@@ -131,8 +131,7 @@ body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#f0f4f8;c
 .toast.show{opacity:1}
 
 /* ── 애플펜슬 드로잉 ── */
-#drawCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:500;display:none;cursor:crosshair;touch-action:none}
-#drawCanvas.active{display:block}
+#drawCanvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:500;pointer-events:none;display:block;}
 #drawToolbar{position:fixed;bottom:30px;right:20px;z-index:600;display:flex;flex-direction:column;align-items:center;gap:8px;background:rgba(15,45,82,0.92);border-radius:20px;padding:12px 10px;box-shadow:0 4px 20px rgba(0,0,0,0.3);backdrop-filter:blur(6px)}
 .draw-btn{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,0.25);background:transparent;color:#fff;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
 .draw-btn:hover,.draw-btn.active{background:rgba(255,255,255,0.2);border-color:#fff}
@@ -565,16 +564,14 @@ setFilter('all','all');
   let currentColor = '#e53935';
   let lastX = 0, lastY = 0;
 
+  // 캔버스 크기 설정 (그림 보존)
   function resizeCanvas() {
-    // 기존 그림 보존
     const img = canvas.toDataURL();
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    if(img !== 'data:,') {
-      const image = new Image();
-      image.src = img;
-      image.onload = () => ctx.drawImage(image, 0, 0);
-    }
+    const image = new Image();
+    image.src = img;
+    image.onload = () => ctx.drawImage(image, 0, 0);
   }
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
@@ -583,11 +580,8 @@ setFilter('all','all');
     drawMode = !drawMode;
     eraseMode = false;
     document.getElementById('eraserBtn').classList.remove('active');
-    canvas.classList.toggle('active', drawMode);
     document.getElementById('penToggleBtn').classList.toggle('pen-on', drawMode);
-    // 드로잉 모드 ON 시 스크롤 막기
-    document.body.style.overflow = drawMode ? 'hidden' : '';
-    showToast(drawMode ? '✏️ 필기 모드 ON — 툴바에서 색상/지우개 선택' : '✏️ 필기 모드 OFF');
+    showToast(drawMode ? '✏️ 필기 모드 ON — 애플펜슬로 필기하세요' : '✏️ 필기 모드 OFF');
   };
 
   window.setColor = function(color, el) {
@@ -608,72 +602,50 @@ setFilter('all','all');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
   };
 
-  function getPos(e) {
-    const rect = canvas.getBoundingClientRect();
-    if(e.touches) {
-      return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
-    }
-    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-  }
-
   function startDraw(e) {
     if(!drawMode) return;
-    e.preventDefault();
+    if(e.pointerType !== 'pen') return; // 애플펜슬만 인식
     drawing = true;
-    const pos = getPos(e);
-    lastX = pos.x; lastY = pos.y;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    ctx.globalCompositeOperation = eraseMode ? 'destination-out' : 'source-over';
     ctx.beginPath();
-    ctx.arc(lastX, lastY, eraseMode ? 15 : 2, 0, Math.PI * 2);
+    ctx.arc(lastX, lastY, eraseMode ? 15 : 1.5, 0, Math.PI * 2);
     ctx.fillStyle = eraseMode ? 'rgba(0,0,0,1)' : currentColor;
-    if(eraseMode) ctx.globalCompositeOperation = 'destination-out';
-    else { ctx.globalCompositeOperation = 'source-over'; ctx.fill(); }
+    ctx.fill();
   }
 
-  function draw(e) {
+  function drawLine(e) {
     if(!drawMode || !drawing) return;
-    e.preventDefault();
-    const pos = getPos(e);
-    // 애플펜슬 압력 감지 (pointerEvent)
-    let lineW = eraseMode ? 30 : 3;
-    if(e.pressure && e.pressure > 0) lineW = eraseMode ? 30 : Math.max(1, e.pressure * 6);
+    if(e.pointerType !== 'pen') return; // 애플펜슬만 인식
+    const pressure = (e.pressure && e.pressure > 0) ? e.pressure : 0.5;
+    const lineW = eraseMode ? 30 : Math.max(1.5, pressure * 7);
 
+    ctx.globalCompositeOperation = eraseMode ? 'destination-out' : 'source-over';
     ctx.beginPath();
     ctx.moveTo(lastX, lastY);
-    ctx.lineTo(pos.x, pos.y);
+    ctx.lineTo(e.clientX, e.clientY);
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.lineWidth = lineW;
-    if(eraseMode) {
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.strokeStyle = 'rgba(0,0,0,1)';
-    } else {
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.strokeStyle = currentColor;
-    }
+    ctx.strokeStyle = eraseMode ? 'rgba(0,0,0,1)' : currentColor;
     ctx.stroke();
-    lastX = pos.x; lastY = pos.y;
+    lastX = e.clientX;
+    lastY = e.clientY;
   }
 
   function endDraw(e) {
-    if(!drawMode) return;
+    if(e.pointerType !== 'pen') return;
     drawing = false;
     ctx.globalCompositeOperation = 'source-over';
   }
 
-  // Pointer Events (애플펜슬 최적화)
-  canvas.addEventListener('pointerdown', startDraw, {passive:false});
-  canvas.addEventListener('pointermove', draw, {passive:false});
-  canvas.addEventListener('pointerup', endDraw);
-  canvas.addEventListener('pointercancel', endDraw);
-  // Touch Events (구형 iOS 대비)
-  canvas.addEventListener('touchstart', startDraw, {passive:false});
-  canvas.addEventListener('touchmove', draw, {passive:false});
-  canvas.addEventListener('touchend', endDraw);
-  // Mouse Events
-  canvas.addEventListener('mousedown', startDraw);
-  canvas.addEventListener('mousemove', draw);
-  canvas.addEventListener('mouseup', endDraw);
-  canvas.addEventListener('mouseleave', endDraw);
+  // ✅ document 레벨에서 pen 이벤트만 감지
+  // → 캔버스는 pointer-events:none 이므로 손가락/버튼 클릭은 그대로 통과
+  document.addEventListener('pointerdown', startDraw);
+  document.addEventListener('pointermove', drawLine);
+  document.addEventListener('pointerup', endDraw);
+  document.addEventListener('pointercancel', endDraw);
 })();
 </script>
 </body>
