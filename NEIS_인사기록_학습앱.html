@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEIS 인사기록 학습앱</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Malgun Gothic','맑은 고딕',sans-serif;background:#f0f4f8;color:#1a2d4a;min-height:100vh}
+:root{--blue:#1a5fa8;--blue-light:#e8f0fb;--blue-mid:#3a7fd4;--navy:#0f2d52;--green:#1a7a4a;--green-light:#e6f7ef;--red:#c0392b;--red-light:#fdecea;--amber:#b36b00;--amber-light:#fff8e6;--gray:#5a6a7a;--gray-light:#f5f7fa;--card:#fff;--border:#dde3ec;--shadow:0 2px 12px rgba(26,45,74,0.08)}
+.app{display:flex;flex-direction:column;min-height:100vh}
+
+/* HEADER */
+.hdr{background:var(--navy);color:#fff;padding:0}
+.hdr-inner{max-width:1100px;margin:0 auto;padding:20px 28px;display:flex;align-items:center;gap:16px}
+.hdr-logo{font-size:40px;font-weight:700;letter-spacing:-0.5px}
+.hdr-logo span{color:#7ec8ff}
+.hdr-sub{font-size:26px;color:#a8c4e0;margin-left:auto}
+.hdr-stats{display:flex;gap:16px;margin-left:auto}
+.stat-chip{background:rgba(255,255,255,0.12);border-radius:20px;padding:5px 14px;font-size:26px;color:#e0ecf8}
+.stat-chip b{color:#fff;font-size:30px;margin-right:4px}
+
+/* PROGRESS BAR */
+.prog-bar-wrap{background:rgba(255,255,255,0.1);height:4px}
+.prog-bar{height:4px;background:linear-gradient(90deg,#7ec8ff,#3af0b0);transition:width .5s ease}
+
+/* MAIN LAYOUT */
+.main{max-width:1100px;margin:0 auto;padding:24px;display:grid;grid-template-columns:300px 1fr;gap:24px;flex:1;transition:grid-template-columns .3s ease}
+.main.sidebar-closed{grid-template-columns:0px 1fr;gap:0}
+@media(max-width:768px){.main{grid-template-columns:1fr;padding:16px}.main.sidebar-closed{grid-template-columns:1fr}}
+
+/* SIDEBAR */
+.sidebar{display:flex;flex-direction:column;gap:12px;overflow:hidden;transition:opacity .25s ease,transform .3s ease;transform-origin:left}
+.sidebar-closed .sidebar{opacity:0;pointer-events:none;transform:translateX(-20px)}
+
+/* TOGGLE BUTTON */
+.sidebar-toggle{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.14);border:1px solid rgba(255,255,255,0.22);border-radius:20px;color:#e0ecf8;font-size:26px;font-weight:500;padding:5px 14px;cursor:pointer;transition:all .2s;font-family:inherit;flex-shrink:0}
+.sidebar-toggle:hover{background:rgba(255,255,255,0.24);color:#fff}
+.sidebar-toggle .toggle-icon{font-size:30px;transition:transform .3s ease;display:inline-block}
+.sidebar-closed-hint{display:none;position:fixed;left:12px;top:50%;transform:translateY(-50%);z-index:100}
+.sidebar-tab{writing-mode:vertical-lr;transform:rotate(180deg);background:var(--navy);color:#a8c4e0;border:1px solid rgba(255,255,255,0.15);border-radius:0 8px 8px 0;padding:14px 8px;font-size:24px;font-weight:600;letter-spacing:0.5px;cursor:pointer;transition:all .2s;box-shadow:2px 0 8px rgba(0,0,0,0.15)}
+.sidebar-tab:hover{color:#fff;background:#1a4a7a}
+.main.sidebar-closed~.sidebar-closed-hint,.sidebar-closed .sidebar-closed-hint{display:block}
+.filter-card{background:var(--card);border-radius:12px;border:1px solid var(--border);overflow:hidden;box-shadow:var(--shadow)}
+.filter-title{background:var(--navy);color:#fff;padding:14px 20px;font-size:26px;font-weight:600;letter-spacing:0.3px}
+.filter-btn{display:flex;align-items:center;gap:10px;padding:16px 20px;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;font-size:26px;color:var(--gray);border-bottom:1px solid var(--border);transition:all .15s;font-family:inherit}
+.filter-btn:last-child{border-bottom:none}
+.filter-btn:hover{background:var(--blue-light);color:var(--blue)}
+.filter-btn.active{background:var(--blue-light);color:var(--blue);font-weight:600}
+.filter-btn .badge{margin-left:auto;background:#dde3ec;color:var(--gray);border-radius:10px;padding:1px 8px;font-size:22px;font-weight:600}
+.filter-btn.active .badge{background:var(--blue);color:#fff}
+.type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-red{background:#e74c3c}.dot-blue{background:#2980b9}.dot-green{background:#27ae60}
+
+.legend-card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:14px 16px;box-shadow:var(--shadow)}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:24px;color:var(--gray);margin-bottom:7px}
+.legend-item:last-child{margin-bottom:0}
+.legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+/* CONTENT AREA */
+.content-area{display:flex;flex-direction:column;gap:16px}
+.toolbar{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:18px 22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;box-shadow:var(--shadow)}
+.toolbar-label{font-size:26px;color:var(--gray)}
+.toolbar-count{font-size:28px;font-weight:700;color:var(--blue)}
+.toolbar-right{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:7px 16px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--gray);font-size:26px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s}
+.btn:hover{background:var(--gray-light);border-color:var(--blue);color:var(--blue)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn.primary:hover{background:#1751a0}
+.btn.success{background:var(--green);border-color:var(--green);color:#fff}
+.btn.danger{background:var(--red);border-color:var(--red);color:#fff}
+
+/* QUESTION CARD */
+.q-card{background:var(--card);border-radius:16px;border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s}
+.q-card-header{padding:20px 24px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+.q-num{font-size:36px;font-weight:700;color:var(--navy)}
+.q-section-badge{padding:3px 10px;border-radius:20px;font-size:24px;font-weight:600}
+.badge-s1{background:#e8f0fb;color:#1a5fa8}
+.badge-s2{background:#e6f7ef;color:#1a7a4a}
+.badge-s3{background:#fff3e0;color:#b36b00}
+.q-type-badge{padding:3px 10px;border-radius:20px;font-size:24px;font-weight:600}
+.badge-t1{background:#fdecea;color:#c0392b}
+.badge-t2{background:#eff7ff;color:#1a5fa8}
+.badge-t3{background:#f5f0ff;color:#6b3fa0}
+.q-progress{margin-left:auto;font-size:24px;color:var(--gray)}
+.q-known-indicator{margin-left:8px;font-size:22px;padding:2px 8px;border-radius:10px}
+.known-yes{background:var(--green-light);color:var(--green)}
+.known-no{background:var(--red-light);color:var(--red)}
+
+.q-body{padding:28px 32px}
+.q-text{font-size:30px;line-height:1.8;color:#1a2d4a;margin-bottom:16px;white-space:pre-wrap}
+.wrong-box{background:#f8f9fa;border:1.5px solid #dde3ec;border-left:4px solid #e74c3c;border-radius:8px;padding:20px 24px;font-size:28px;line-height:1.8;color:#2c3e50;margin:12px 0 20px;font-style:italic}
+
+/* ANSWER REVEAL */
+.ans-toggle-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:18px;border:2px dashed var(--border);border-radius:10px;background:transparent;cursor:pointer;font-size:28px;color:var(--gray);font-family:inherit;font-weight:500;transition:all .2s;margin-bottom:0}
+.ans-toggle-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-light)}
+.ans-reveal{margin-top:16px;border-top:1px solid var(--border);padding-top:16px;animation:slideIn .25s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.ans-label{font-size:24px;font-weight:700;color:var(--gray);letter-spacing:0.5px;margin-bottom:10px;text-transform:uppercase}
+.ans-text{font-size:28px;line-height:1.9;color:#1a2d4a;background:var(--blue-light);border-radius:8px;padding:20px 24px;margin-bottom:16px;white-space:pre-wrap}
+.hint-box{display:flex;align-items:flex-start;gap:10px;background:var(--amber-light);border:1px solid #f0d090;border-radius:8px;padding:18px 22px}
+.hint-star{color:var(--amber);font-size:32px;flex-shrink:0;margin-top:1px}
+.hint-text{font-size:26px;line-height:1.7;color:#6b4c00}
+
+/* CARD FOOTER */
+.q-footer{padding:20px 32px;border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;background:var(--gray-light)}
+.nav-btn{padding:14px 24px;border-radius:8px;border:1.5px solid var(--border);background:var(--card);color:var(--navy);font-size:26px;cursor:pointer;font-family:inherit;font-weight:600;transition:all .15s}
+.nav-btn:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.action-btns{margin-left:auto;display:flex;gap:8px}
+.act-btn{padding:14px 22px;border-radius:8px;border:2px solid;font-size:26px;cursor:pointer;font-family:inherit;font-weight:600;transition:all .15s}
+.act-btn.know{border-color:var(--green);color:var(--green);background:transparent}
+.act-btn.know:hover,.act-btn.know.active{background:var(--green);color:#fff}
+.act-btn.review{border-color:var(--red);color:var(--red);background:transparent}
+.act-btn.review:hover,.act-btn.review.active{background:var(--red);color:#fff}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px;color:var(--gray)}
+.empty-icon{font-size:96px;margin-bottom:16px;opacity:.4}
+
+/* MINI PROGRESS DOTS */
+.mini-nav{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.mini-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);background:var(--card);cursor:pointer;transition:all .15s;flex-shrink:0}
+.mini-dot.current{border-color:var(--blue);background:var(--blue)}
+.mini-dot.done-know{background:var(--green);border-color:var(--green)}
+.mini-dot.done-review{background:var(--red);border-color:var(--red)}
+.mini-dot:hover{transform:scale(1.3)}
+
+/* RESET CONFIRM */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:10px 20px;border-radius:8px;font-size:28px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hdr">
+  <div class="hdr-inner">
+    <button class="sidebar-toggle" id="sidebarToggleBtn" onclick="toggleSidebar()" title="패널 열기/닫기">
+      <span class="toggle-icon" id="toggleIcon">◀</span>
+      <span id="toggleLabel">패널 닫기</span>
+    </button>
+    <div class="hdr-logo">NEIS 인사기록 <span>학습앱</span></div>
+    <div class="hdr-stats" id="hdrStats"></div>
+  </div>
+  <div class="prog-bar-wrap"><div class="prog-bar" id="progBar" style="width:0%"></div></div>
+</div>
+
+<div class="main" id="mainGrid">
+  <div class="sidebar" id="sidebar">
+    <div class="filter-card">
+      <div class="filter-title">📚 단원 선택</div>
+      <button class="filter-btn active" onclick="setFilter('all','all')" id="fb-all">
+        <span class="type-dot" style="background:#6b7a8a"></span> 전체 보기
+        <span class="badge" id="cnt-all">45</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('s1','all')" id="fb-s1">
+        <span class="type-dot" style="background:#1a5fa8"></span> 제1절 권한관리
+        <span class="badge" id="cnt-s1">15</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('s2','all')" id="fb-s2">
+        <span class="type-dot" style="background:#1a7a4a"></span> 제2절 기록내용
+        <span class="badge" id="cnt-s2">15</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('s3','all')" id="fb-s3">
+        <span class="type-dot" style="background:#b36b00"></span> 제3절 관리실제
+        <span class="badge" id="cnt-s3">15</span>
+      </button>
+    </div>
+    <div class="filter-card">
+      <div class="filter-title">📝 유형 선택</div>
+      <button class="filter-btn" onclick="setFilter('all','t1')" id="fb-t1">
+        <span class="type-dot dot-red"></span> 틀린 곳 찾기
+        <span class="badge" id="cnt-t1">15</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('all','t2')" id="fb-t2">
+        <span class="type-dot dot-blue"></span> 현장 적용
+        <span class="badge" id="cnt-t2">15</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('all','t3')" id="fb-t3">
+        <span class="type-dot dot-green"></span> 빈칸 채우기
+        <span class="badge" id="cnt-t3">15</span>
+      </button>
+    </div>
+    <div class="filter-card">
+      <div class="filter-title">🎯 학습 현황별</div>
+      <button class="filter-btn" onclick="setFilter('all','unknown')" id="fb-unknown">
+        <span class="type-dot" style="background:#bbb"></span> 미학습
+        <span class="badge" id="cnt-unknown">45</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('all','review')" id="fb-review">
+        <span class="type-dot dot-red"></span> 다시 볼게
+        <span class="badge" id="cnt-review">0</span>
+      </button>
+      <button class="filter-btn" onclick="setFilter('all','know')" id="fb-know">
+        <span class="type-dot" style="background:#27ae60"></span> 알겠어요
+        <span class="badge" id="cnt-know">0</span>
+      </button>
+    </div>
+    <div class="legend-card">
+      <div style="font-size:24px;font-weight:600;color:var(--gray);margin-bottom:10px">● 진도 표시</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#fff;border:2px solid #dde3ec"></div> 미학습</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#1a5fa8"></div> 현재 문제</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#27ae60"></div> 알겠어요 ✓</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div> 다시 볼게 ↺</div>
+      <button class="btn" style="width:100%;margin-top:12px;font-size:24px" onclick="resetAll()">🔄 학습 기록 초기화</button>
+    </div>
+  </div>
+
+  <div class="content-area">
+    <div class="toolbar">
+      <span class="toolbar-label">표시 중:</span>
+      <span class="toolbar-count" id="toolbarCount"></span>
+      <div class="toolbar-right">
+        <button class="btn" onclick="revealAll()">정답 모두 보기</button>
+        <button class="btn" onclick="hideAll()">정답 모두 숨기기</button>
+        <button class="btn primary" onclick="goRandom()">🎲 랜덤 문제</button>
+      </div>
+    </div>
+    <div class="mini-nav" id="miniNav"></div>
+    <div id="questionArea"></div>
+  </div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const Q = [
+// ===== 제1절 틀린 곳 찾기 =====
+{id:1,sec:'s1',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:'나이스 교원인사 기본 원칙에 따르면, 인사기록의 관리는 공립 정규 교직원의 경우 학교에서 관리하며, 국립 교직원·사립 교직원·비공무원·계약직교원은 교육청 인사담당장학사가 직접 관리한다.',ans:"'학교' → '교육청'\n'교육청 인사담당장학사' → '학교인사담당자(교감)'",hint:"공립 정규직 = 교육청 관리 / 나머지(국립·사립·비공무원·계약직) = 학교인사담당자(교감) 직접 관리",page:'289p'},
+{id:2,sec:'s1',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:'나이스 교원인사 기본 원칙에 따르면, 교원인사 권한은 학교 기관마스터를 통해 부여하며, 인사담당부서(교육청)에서는 권한관리를 할 수 없다.',ans:"'학교 기관마스터를 통해 부여하며' → '학교 기관마스터를 통해 부여하지 않으며'\n'인사담당부서(교육청)에서는 권한관리를 할 수 없다' → '인사담당부서(교육청)에서 독립적으로 권한관리가 이루어진다'",hint:"교원인사 권한: 학교 기관마스터 통해 부여 ✗ → 교육청 인사담당부서에서 독립적으로 관리!",page:'289p'},
+{id:3,sec:'s1',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:'공립 정규직 교원이 퇴직할 경우 퇴직 처리 담당자는 학교 교감이며, 권한은 임용기안문 시행 시 자동으로 회수된다.',ans:"'학교 교감' → '인사담당자(관할교육청)'",hint:"공립 정규직 퇴직 처리: 관할교육청 / 계약직·비공무원 퇴직 처리: 학교(교감)",page:'294p'},
+{id:4,sec:'s1',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:'교감은 개인정보변경승인자상세 팝업창에서 가족, 자격취득, 연수, 징계/형벌 항목에 대해 교원의 변경 신청을 승인할 수 있다.',ans:"'징계/형벌' → '포상/서훈'",hint:"교감 승인 가능 4가지: 가족·자격취득·연수·포상/서훈\n(징계/형벌은 교육청 관리!)",page:'293~294p'},
+{id:5,sec:'s1',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:'기간제 교사가 계약 기간 만료로 퇴직할 경우, 퇴직 처리 메뉴는 [교원인사]-[계약직교원]-[인사기록관리]-[계약직교원퇴직]이며, 이 경우 권한은 학교 교감이 별도로 삭제 처리해야 회수된다.',ans:"'학교 교감이 별도로 삭제 처리해야 회수된다' → '퇴직 처리 시행 시 자동으로 회수된다'",hint:"기간제 퇴직 처리 시 권한: 자동 회수!\n(퇴직 처리 후 업무그룹·자료권한 삭제 여부 별도 확인 필요)",page:'294p'},
+
+// ===== 제1절 현장 적용 =====
+{id:6,sec:'s1',type:'t2',q:'신규 임용된 교감이 소속교 교원의 NEIS 인사기록 조회가 되지 않아 교육지원청에 권한 부여를 요청하였다. 교육지원청 인사담당장학사가 교감에게 인사 권한을 부여하기 위해 거쳐야 하는 4단계 절차를 순서대로 쓰시오.',ans:'① 개인별 권한 등록\n   (사용자그룹·업무그룹 지정)\n↓\n② 인사기록탭관리\n   (등재 및 조회 권한 부여)\n↓\n③ 인사권한등록\n   (인사기록을 등재·삭제할 수 있는 교원 범주 설정)\n↓\n④ 개인정보변경승인자관리\n   (가족·자격취득·연수·포상/서훈 승인 권한 부여)',hint:"암기법: 개인별권한등록 → 인사기록탭관리 → 인사권한등록 → 개인정보변경승인자관리",page:'290~293p'},
+{id:7,sec:'s1',type:'t2',q:'교사 B는 인사이동으로 다른 학교에서 전입해 왔다. NEIS를 확인해 보니 이전 학교의 권한을 아직 보유하고 있었다. 교감으로서 이 상황을 올바르게 판단하고, 처리 방법과 주의사항을 설명하시오.',ans:'판단: 전출자가 이전 기관의 권한을 미회수한 상태로 부적절한 상황.\n\n처리방법: 시스템관리 → 권한관리 → 사용자권한관리 → 권한일괄삭제 메뉴에서 삭제 대상 및 사용자명 선택 → 조회 → 권한일괄삭제 클릭.\n\n주의사항: 삭제 전 개인별 권한 등록에서 한 번 더 확인하고, 상급기관에서 권한을 보유한 경우 해당 기관에 확인 후 처리.',hint:"타조직 미회수 권한: 권한일괄삭제 메뉴\n상급기관 권한은 반드시 해당기관 확인 후 처리!",page:'296p'},
+{id:8,sec:'s1',type:'t2',q:"교사 C와 교사 D가 동시에 전보 발령되었다. 교사 C에게 새 권한을 부여해야 하고, 전출 교사 D의 권한은 C에게 이양해야 한다. '권한 이양'과 '권한 교환'을 구분하여 설명하시오.",ans:"권한 이양: 전임자(D)의 권한을 후임자(C)에게 넘기는 일방향 이전.\n\n권한 교환: 두 사용자가 선택(체크)된 권한을 서로 맞바꾸는 양방향 작업.\n\n처리 경로:\n시스템관리 → 권한관리 → 사용자권한관리 → 권한인계인수 (Step 01~06)\n\n※ 권한 조회·이양·교환 모두 로그인 사용자의 부여 가능 권한 범위 내에서만 가능!",hint:"권한이양: 일방향 이전 / 권한교환: 양방향 맞바꿈",page:'294~295p'},
+{id:9,sec:'s1',type:'t2',q:'교사 E가 NEIS 연수 탭에서 특수분야 연수기관 직무연수 이수 결과 등재를 신청하였으나 확인자를 잘못 지정하였다. 아직 교감이 승인하지 않은 상태이다. 교감으로서 올바른 처리 방법을 설명하시오.',ans:'아직 승인되지 않은 상태이므로 교사가 직접 취소 가능.\n\n처리: 교사가 연수 변경신청에서 [미승인] 신청 내역 선택 후 [삭제] 버튼 클릭으로 상신 취소.\n\n이후 올바른 확인자(교감)를 지정하여 다시 신규신청 처리.\n\n※ 승인 완료 후에는 삭제 불가!',hint:"미승인 연수 신청 취소: [삭제] 버튼\n승인 후에는 취소 불가!",page:'308~309p'},
+{id:10,sec:'s1',type:'t2',q:"[상황] 교사 F에게 NEIS 인사 권한을 부여하면서 [step 02. 업무그룹] 단계에서 업무영역을 '교원인사'만 선택하고 단위업무는 선택하지 않은 채 권한 인수인계를 완료하였다. 이 처리가 올바른지 판단하고 이유를 설명하시오.",ans:'잘못된 처리.\n\n인수인계 시에는 업무영역과 단위업무를 모두 "전체"로 선택하여야 함.\n\n기본적으로 전체 권한이 체크된 상태로 조회되며, 사용자그룹과 자료권한을 확인하여 필요한 권한만 선별 부여하는 방식으로 처리해야 함.\n\n일부만 선택하면 필요한 권한이 누락될 수 있음.',hint:"권한인수인계 Step02: 업무영역-전체, 단위업무-전체 선택 후 추가\n→ 이후 필요한 권한만 선별 부여",page:'295p'},
+
+// ===== 제1절 빈칸 채우기 =====
+{id:11,sec:'s1',type:'t3',q:"나이스 교원인사 기본 원칙에 따르면 기본적으로 인사기록의 내용은 ( ① ) 메뉴를 이용하여 처리하여야 하며, ( ① ) 시행완료 시 인사기록의 다른 항목인 ( ② ), ( ③ ) 등에 자동으로 반영된다.",ans:'① 임용발령\n② 근무사항\n③ 경력',hint:"임용발령 시행완료 → 근무사항·경력 자동 반영",page:'289p'},
+{id:12,sec:'s1',type:'t3',q:'교감이 소속 교원의 인사자료를 "등재"하기 위해서는 인사기록탭관리에서 권한분류를 ( ① )으로, "전체 조회"만 하기 위해서는 권한분류를 ( ② )으로 선택해야 한다.',ans:'① 인사기록(인사권한)\n② 인사기록(인사권한-조회)',hint:"등재 가능 = 인사기록(인사권한)\n조회만 = 인사기록(인사권한-조회)",page:'292p'},
+{id:13,sec:'s1',type:'t3',q:'인사기록탭관리에서 교감에게 등재 권한을 부여할 때 체크해야 할 7가지 항목을 쓰시오.\n( ① ), ( ② ), ( ③ ), ( ④ ), ( ⑤ ), ( ⑥ ), ( ⑦ )',ans:'① 개인신상\n② 가족\n③ 외국어능력\n④ 국외시찰및수학\n⑤ 비고\n⑥ 승급기록\n⑦ 보충기재란',hint:"암기법: 개·가·외·국·비·승·보 = 7개",page:'292p'},
+{id:14,sec:'s1',type:'t3',q:'권한관리자는 업무분장에 따라 업무담당자에게 권한을 부여하고, 업무가 변경되었을 경우 ( ① ) 기존의 권한을 ( ② ) 처리하여야 한다.',ans:'① 즉시\n② 삭제',hint:"업무 변경 시 기존 권한: 즉시 삭제 처리!\n(지체 시 정보 보안 사고 위험)",page:'294p'},
+{id:15,sec:'s1',type:'t3',q:'개인정보변경승인자상세 팝업창에서 체크할 4가지 항목을 선택한 후 ( ① ) 버튼을 클릭하며, 이 권한을 부여받은 교감은 소속 교육지원청 ( ② )에 따라 해당 항목의 변경 범위가 달라질 수 있다.',ans:'① 저장\n② 인사기록 정책',hint:"개인정보변경승인자 설정: 저장\n교육지원청 인사기록 정책에 따라 변경 가능",page:'293~294p'},
+
+// ===== 제2절 틀린 곳 찾기 =====
+{id:16,sec:'s2',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:"NEIS 인사기록 탭 중 교원이 직접 기록(수정)할 수 있는 항목은 '개인신상'과 '연수'이며, 두 항목 모두 본인이 직접 수정 가능하고 교감의 별도 승인이 필요 없다.",ans:"'연수'는 교원이 신청하고 교감이 승인해야 하므로 교감의 승인이 필요함.\n교원이 단독 직접 수정(교원 기록 ○) 가능한 항목은 '개인신상'뿐임.",hint:"개인신상: 교원 직접 수정 가능(교감도 수정 가능)\n연수: 교원 신청 → 교감 승인 구조",page:'297p'},
+{id:17,sec:'s2',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:"NEIS 인사기록 탭 중 호봉과 연계되는 항목은 병역, 학력, 경력(3가지)이며, 가족 탭은 가족수당과만 연계되어 있다.",ans:"호봉 연계 항목: '경력' → '임용전경력'\n가족 탭: '가족수당과만' → '가족수당과 육아시간 모두'와 연계됨.",hint:"호봉 연계: 병역·학력·임용전경력\n가족: 가족수당 + 육아시간 연계",page:'297~298p'},
+{id:18,sec:'s2',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:"'10. 자격취득' 탭에는 교원자격을 포함한 모든 국가자격 취득 사항(교원 임용 후 국가공인기관에서 인정하는 자격증 취득 사항)을 기록하며, 교원이 신청하면 교육청에서 승인한다.",ans:"'교원자격을 포함한' → '교원자격을 제외한'\n'교육청에서 승인한다' → '교감이 승인한다'",hint:"자격취득: 교원자격 제외! 임용 후 국가공인 자격만\n교사 신청 → 교감 승인",page:'298p'},
+{id:19,sec:'s2',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:"NEIS 인사기록에서 '16. 징계/형벌' 항목의 징계말소 처리는 해당 징계 기록 자체를 시스템에서 완전히 삭제하는 것이다.",ans:"'징계 기록 자체를 시스템에서 완전히 삭제하는 것'\n→ '말소 기록을 추가 입력하는 것이며, 징계사실 자체는 삭제하지 않음'",hint:"징계말소 ≠ 삭제!\n'말소' 기록을 별도로 입력하는 것. 원래 징계 기록은 그대로 남음",page:'298p'},
+{id:20,sec:'s2',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:"'1. 근무사항'은 교육청이 관리하며, 보직구분을 포함한 모든 내용은 교육청에서만 등재 및 수정할 수 있다.",ans:"'보직구분을 포함한 모든 내용은 교육청에서만 등재 및 수정할 수 있다'\n→ '보직구분은 [교원인사-임용발령-보직(담임)교사] 메뉴를 통해 교감이 등재·수정할 수 있다'",hint:"근무사항은 교육청 관리가 원칙\nBUT 보직구분만큼은 교감이 임용발령 메뉴로 직접 등재·수정 가능!",page:'298p'},
+
+// ===== 제2절 현장 적용 =====
+{id:21,sec:'s2',type:'t2',q:'NEIS 인사기록 탭의 관리 주체를 쓰시오.\n\n㉠ 외국어능력 → (\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0)\n㉡ 국외시찰및수학 → (\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0)\n㉢ 연수 → (\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0)\n㉣ 가산점 → (\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0)\n㉤ 비고 → (\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0)',ans:'㉠ 외국어능력 → 교감\n㉡ 국외시찰및수학 → 교감\n㉢ 연수 → 교사→교감(교사 신청 후 교감 승인)\n㉣ 가산점 → 교육청\n㉤ 비고 → 교감, 교육청 (공동 관리)',hint:"교감 단독 기록: 외국어능력·국외시찰및수학\n비고·승급기록·보충기재란: 교감+교육청 공동 관리",page:'297~298p'},
+{id:22,sec:'s2',type:'t2',q:'교사 G가 민간자격증(공인중개사)을 취득하여 NEIS 자격취득 탭에 등재해 달라고 요청하였다. 교감으로서 이 요청을 승인할 수 있는지 판단하고 이유를 설명하시오.',ans:'승인 불가.\n\n이유: NEIS 자격취득 탭에는 국가기술자격법에 의한 자격, 교육부 장관이 정하는 직무능력인증자격(어학 관련 능력검정) 등만 등재 가능하며, 민간자격증은 등재 대상에 해당하지 않음.\n\n또한 자격취득 탭에는 교원 발령 후의 자격증만 등록함.',hint:"등재 가능: 국가기술자격법 자격·어학능력검정 등\n민간자격증(공인중개사, 문서실무사 등) 등재 불가!",page:'306p, 320p'},
+{id:23,sec:'s2',type:'t2',q:"[상황] 교사 H가 재직 중 국내 대학원에서 석사 학위를 취득하였다. 이 내용을 NEIS에 등재하기 위해 교감에게 임용전경력 탭에도 추가로 입력해 달라고 요청하였다. 올바른지 판단하고 이유를 설명하시오.",ans:'잘못된 요청.\n\n이유: 학력 또는 학위는 [임용전경력] 탭에 이중으로 기록하지 않음.\n\n[학력] 탭에 석사과정 내용을 입력하면 [학위취득] 탭에 자동으로 연계되어 표시됨.\n\n임용전경력에 별도 입력 불필요.',hint:"학력·학위는 [임용전경력]에 이중 입력 금지!\n학력 탭 입력 → 학위취득 자동 연계",page:'298p'},
+{id:24,sec:'s2',type:'t2',q:'신규 임용 교사 I의 학적을 점검하는 과정에서 외국 대학 학위를 가진 것을 확인하였다. 외국 학위 등재에 필요한 증빙서류를 모두 쓰시오.',ans:'① 학위수여증명서\n② 성적증명서\n③ 학위수여증명서와 성적증명서에 대한 한국어 번역 공증\n④ 아포스티유 확인서\n\n(총 4가지)',hint:"외국학위 증빙 4가지:\n학위수여증명서·성적증명서·한국어 번역 공증·아포스티유 확인서",page:'304p'},
+{id:25,sec:'s2',type:'t2',q:'학기 초 교사의 인사기록 점검 중 NEIS 근무사항에서 소속교 교원임에도 불구하고 [기관]과 [부서명]이 서로 다르게 기재되어 있는 것을 발견하였다. 올바른 처리 방법을 설명하시오.',ans:'학교에 근무 중인 교원의 경우 [기관]과 [부서명]이 학교명으로 동일해야 함.\n\n처리방법: 기관명을 입력 후 [찾기] 버튼을 눌러 확인하면 부서명과 기관명이 자동으로 동일하게 입력됨.\n\n수정 후 반드시 [저장] → [연계재전송]을 클릭하여 다른 시스템에도 반영.',hint:"기관=부서명=학교명이어야 정상\n[찾기] 버튼으로 자동 일치 처리 후 연계재전송 必",page:'301p'},
+
+// ===== 제2절 빈칸 채우기 =====
+{id:26,sec:'s2',type:'t3',q:'NEIS 인사기록 탭에서 교원이 신청하고 교감이 승인하는 항목은 ( ① ), ( ② ), ( ③ ), ( ④ )이며, 교감이 단독으로 기록하는 항목은 ( ⑤ )와 ( ⑥ )이다.',ans:'① 가족\n② 자격취득\n③ 연수\n④ 포상/서훈\n⑤ 외국어능력\n⑥ 국외시찰및수학',hint:"교사 신청→교감 승인 4가지\n교감 단독 기록 2가지\n→ 합계 6가지 반드시 암기!",page:'297p'},
+{id:27,sec:'s2',type:'t3',q:"NEIS 인사기록 탭 중 '3. 병역' 관련 사항은 병역 탭에 입력하되, 특히 임용전 병역 경력은 '( ① )' 탭에도 ( ② ) 입력해야 한다.",ans:'① 임용전 경력\n② 추가',hint:"병역 관련: 병역 탭에 입력\n+ 임용전 병역 경력은 [임용전 경력]에도 추가 입력!",page:'298p'},
+{id:28,sec:'s2',type:'t3',q:"NEIS 인사기록 탭 중 '9. 자격면허' 내용이 누락되거나 수정이 필요한 경우, 초등 정교사 1급 자격증은 ( ① )에, 정교사 2급은 ( ② )에 문의해야 한다.",ans:'① 서울특별시교육청 중등교육과 사립교원인사관리팀\n② 출신 (교육)대학교',hint:"1급 정교사 자격면허 등재: 본청(사립교원인사관리팀)\n2급: 출신 교육대학교",page:'298p, 306p'},
+{id:29,sec:'s2',type:'t3',q:"NEIS 인사기록에서 '23. 가산점' 탭에는 ( ① ), ( ② ), ( ③ ) 관련 가산점 내용을 기록하며, 이 탭의 관리 주체는 ( ④ )이다.",ans:'① 연구·시범학교\n② 청소년단체\n③ 학교폭력 유공교원\n④ 교육청',hint:"가산점 3가지: 연구·시범학교 / 청소년단체 / 학교폭력 유공교원\n→ 교육청 관리",page:'297~298p'},
+{id:30,sec:'s2',type:'t3',q:"NEIS 인사기록 시기별 업무 처리에서 '가족'은 ( ① ) 또는 ( ② ) 시에 가족 관계를 기록하며, '연수'는 ( ③ )로 자격연수·직무연수 이수 실적 및 특수분야 연수기관 연수 이수 실적을 관리한다.",ans:'① 신규임용\n② 변동 발생\n③ 수시',hint:"가족: 신규임용 시 or 변동 발생 시\n연수: 수시 관리",page:'299p'},
+
+// ===== 제3절 틀린 곳 찾기 =====
+{id:31,sec:'s3',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:"NEIS 근무사항의 재직상태 영역에서 '재직(파견)'은 재직 중인 교원이 타 시·도로 파견 간 경우에 해당하며, '재직(타시도파견(출))'은 시교육청 내에서의 파견인 경우에 해당한다.",ans:"'재직(파견)'과 '재직(타시도파견(출))'의 설명이 서로 바뀜.\n재직(파견): 시교육청 내에서의 파견\n재직(타시도파견(출)): 재직 중인 교원이 타 시·도로 파견 간 경우",hint:"재직(파견) = 시교육청 내 파견\n재직(타시도파견(출)) = 타시도로 나간 파견",page:'302p'},
+{id:32,sec:'s3',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:"NEIS 근무사항의 [공무원구분]에서 공립은 [사립교원], 사립은 [행정부국가공무원]을 선택한다.",ans:"'공립은 [사립교원]' → '공립은 [행정부국가공무원]'\n'사립은 [행정부국가공무원]' → '사립은 [비공무원(사립교직원)]'",hint:"공사립구분: 공립=국공립교원, 사립=사립교원\n공무원구분: 공립=행정부국가공무원, 사립=비공무원(사립교직원)",page:'301~302p'},
+{id:33,sec:'s3',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:"승급기록에서 호봉을 정정할 때는 반드시 [호봉정정] 버튼을 사용해야 하며, [등록] 버튼 사용은 지양해야 한다. [호봉정정] 버튼을 사용하면 이전 승급기록은 파란색으로 표시된다.",ans:"'[호봉정정] 버튼을 사용해야 하며' → '[호봉정정] 버튼 사용을 자제하고 [등록] 버튼을 활용하여 등록'\n'[등록] 버튼 사용은 지양해야 한다' → '[호봉정정] 버튼 사용을 자제해야 한다'\n'파란색' → '빨간색'",hint:"호봉정정: [등록] 버튼 활용 권장! [호봉정정] 버튼 자제\n호봉정정 시 이전 기록: 빨간색 표시",page:'312p'},
+{id:34,sec:'s3',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:"교육공무원의 임용기간에는 공백이 있을 수 있으며, 임용전의 경력 사항 중 사립교원이 공립교원으로 특별채용된 경우 사립교원 경력은 [경력] 항목에 입력한다.",ans:"'공백이 있을 수 있으며' → '공백이 있을 수 없으며'\n'[경력] 항목에 입력한다' → '[임용전 경력]에 입력한다'",hint:"임용기간 공백: 절대 불가!\n사립→공립 특별채용 시 사립교원 경력: 임용전경력에 입력",page:'313p'},
+{id:35,sec:'s3',type:'t1',q:'다음 설명에서 틀린 부분을 찾아 바르게 고쳐 쓰시오.',box:"경력 입력 시 기관명을 찾기 버튼을 사용하지 않고 직접 입력한 경우, 시스템 내부에서도 기관명 코드로 정상 인식되기 때문에 오류 없이 처리된다.",ans:"'시스템 내부에서도 기관명 코드로 정상 인식되기 때문에 오류 없이 처리된다'\n→ '시스템 내부에서는 기관명을 코드로만 인식하므로, 화면상 정상으로 보여도 실제로는 코드가 입력되지 않아 유효하지 않은 정보가 된다'",hint:"경력 기관명: 반드시 [찾기] 버튼으로 선택!\n직접 입력 시 코드 미인식 → 오류 발생",page:'319p'},
+
+// ===== 제3절 현장 적용 =====
+{id:36,sec:'s3',type:'t2',q:'아래 교사의 경력 기록을 보고, 오류 여부를 판단하고 올바른 값으로 수정하시오.\n\n[경력 현황]\n  순번 14: 기간 2015-03-01 ~ 2020-02-29, 임용구분: 교원초빙\n  순번 15: 기간 2015-03-01 ~ 2016-02-29, 임용구분: 보직교사',ans:'순번 15의 날짜에 오류 있음.\n\n2016년은 4의 배수(2016÷4=504)이므로 윤년 → 2월 29일까지 있음.\n따라서 2016-02-29는 정상.\n\n※ 2020년도 4의 배수 윤년이므로 2020-02-29도 정상.\n\n결론: 제시된 경력 기록에는 날짜 오류 없음.\n\n[핵심 판단 기준]\n4의 배수 연도 = 윤년 = 2월 29일까지\n비윤년 = 2월 28일까지',hint:"4의 배수 연도(윤년): 2월이 29일까지\n비윤년: 2월 28일까지\n경력 오류의 주요 원인 중 하나!",page:'314p'},
+{id:37,sec:'s3',type:'t2',q:'교사 J가 1980. 3. 1.자로 교육공무원으로 신규 임용되어 근무하다가 1985. 2. 28.자로 퇴직하였고, 이후 2003. 3. 1.자로 다시 교육공무원으로 재임용되었다. NEIS 근무사항 발령일자 영역에서 "공무원 최초임용일"과 "최초임용일"에 각각 입력해야 하는 날짜를 쓰고 차이점을 설명하시오.',ans:'공무원 최초임용일: 1980. 3. 1.\n→ 임용전경력을 포함하여 공무원으로 최초 임용된 일자\n\n최초임용일: 2003. 3. 1.\n→ 현 경력에서 공무원으로 최초 임용된 일자\n\n[차이점] 퇴직 후 재임용된 경우처럼 개인에 따라 두 날짜가 다를 수 있음.',hint:"공무원최초임용일: 태어나서 처음 공무원 된 날\n최초임용일: 현재 경력 기준 처음 임용된 날",page:'301p, 317p'},
+{id:38,sec:'s3',type:'t2',q:'교사 K의 연수 신청 내역을 확인하니, 특수분야 연수기관(민간 연수원)에서 이수한 직무연수가 교육청에서 자동 등재되지 않았다. 교사 K가 이 연수를 NEIS에 등재하기 위한 신청 절차를 단계별로 설명하시오.',ans:'① NEIS 초기화면 → [기본 메뉴]-[인사]-[인사기록]-[개인정보변경신청] 클릭\n↓\n② [연수] → [신규신청] 버튼 클릭\n↓\n③ 교육유형·연수구분·교육형태·연수내용 선택\n↓\n④ 연수과정명 입력\n↓\n⑤ 연수기관 선택 또는 직접입력\n↓\n⑥ 연수기간·연수시간 입력\n↓\n⑦ 증빙자료(이수증) 업로드\n↓\n⑧ [확인자](교감) 지정\n↓\n⑨ [저장] 클릭 → 확인자(교감)에게 자동 신청됨',hint:"특수분야 연수: 교사가 직접 신규신청\n→ 확인자로 교감 지정\n→ 저장과 동시에 교감에게 자동 신청",page:'307~308p'},
+{id:39,sec:'s3',type:'t2',q:'아래 상황에서 NEIS 경력 탭의 오류 여부와 올바른 처리 방법을 설명하시오.\n\n[상황] 교사 L의 NEIS 경력 탭에는 현재 근무 중인 학교의 임용일(2022-03-01)만 기록되어 있고, 임용종료일이 비어 있다.',ans:'오류 없음.\n\n현재 근무 중인 학교(전보 상태)의 경우 임용종료일이 입력되지 않아도 정상임.\n\n※ 경력 사항 오류 발생 원인 중 "임용일만 기록되고 임용종료일이 기록되지 않은 경우"는 현재 근무 학교(전보 상태)는 예외.',hint:"현재 근무 중인 학교의 전보 상태: 임용종료일 없어도 정상!\n퇴직·전출 시에는 반드시 종료일 입력",page:'315p'},
+{id:40,sec:'s3',type:'t2',q:'교사 M이 방학 중 연가를 이용하여 해외여행을 다녀오려 한다. NEIS에서의 신청 방법을 설명하고, 이 경우 국외시찰및수학 탭에도 등재해야 하는지 판단하시오.',ans:'NEIS 신청방법:\n[개인근무상황관리] 메뉴에서\n→ 근무상황: [연가] 선택\n→ 사유: "휴업일" 선택\n→ 비고란: "공무외 국외여행" 기재\n\n국외시찰및수학 탭 등재 여부: 등재 불필요.\n\n개인 해외여행은 등재하지 않으며, 공무로 해외 연수·시찰의 경우에만 등재함.',hint:"공무외 국외여행: 연가 신청 + 비고에 '공무외 국외여행'\n국외시찰및수학 탭: 공무 해외연수·시찰만 등재",page:'309p, 318p'},
+
+// ===== 제3절 빈칸 채우기 =====
+{id:41,sec:'s3',type:'t3',q:"NEIS 근무사항의 재직상태 영역에서, 기간제 교사가 계약 해지된 경우 반드시 재직상태를 ( ① )으로 변경해야 하며, NEIS 경력 탭에서 [찾기]를 사용하지 않고 기관명을 직접 입력하면 시스템 내부에서 ( ② )로만 인식하므로 오류가 발생한다.",ans:'① 퇴직\n② 기관코드(코드)',hint:"기간제 계약 해지 후: 반드시 퇴직으로 재직상태 변경!\n기관명: 코드로만 인식 → 반드시 [찾기] 사용",page:'302p, 319p'},
+{id:42,sec:'s3',type:'t3',q:'NEIS에서 연수이수 등재 신청을 반려할 경우 반드시 ( ① )를 입력해야 하며, 반려 처리 후 교사가 수정하여 재신청하면 승인자인 교감은 ( ② ) 메뉴에서 다시 승인 처리를 할 수 있다.',ans:'① 반려사유\n② 개인정보변경승인',hint:"반려 시 반려사유 입력 필수!\n재신청 승인 경로: 교원인사→인사기록→개인정보변경관리→개인정보변경승인",page:'309p'},
+{id:43,sec:'s3',type:'t3',q:'NEIS 근무사항의 일부를 수정한 경우 반드시 ( ① ) 버튼을 클릭해야 다른 시스템에서 조회가 가능하며, 승급기록을 수정·등록한 후에는 반드시 ( ② ) 버튼을 클릭해야 봉급 계산에 적용된다.',ans:'① 연계재전송\n② 근무사항반영',hint:"근무사항 수정 후: 연계재전송\n승급기록 수정 후: 근무사항반영\n→ 두 버튼 모두 반드시 클릭!",page:'312p, 317p'},
+{id:44,sec:'s3',type:'t3',q:'NEIS 경력 사항을 정정(추가 등재)하려면 ( ① )에 ( ② )를 구비하여 ( ③ )으로 수정 요청을 해야 한다.',ans:'① 교육지원청\n② 증빙서류\n③ 공문',hint:"경력 정정: 교육지원청에 증빙서류 + 공문으로 수정 요청\n→ 학교(교감)가 직접 수정 불가!",page:'314p'},
+{id:45,sec:'s3',type:'t3',q:'NEIS에서 보직교사 임용발령 처리 시에는 [근무사항]이나 [경력] 탭에서 직접 입력하지 않고, ( ① ) 메뉴를 활용해야 하며, 부장교사이면서 담임을 맡고 있는 경우 보직구분을 ( ② )으로 설정한다.',ans:'① [교원인사]-[임용발령]-[임용기안문작성]-[보직(담임)교사]\n② 부장담임',hint:"보직교사 임용: 직접 입력 금지!\n임용발령-보직(담임)교사 메뉴로만 처리\n부장+담임 동시 = 부장담임",page:'320p'}
+];
+
+// ── STATE ──
+let status = {};
+let filtered = [];
+let curIdx = 0;
+let curFilter = {sec:'all', type:'all'};
+let revealedAll = false;
+
+const SNAME = {s1:'제1절',s2:'제2절',s3:'제3절'};
+const SCLASS = {s1:'badge-s1',s2:'badge-s2',s3:'badge-s3'};
+const TNAME = {t1:'틀린 곳 찾기',t2:'현장 적용',t3:'빈칸 채우기'};
+const TCLASS = {t1:'badge-t1',t2:'badge-t2',t3:'badge-t3'};
+
+function load() {
+  try { status = JSON.parse(localStorage.getItem('neis_status') || '{}'); } catch(e) { status = {}; }
+}
+function save() {
+  try { localStorage.setItem('neis_status', JSON.stringify(status)); } catch(e) {}
+}
+function getStatus(id) { return status[id] || 'unknown'; }
+function setStatus(id, s) { status[id] = s; save(); }
+
+function applyFilter() {
+  let sec = curFilter.sec, type = curFilter.type;
+  if(type === 'know' || type === 'review' || type === 'unknown') {
+    filtered = Q.filter(q => getStatus(q.id) === type);
+  } else {
+    filtered = Q.filter(q => {
+      if(sec !== 'all' && q.sec !== sec) return false;
+      if(type !== 'all' && q.type !== type) return false;
+      return true;
+    });
+  }
+  curIdx = 0;
+  render();
+}
+
+function setFilter(sec, type) {
+  curFilter = {sec, type};
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  const id = (type === 'know' || type === 'review' || type === 'unknown')
+    ? `fb-${type}` : (sec==='all' && type==='all') ? 'fb-all'
+    : (type==='all') ? `fb-${sec}` : `fb-${type}`;
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  applyFilter();
+}
+
+function updateBadges() {
+  const counts = {s1:0,s2:0,s3:0,t1:0,t2:0,t3:0,know:0,review:0,unknown:0};
+  Q.forEach(q => {
+    counts[q.sec]++; counts[q.type]++;
+    counts[getStatus(q.id)]++;
+  });
+  document.getElementById('cnt-all').textContent = Q.length;
+  ['s1','s2','s3','t1','t2','t3','know','review','unknown'].forEach(k => {
+    const el = document.getElementById(`cnt-${k}`);
+    if(el) el.textContent = counts[k];
+  });
+  const done = counts.know + counts.review;
+  const pct = Math.round(done / Q.length * 100);
+  document.getElementById('progBar').style.width = pct + '%';
+  document.getElementById('hdrStats').innerHTML =
+    `<span class="stat-chip"><b>${counts.know}</b>알겠어요</span>
+     <span class="stat-chip"><b>${counts.review}</b>다시볼게</span>
+     <span class="stat-chip"><b>${pct}%</b>진도</span>`;
+}
+
+function renderMiniNav() {
+  const nav = document.getElementById('miniNav');
+  nav.innerHTML = filtered.map((q, i) => {
+    const st = getStatus(q.id);
+    let cls = 'mini-dot';
+    if(i === curIdx) cls += ' current';
+    else if(st === 'know') cls += ' done-know';
+    else if(st === 'review') cls += ' done-review';
+    return `<div class="${cls}" onclick="goTo(${i})" title="Q.${q.id}"></div>`;
+  }).join('');
+}
+
+function render() {
+  updateBadges();
+  const area = document.getElementById('questionArea');
+  document.getElementById('toolbarCount').textContent =
+    filtered.length + '문항 / Q.' + (filtered[curIdx] ? filtered[curIdx].id : '-');
+  renderMiniNav();
+
+  if(filtered.length === 0) {
+    area.innerHTML = `<div class="q-card"><div class="empty">
+      <div class="empty-icon">📭</div>
+      <div style="font-size:32px;font-weight:600;margin-bottom:8px">해당 문항이 없습니다</div>
+      <div style="font-size:28px">다른 필터를 선택해 보세요</div>
+    </div></div>`;
+    return;
+  }
+  const q = filtered[curIdx];
+  const st = getStatus(q.id);
+  const isLast = curIdx === filtered.length - 1;
+  const isFirst = curIdx === 0;
+  const showBox = q.box ? `<div class="wrong-box">${q.box.replace(/\n/g,'<br>')}</div>` : '';
+  const stBadge = st === 'know'
+    ? `<span class="q-known-indicator known-yes">✓ 알겠어요</span>`
+    : st === 'review'
+    ? `<span class="q-known-indicator known-no">↺ 다시볼게</span>` : '';
+
+  area.innerHTML = `
+    <div class="q-card" id="qcard">
+      <div class="q-card-header">
+        <span class="q-num">Q. ${q.id}</span>
+        <span class="q-section-badge ${SCLASS[q.sec]}">${SNAME[q.sec]}</span>
+        <span class="q-type-badge ${TCLASS[q.type]}">${TNAME[q.type]}</span>
+        <span class="q-progress">${curIdx+1} / ${filtered.length}</span>
+        ${stBadge}
+      </div>
+      <div class="q-body">
+        <div class="q-text">${q.q.replace(/\n/g,'<br>')}</div>
+        ${showBox}
+        <button class="ans-toggle-btn" id="toggleBtn" onclick="toggleAns()">
+          ▼ 정답 보기
+        </button>
+        <div id="ansReveal" style="display:none">
+          <div class="ans-reveal">
+            <div class="ans-label">✏ 정답</div>
+            <div class="ans-text">${q.ans.replace(/\n/g,'<br>')}</div>
+            <div class="hint-box">
+              <span class="hint-star">★</span>
+              <span class="hint-text">${q.hint.replace(/\n/g,'<br>')}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="q-footer">
+        <button class="nav-btn" onclick="prev()" ${isFirst?'disabled':''}>◀ 이전</button>
+        <button class="nav-btn" onclick="next()" ${isLast?'disabled':''}>다음 ▶</button>
+        <span style="font-size:24px;color:var(--gray);margin-left:4px">${q.page}</span>
+        <div class="action-btns">
+          <button class="act-btn know ${st==='know'?'active':''}" onclick="markKnow()">✓ 알겠어요</button>
+          <button class="act-btn review ${st==='review'?'active':''}" onclick="markReview()">↺ 다시볼게</button>
+        </div>
+      </div>
+    </div>`;
+
+  if(revealedAll) { showAns(); }
+}
+
+function toggleAns() {
+  const div = document.getElementById('ansReveal');
+  const btn = document.getElementById('toggleBtn');
+  if(div.style.display === 'none') {
+    div.style.display = 'block';
+    btn.textContent = '▲ 정답 숨기기';
+  } else {
+    div.style.display = 'none';
+    btn.textContent = '▼ 정답 보기';
+  }
+}
+function showAns() {
+  const div = document.getElementById('ansReveal');
+  const btn = document.getElementById('toggleBtn');
+  if(div) { div.style.display = 'block'; if(btn) btn.textContent = '▲ 정답 숨기기'; }
+}
+
+function goTo(i) { curIdx = i; revealedAll = false; render(); }
+function prev() { if(curIdx > 0) { curIdx--; revealedAll = false; render(); } }
+function next() { if(curIdx < filtered.length-1) { curIdx++; revealedAll = false; render(); } }
+function goRandom() { if(filtered.length) { curIdx = Math.floor(Math.random()*filtered.length); revealedAll = false; render(); } }
+function revealAll() { revealedAll = true; showAns(); }
+function hideAll() { revealedAll = false; const div = document.getElementById('ansReveal'); const btn = document.getElementById('toggleBtn'); if(div) { div.style.display='none'; if(btn) btn.textContent='▼ 정답 보기'; } }
+
+function markKnow() {
+  const q = filtered[curIdx];
+  if(!q) return;
+  const was = getStatus(q.id);
+  setStatus(q.id, was === 'know' ? 'unknown' : 'know');
+  showToast(getStatus(q.id) === 'know' ? '✓ 알겠어요로 표시했어요' : '표시를 해제했어요');
+  render();
+}
+function markReview() {
+  const q = filtered[curIdx];
+  if(!q) return;
+  const was = getStatus(q.id);
+  setStatus(q.id, was === 'review' ? 'unknown' : 'review');
+  showToast(getStatus(q.id) === 'review' ? '↺ 다시볼게로 표시했어요' : '표시를 해제했어요');
+  render();
+}
+function resetAll() {
+  if(!confirm('학습 기록을 모두 초기화하시겠습니까?')) return;
+  status = {}; save();
+  showToast('🔄 학습 기록이 초기화되었습니다');
+  render();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// 키보드 지원
+document.addEventListener('keydown', e => {
+  if(e.key === 'ArrowRight') next();
+  if(e.key === 'ArrowLeft') prev();
+  if(e.key === ' ') { e.preventDefault(); toggleAns(); }
+  if(e.key === '1') markKnow();
+  if(e.key === '2') markReview();
+});
+
+// 사이드바 토글
+let sidebarOpen = true;
+function toggleSidebar() {
+  sidebarOpen = !sidebarOpen;
+  const grid = document.getElementById('mainGrid');
+  const icon = document.getElementById('toggleIcon');
+  const label = document.getElementById('toggleLabel');
+  if(sidebarOpen) {
+    grid.classList.remove('sidebar-closed');
+    icon.style.transform = 'rotate(0deg)';
+    label.textContent = '패널 닫기';
+  } else {
+    grid.classList.add('sidebar-closed');
+    icon.style.transform = 'rotate(180deg)';
+    label.textContent = '패널 열기';
+  }
+}
+
+// 초기화
+load();
+setFilter('all','all');
+</script>
+</body>
+</html>
