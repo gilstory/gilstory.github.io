@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>인사실무 매뉴얼 완전 암기 학습앱 v2 | 서울특별시교육청</title>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Pretendard:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--nv:#0d1f3c;--nv2:#162848;--bl:#1f5aad;--cy:#29b4d8;--cy2:#6dd4ed;--gd:#c9a43c;--gd2:#e8c96a;--gr:#27ae60;--gr2:#5dcc8a;--rd:#e74c3c;--rd2:#e87070;--wh:#fff;--cr:#f4f0e6;--g1:rgba(255,255,255,.06);--g2:rgba(255,255,255,.12);--g3:rgba(255,255,255,.45);--g4:rgba(255,255,255,.75)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;background:var(--nv);min-height:100vh;overflow-x:hidden;color:var(--wh)}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 20%,rgba(29,90,173,.2) 0%,transparent 55%),radial-gradient(ellipse at 85% 75%,rgba(41,180,216,.08) 0%,transparent 50%),repeating-linear-gradient(-45deg,transparent,transparent 38px,rgba(255,255,255,.012) 38px,rgba(255,255,255,.012) 39px);pointer-events:none;z-index:0}
+#app{position:relative;z-index:1;display:flex;min-height:100vh}
+#sb{width:240px;flex-shrink:0;background:rgba(0,0,0,.28);border-right:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;scrollbar-width:thin;z-index:10;transition:transform .3s}
+#sb::-webkit-scrollbar{width:4px}#sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:2px}
+.sbhd{padding:16px 14px 10px;border-bottom:1px solid rgba(255,255,255,.06)}.sblogo{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sbmark{width:32px;height:32px;background:linear-gradient(135deg,var(--bl),var(--cy));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.sbtxt{font-family:'Nanum Myeongjo',serif;font-size:11.5px;font-weight:700;color:var(--wh);line-height:1.3}.sbsub{font-size:9px;color:var(--cy2);letter-spacing:.08em}
+.sbyr{font-size:9.5px;color:rgba(255,255,255,.3);background:var(--g1);border:1px solid var(--g2);border-radius:4px;padding:2px 7px;display:inline-block}
+.sbnav{flex:1;padding:6px 0}.sbseclbl{font-size:9px;font-weight:700;color:rgba(255,255,255,.2);letter-spacing:.14em;text-transform:uppercase;padding:8px 14px 3px}
+.sbi{display:flex;align-items:center;gap:9px;padding:8px 14px;cursor:pointer;border-left:3px solid transparent;transition:all .15s}.sbi:hover{background:rgba(255,255,255,.05)}.sbi.on{background:rgba(201,164,60,.08);border-left-color:var(--gd)}
+.sbiico{font-size:15px;width:20px;text-align:center;flex-shrink:0}.sbiinfo{flex:1;min-width:0}
+.sbinum{font-size:9px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.06em}.sbi.on .sbinum{color:rgba(201,164,60,.7)}
+.sbinm{font-size:12px;font-weight:600;color:var(--g3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sbi.on .sbinm{color:var(--wh)}
+.sbbadge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:8px;white-space:nowrap;flex-shrink:0;background:rgba(39,174,96,.18);color:var(--gr2)}
+.sbdiv{height:1px;background:rgba(255,255,255,.05);margin:4px 14px}
+.sbft{padding:10px 14px;border-top:1px solid rgba(255,255,255,.06)}.sbplbl{font-size:9px;color:rgba(255,255,255,.3);margin-bottom:4px;display:flex;justify-content:space-between}
+.sbptrk{height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}.sbpfil{height:100%;background:linear-gradient(90deg,var(--bl),var(--cy));border-radius:2px;transition:width .5s}
+.sbsts{display:flex;gap:6px;margin-top:7px}.sbst{flex:1;text-align:center;background:var(--g1);border-radius:5px;padding:4px 2px}.sbstn{font-size:13px;font-weight:800}.sbstl{font-size:8.5px;color:rgba(255,255,255,.3);margin-top:1px}
+#tog{display:none;position:fixed;top:11px;left:11px;z-index:20;width:36px;height:36px;border-radius:8px;background:rgba(13,31,60,.9);border:1px solid rgba(255,255,255,.14);color:var(--wh);font-size:17px;cursor:pointer;align-items:center;justify-content:center}
+#ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9}
+#main{margin-left:240px;flex:1;display:flex;flex-direction:column;min-height:100vh}
+#topbar{background:rgba(0,0,0,.22);border-bottom:1px solid rgba(255,255,255,.06);padding:11px 26px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5;backdrop-filter:blur(10px);flex-wrap:wrap}
+.tbchip{font-size:9.5px;font-weight:700;color:var(--cy2);letter-spacing:.1em;background:rgba(41,180,216,.1);border:1px solid rgba(41,180,216,.2);padding:3px 9px;border-radius:4px}
+.tbtitle{font-family:'Nanum Myeongjo',serif;font-size:15px;font-weight:700;color:var(--wh)}.tbright{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.tbpill{font-size:10.5px;color:var(--g3);background:var(--g1);border:1px solid var(--g2);padding:3px 9px;border-radius:10px}.tbpill strong{color:var(--gd2)}
+#stabs{display:flex;gap:3px;padding:9px 26px 0;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(255,255,255,.06)}#stabs::-webkit-scrollbar{display:none}
+.stab{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-bottom:none;color:rgba(255,255,255,.4);padding:6px 12px;border-radius:6px 6px 0 0;font-size:11px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .15s;font-family:'Pretendard',sans-serif}
+.stab:hover{background:rgba(255,255,255,.09)}.stab.on{background:var(--cr);border-color:var(--gd);color:var(--nv);font-weight:700}
+#ca{flex:1;padding:18px 26px 40px;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:840px;width:100%;margin:0 auto}
+.mrow{width:100%;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}.mbtns{display:flex;gap:4px}.abtns{display:flex;gap:5px}
+.mbtn{background:var(--g1);border:1px solid var(--g2);color:var(--g3);padding:5px 12px;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s}.mbtn.on{background:rgba(201,164,60,.15);border-color:var(--gd);color:var(--gd2)}
+.abtn{background:var(--g1);border:1px solid var(--g2);color:var(--g3);padding:5px 11px;border-radius:6px;font-size:10.5px;cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s}.abtn:hover{background:rgba(255,255,255,.11)}
+.prog{width:100%}.ptrk{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;margin-bottom:5px}
+.pfil{height:100%;background:linear-gradient(90deg,var(--bl),var(--cy));border-radius:2px;transition:width .4s}.plbls{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.3)}
+.cwrap{width:100%;perspective:1200px}.cflip{position:relative;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.4,0,.2,1);cursor:pointer}.cflip.flipped{transform:rotateY(180deg)}
+.cface{width:100%;backface-visibility:hidden;border-radius:16px;overflow:hidden}.cfront{background:var(--cr);min-height:260px;display:flex;flex-direction:column}
+.cback{position:absolute;top:0;left:0;transform:rotateY(180deg);background:var(--wh);width:100%;min-height:260px;display:flex;flex-direction:column}
+.ctag{background:var(--nv);padding:8px 18px;display:flex;align-items:center;gap:8px}.ctag.ans{background:var(--nv2)}
+.cbadge{font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:3px}.bq{background:var(--gd);color:var(--nv)}.ba{background:var(--gr);color:#fff}
+.ccat{color:rgba(255,255,255,.4);font-size:10.5px}.cpg{margin-left:auto;color:rgba(255,255,255,.25);font-size:10.5px}
+.cbody{flex:1;padding:20px 24px 14px;display:flex;flex-direction:column;justify-content:center}
+.qt{font-size:15px;font-weight:600;color:var(--nv);line-height:1.65;word-break:keep-all}
+.at{font-size:13.5px;font-weight:500;color:var(--nv);line-height:1.75;word-break:keep-all}
+.amemo{margin-top:9px;padding:9px 13px;background:#fffbf0;border:1px solid #e8d88a;border-radius:7px;font-size:11px;color:#7a6830;line-height:1.6}
+.chint{text-align:center;font-size:11px;color:rgba(26,39,68,.35);padding:9px;border-top:1px solid rgba(26,39,68,.08)}.cback .chint{border-top-color:#eee}
+.ctrl{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:9px 16px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:'Pretendard',sans-serif;transition:all .18s}
+.bnav{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);color:var(--wh);padding:10px 20px}.bnav:hover{background:rgba(255,255,255,.15);transform:translateY(-1px)}.bnav:disabled{opacity:.25;cursor:not-allowed;transform:none}
+.bflip{background:var(--gd);color:var(--nv);padding:10px 22px;font-size:12.5px;box-shadow:0 4px 12px rgba(201,164,60,.35)}.bflip:hover{background:var(--gd2);transform:translateY(-2px)}
+.bkn{background:rgba(39,174,96,.13);border:1px solid rgba(39,174,96,.3);color:#4caf80}.bkn:hover{background:rgba(39,174,96,.22)}
+.brt{background:rgba(231,76,60,.11);border:1px solid rgba(231,76,60,.27);color:#e07070}.brt:hover{background:rgba(231,76,60,.2)}
+.stbar{width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:9px;padding:11px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sti{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--g4)}.stdot{width:6px;height:6px;border-radius:50%}.stv{width:1px;height:16px;background:rgba(255,255,255,.07)}.stfbt{margin-left:auto;display:flex;gap:5px}
+.lv{display:none;width:100%;flex-direction:column;gap:5px}.lv.show{display:flex}
+.li{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:11px 15px;cursor:pointer;transition:all .15s;display:flex;align-items:flex-start;gap:9px}
+.li:hover{background:rgba(255,255,255,.08);border-color:var(--gd)}.li.kn{border-left:3px solid var(--gr)}.li.rt{border-left:3px solid var(--rd)}
+.lnum{color:var(--gd);font-size:10px;font-weight:700;min-width:24px;margin-top:2px}.lq{flex:1;color:rgba(255,255,255,.7);font-size:12px;line-height:1.5}
+.ls{font-size:9.5px;padding:2px 6px;border-radius:3px;white-space:nowrap}.skn{background:rgba(39,174,96,.16);color:var(--gr2)}.srt{background:rgba(231,76,60,.16);color:var(--rd2)}
+.tv{display:none;width:100%;overflow-x:auto}.tv.show{display:block}
+table{width:100%;border-collapse:collapse;font-size:11.5px;color:rgba(255,255,255,.8)}
+th{background:rgba(201,164,60,.16);color:var(--gd2);padding:8px 11px;text-align:left;font-weight:700;font-size:10.5px;border-bottom:1px solid rgba(201,164,60,.2)}
+td{padding:8px 11px;border-bottom:1px solid rgba(255,255,255,.05);vertical-align:top;line-height:1.5}tr:hover td{background:rgba(255,255,255,.03)}
+.trd{color:var(--rd2);font-weight:700}.trg{color:var(--gr2);font-weight:700}.trgd{color:var(--gd2);font-weight:700}.trbl{color:#7ab0e8;font-weight:700}
+.compscr{display:none;width:100%;max-width:520px;text-align:center;padding:36px 18px}.compscr.show{display:block}
+.cion{font-size:52px;margin-bottom:12px}.ctitle{font-family:'Nanum Myeongjo',serif;color:var(--gd2);font-size:24px;margin-bottom:7px}
+.cdesc{color:var(--g3);font-size:13px;line-height:1.7;margin-bottom:20px}
+.cstats{display:flex;justify-content:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.cst{background:rgba(255,255,255,.05);border-radius:9px;padding:13px 16px;min-width:75px}.cstn{font-size:24px;font-weight:800}.cstl{font-size:10px;color:var(--g3);margin-top:2px}
+.cbtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+#home{display:none;padding:24px 26px;max-width:980px;width:100%;margin:0 auto}#home.show{display:block}
+.hhero{margin-bottom:24px}.heye{display:flex;align-items:center;gap:9px;margin-bottom:12px}.heln{width:30px;height:2px;background:linear-gradient(90deg,var(--cy),var(--bl));border-radius:1px}
+.hetxt{color:var(--cy2);font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.hhtitle{font-family:'Nanum Myeongjo',serif;color:var(--wh);font-size:clamp(22px,4vw,38px);font-weight:800;line-height:1.3;letter-spacing:-.02em}
+.hhtitle .ac{color:var(--cy2)}.hhtitle .gl{color:var(--gd2)}.hhdesc{color:var(--g3);font-size:12.5px;margin-top:9px;line-height:1.7}
+.hhsts{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}.hhst{display:flex;flex-direction:column;gap:2px}.hhstn{font-size:19px;font-weight:800}.hhstl{font-size:10px;color:var(--g3)}.hhdiv{width:1px;height:28px;background:rgba(255,255,255,.1)}
+.hprog{margin:0 0 24px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:11px;padding:14px 18px}
+.hplbl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--g3);margin-bottom:7px}.hptrk{height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.hpfil{height:100%;background:linear-gradient(90deg,var(--bl),var(--cy));border-radius:4px;transition:width .6s}
+.hpsegs{display:flex;gap:3px;margin-top:8px;flex-wrap:wrap}.hpseg{height:3px;flex:1;border-radius:2px;min-width:18px;transition:all .3s}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:10px}
+.cc{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:16px 18px;cursor:pointer;transition:all .22s;position:relative;overflow:hidden}
+.cc:hover{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.07);transform:translateY(-2px)}
+.cc.rdy{border-color:rgba(201,164,60,.38);background:rgba(201,164,60,.04)}.cc.rdy:hover{border-color:var(--gd);transform:translateY(-3px);box-shadow:0 0 20px rgba(201,164,60,.25)}
+.cctop{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px}
+.ccico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.ccbdg{font-size:9px;font-weight:700;padding:2px 8px;border-radius:8px;background:rgba(201,164,60,.18);border:1px solid rgba(201,164,60,.35);color:var(--gd2)}
+.ccnum{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.25);letter-spacing:.05em;margin-bottom:2px}.cc.rdy .ccnum{color:rgba(201,164,60,.65)}
+.cctitl{font-family:'Nanum Myeongjo',serif;color:var(--wh);font-size:16px;font-weight:700;margin-bottom:4px}
+.ccdesc{color:rgba(255,255,255,.38);font-size:11px;line-height:1.55;word-break:keep-all}
+.ccbot{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.06)}
+.cctags{display:flex;gap:3px;flex-wrap:wrap}.cctag{background:rgba(201,164,60,.07);border:1px solid rgba(201,164,60,.18);color:rgba(201,164,60,.75);font-size:9.5px;padding:2px 6px;border-radius:3px}
+.ccpg{color:rgba(255,255,255,.2);font-size:10px}.ccarr{font-size:15px;color:var(--gd);position:absolute;bottom:12px;right:13px}
+@media(max-width:700px){#sb{transform:translateX(-100%)}#sb.open{transform:translateX(0)}#ov.show{display:block}#tog{display:flex}#main{margin-left:0}#ca{padding:14px 12px 30px}#topbar{padding:9px 14px}#home{padding:14px}#stabs{padding:7px 12px 0}.qt{font-size:13.5px}.at{font-size:12.5px}}
+</style>
+</head>
+<body>
+<button id="tog" onclick="togSB()">&#9776;</button>
+<div id="ov" onclick="closeSB()"></div>
+<div id="app">
+<nav id="sb">
+  <div class="sbhd">
+    <div class="sblogo"><div class="sbmark">&#127891;</div><div><div class="sbtxt">서울시교육청<br>인사실무 매뉴얼</div><div class="sbsub">교감 자격연수 v2</div></div></div>
+    <span class="sbyr">2026년도 기준</span>
+  </div>
+  <div class="sbnav">
+    <div class="sbseclbl">메뉴</div>
+    <div class="sbi on" id="sb-home" onclick="goHome()"><div class="sbiico">&#127968;</div><div class="sbiinfo"><div class="sbinum">HOME</div><div class="sbinm">전체 목차</div></div></div>
+    <div class="sbdiv"></div>
+    <div id="sbchs"></div>
+  </div>
+  <div class="sbft">
+    <div class="sbplbl"><span>전체 진도</span><span id="sbpct">0%</span></div>
+    <div class="sbptrk"><div class="sbpfil" id="sbpf" style="width:0%"></div></div>
+    <div class="sbsts">
+      <div class="sbst"><div class="sbstn" id="sbt">0</div><div class="sbstl">전체</div></div>
+      <div class="sbst"><div class="sbstn" style="color:var(--gr2)" id="sbk">0</div><div class="sbstl">암기</div></div>
+      <div class="sbst"><div class="sbstn" style="color:var(--rd2)" id="sbr">0</div><div class="sbstl">복습</div></div>
+    </div>
+  </div>
+</nav>
+<div id="main">
+  <div id="topbar">
+    <div style="display:flex;align-items:center;gap:9px"><span class="tbchip" id="tbc">HOME</span><span class="tbtitle" id="tbt">인사실무 매뉴얼 학습앱 v2</span></div>
+    <div class="tbright">
+      <span class="tbpill">전체 <strong id="tbtl">0</strong></span>
+      <span class="tbpill">암기 <strong id="tbkn" style="color:var(--gr2)">0</strong></span>
+      <span class="tbpill">복습 <strong id="tbrt" style="color:var(--rd2)">0</strong></span>
+    </div>
+  </div>
+  <div id="home" class="show">
+    <div class="hhero">
+      <div class="heye"><div class="heln"></div><div class="hetxt">암기학습 앱 v2 · 800+ 문항</div></div>
+      <h1 class="hhtitle"><span class="ac">인사실무</span> 매뉴얼<br><span class="gl">전 단원 완전 암기</span> 프로그램</h1>
+      <p class="hhdesc">2026년도 서울특별시교육청 교육공무원 인사실무 매뉴얼 8개 챕터 전체를<br>플래시카드·목록·요약표로 체계적으로 학습하세요. (제4장: 원본 91문항 수록)</p>
+      <div class="hhsts">
+        <div class="hhst"><div class="hhstn" style="color:var(--gd2)" id="hstl">0</div><div class="hhstl">전체 문항</div></div>
+        <div class="hhdiv"></div>
+        <div class="hhst"><div class="hhstn" style="color:var(--cy2)">8</div><div class="hhstl">챕터</div></div>
+        <div class="hhdiv"></div>
+        <div class="hhst"><div class="hhstn" style="color:var(--gr2)" id="hskn">0</div><div class="hhstl">암기완료</div></div>
+        <div class="hhdiv"></div>
+        <div class="hhst"><div class="hhstn" style="color:var(--rd2)" id="hsrt">0</div><div class="hhstl">복습필요</div></div>
+      </div>
+    </div>
+    <div class="hprog">
+      <div class="hplbl"><span>챕터별 학습 진도</span><span id="hspct" style="color:var(--gd2)">0%</span></div>
+      <div class="hptrk"><div class="hpfil" id="hpf" style="width:0%"></div></div>
+      <div class="hpsegs" id="hsegs"></div>
+    </div>
+    <div class="cgrid" id="hgrid"></div>
+  </div>
+  <div id="stabs" style="display:none"></div>
+  <div id="ca" style="display:none">
+    <div class="mrow">
+      <div class="mbtns">
+        <button class="mbtn on" onclick="setMode('card')">&#128199; 카드</button>
+        <button class="mbtn" onclick="setMode('list')">&#128203; 목록</button>
+        <button class="mbtn" onclick="setMode('table')">&#128202; 표</button>
+      </div>
+      <div class="abtns">
+        <button class="abtn" onclick="shuffleCards()">&#128256; 섞기</button>
+        <button class="abtn" onclick="goHome()">&#127968; 목차</button>
+      </div>
+    </div>
+    <div class="prog" id="pg"><div class="ptrk"><div class="pfil" id="pf" style="width:0%"></div></div><div class="plbls"><span id="plbl">0/0</span><span id="ppct">0%</span></div></div>
+    <div class="cwrap" id="cw">
+      <div class="cflip" id="cf" onclick="flipCard()">
+        <div class="cface cfront">
+          <div class="ctag"><span class="cbadge bq">Q</span><span class="ccat" id="ccat"></span><span class="cpg" id="cpg"></span></div>
+          <div class="cbody"><div class="qt" id="qt"></div></div>
+          <div class="chint">클릭하면 정답이 보입니다 &#9660;</div>
+        </div>
+        <div class="cface cback">
+          <div class="ctag ans"><span class="cbadge ba">정답</span><span class="ccat" id="ccatb"></span><span class="cpg" id="cpgb"></span></div>
+          <div class="cbody"><div class="at" id="at"></div><div class="amemo" id="amemo" style="display:none"></div></div>
+          <div class="chint">&#9989; 암기완료 또는 &#10060; 모름을 눌러주세요</div>
+        </div>
+      </div>
+    </div>
+    <div class="ctrl" id="ctrl">
+      <button class="btn bnav" id="pb" onclick="prevCard()">&#9664; 이전</button>
+      <button class="btn brt" onclick="markRetry()">&#10060; 모름</button>
+      <button class="btn bflip" onclick="flipCard()">&#8617; 뒤집기</button>
+      <button class="btn bkn" onclick="markKnown()">&#9989; 암기</button>
+      <button class="btn bnav" id="nb" onclick="nextCard()">다음 &#9654;</button>
+    </div>
+    <div class="stbar">
+      <div class="sti"><div class="stdot" style="background:var(--gr)"></div>암기: <strong id="stk" style="color:var(--gr2);margin-left:3px">0</strong></div>
+      <div class="stv"></div>
+      <div class="sti"><div class="stdot" style="background:var(--rd)"></div>복습: <strong id="str" style="color:var(--rd2);margin-left:3px">0</strong></div>
+      <div class="stv"></div>
+      <div class="sti"><div class="stdot" style="background:rgba(255,255,255,.2)"></div>미확인: <strong id="stu" style="color:var(--g3);margin-left:3px">0</strong></div>
+      <div class="stfbt"><button class="abtn" onclick="filterRetry()">&#10060; 복습만</button><button class="abtn" onclick="resetSec()">&#128260; 초기화</button></div>
+    </div>
+    <div class="lv" id="lv"><div id="li"></div></div>
+    <div class="tv" id="tv"><div id="tc"></div></div>
+    <div class="compscr" id="comp">
+      <div class="cion">&#127891;</div><div class="ctitle">섹션 완료!</div><div class="cdesc">모든 카드를 확인했습니다.</div>
+      <div class="cstats">
+        <div class="cst"><div class="cstn" id="csk" style="color:var(--gr2)">0</div><div class="cstl">암기완료</div></div>
+        <div class="cst"><div class="cstn" id="csr" style="color:var(--rd2)">0</div><div class="cstl">복습필요</div></div>
+        <div class="cst"><div class="cstn" id="cst2" style="color:var(--gd2)">0</div><div class="cstl">전체</div></div>
+      </div>
+      <div class="cbtns">
+        <button class="btn brt" onclick="filterRetry()">&#10060; 복습만</button>
+        <button class="btn bflip" onclick="resetSec()">&#128260; 처음부터</button>
+        <button class="btn bnav" onclick="goHome()">&#127968; 목차</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+const CHS=[
+{id:1,ico:'📋',clr:'#1f5aad',ttl:'임용',pg:'5~38p',
+ desc:'신규·경력채용, 결격사유, 보직교사, 전직, 파견, 겸임겸직, 직위해제, 퇴직, 교장공모',
+ tags:['신규채용','기간제','직위해제'],
+ secs:[
+  {lbl:'개관·결격',ttl:'임용 개관·원칙·결격사유',cards:[
+   {q:'임용의 정의와 포함되는 인사 활동 전체는?',a:'<b>정의</b>: 교육공무원의 신분을 부여하여 근무하게 하는 모든 인사 활동<br><b>포함</b>: 신규 채용, 승진, 승급, 전직, 전보, 겸임, 파견, 강임, 휴직, 직위해제, 정직, 복직, 면직, 해임 및 파면',memo:'신승승전전겸파강휴 직위해제정직복직면해파',pg:'7p',cat:'임용개관'},
+   {q:'임용의 종류를 신분 발생·변경·소멸로 구분하시오.',a:'<b>① 신분 발생</b>: 신규채용·경력경쟁채용<br><b>② 신분 변경</b>: 승진, 승급, 전직, 전보, 겸임, 파견, 강임, 휴직, 직위해제, 정직, 복직<br><b>③ 신분 소멸</b>: 당연퇴직, 명예퇴직, 정년퇴직, 의원면직, 직권면직, 해임, 파면',memo:'발생=신규경력/변경=승진이하11종/소멸=퇴직해임파면',pg:'7p',cat:'임용개관'},
+   {q:'임용 시기의 원칙과 소급 가능한 예외 2가지는?',a:'<b>원칙</b>: 임용장이나 임용통지서에 적힌 일자<br><b>소급 예외 ①</b>: 공무로 사망한 자 → 사망 전일<br><b>소급 예외 ②</b>: 휴직기간 만료 후 직무 복귀 불가로 직권면직 → 휴직기간 만료일 또는 사유소멸일',memo:'임용일 소급금지/예외: 공무사망전일·면직시소멸일',pg:'7p',cat:'임용원칙'},
+   {q:'임용의 원칙 2가지는?',a:'① 자격, 재교육성적, 근무성적, 그 밖에 실제 증명되는 <b>능력에 의함</b><br>② 자격을 갖추고 임용을 원하는 모든 사람에게 <b>능력에 따른 균등한 임용 기회 보장</b>',memo:'능력주의 + 균등기회 보장',pg:'7p',cat:'임용원칙'},
+   {q:'채용이 영구 제한되는 3가지 비위 행위는?',a:'① <b>금품수수 행위</b><br>② 시험문제 유출·성적 조작 등 <b>학생성적 관련 비위</b><br>③ 학생에 대한 <b>신체적 폭력 행위</b><br>→ 파면·해임 또는 금고 이상 형을 받은 자 교원 채용 불가 (집행유예 경과자 포함)',memo:'금품·성적비위·신체폭력 → 영구 채용 제한',pg:'7p',cat:'채용제한'},
+   {q:'국가공무원법상 임용 결격사유 기간별 정리는?',a:'<b>5년</b>: 금고이상 실형 집행 종료 후 / 파면처분 후<br><b>3년</b>: 성폭력·스토킹 100만원 이상 벌금 확정 후 / 해임처분 후<br><b>2년</b>: 금고이상 집행유예 종료 후 / 직무관련 횡령·배임 300만원 이상 벌금 후<br><b>선고유예 기간 중</b>: 선고유예 기간 동안<br><b>영구</b>: 미성년 성범죄로 파면·해임된 자',memo:'파면5년/해임3년/실형5년/집유종료2년/선거법10년/미성년성범죄=영구',pg:'8p',cat:'결격사유'},
+   {q:'공직선거법 위반자의 임용 결격 기간은?',a:'<b>10년</b>: 징역형 선고 후 집행 종료 또는 집행유예 확정 후<br><b>5년</b>: 100만원 이상 벌금형 확정 후',memo:'선거법 징역형=10년 / 벌금100만이상=5년',pg:'8p',cat:'결격사유'},
+   {q:'임용시험 부정행위자의 응시 제한 기간은?',a:'교육공무원 임용시험 부정행위 → <b>처분일로부터 2년간</b> 응시 불가<br>다른 법령의 임용시험 부정행위로 응시자격 정지 중인 자 → 해당 기간 중 응시 불가',memo:'임용시험 부정행위 = 처분일로부터 2년',pg:'8p',cat:'결격사유'},
+   {q:'인사 발령 시 임명장·임용장·인사발령통지서를 구분하시오.',a:'<b>임명장 수여</b>: 교장·교감·교사 등 신규임용 및 전직임용(새로운 직 부여)<br><b>임용장 수여</b>: 승진<br><b>인사발령 통지서로 갈음</b>: 교사의 전보, 전보·강임·면직·징계·직위해제·휴직·복직·호봉재획정·승급 등',memo:'신규·전직=임명장/승진=임용장/전보등=통지서',pg:'9p',cat:'인사발령'},
+   {q:'인사보고 의무 기간 7일 이내 보고 사유는?',a:'소속기관의 장이 발령일 또는 사유발생일로부터 <b>7일 이내</b> 임용권자에게 인사보고<br>사유: 전보, 승급, 국내연수, 국외연수, 국외출장, 포상, 사망, 징계처분, 직위해제, 휴직, 복직, 겸임 및 파견근무',memo:'인사보고 = 사유발생 7일 이내',pg:'9p',cat:'인사발령'},
+  ]},
+  {lbl:'신규·경력채용',ttl:'신규채용·경력경쟁채용·보직교사',cards:[
+   {q:'교사 신규채용 전형 방법은?',a:'<b>1차 시험</b>: 주관식(단답형·서술형·논술형) 필기시험<br><b>2차 시험</b>: 교직적성 심층면접 + 수업능력(실기·실험 포함)<br><b>공개전형</b>에 의해 선발',memo:'1차=주관식필기/2차=심층면접+수업능력',pg:'11p',cat:'신규채용'},
+   {q:'교사임용후보자명부의 작성 기준 및 유효기간은?',a:'<b>작성 기준</b>: 고순위자 순으로 채용예정인원의 <b>3배수 범위</b> 내 임용<br><b>유효기간</b>: 작성일로부터 <b>1년</b> (2년 범위 내 연장 가능)<br><b>연장 시</b>: 새로 시행한 공개전형 합격자 순위보다 상위에 등재',memo:'3배수범위 임용 / 1년(최대2년)',pg:'11p',cat:'신규채용'},
+   {q:'임용후보자명부에서의 삭제 사유 3가지는?',a:'① 교사로 <b>임용된 때</b><br>② 국가공무원법 제33조 <b>결격사유에 해당</b>한 때<br>③ <b>공무원채용신체검사 불합격</b> 판정을 받을 때',memo:'임용됨/결격사유/신체검사불합격',pg:'11p',cat:'신규채용'},
+   {q:'임용후보자의 명부 부활이 가능한 경우 및 부활 후 순위는?',a:'① 결격 사유에 해당되어 삭제된 자: 해당 결격 사유가 해소된 때 (사실 입증 필수)<br>② 신체검사 불합격으로 삭제된 자: 심신의 장애가 치유된 때 (의료기관장 증명 필수)<br>★ <b>부활 순위: 명부의 최하 순위</b>',memo:'부활=결격해소·장애치유 / 순위=최하',pg:'11p',cat:'신규채용'},
+   {q:'임용 연기(유예) 신청 사유와 복귀 후 등재 순위는?',a:'<b>사유</b>: 병역법에 의한 병역 복무 시 신청 (복무 기간 동안 임용 유예)<br><b>복무 만료 시 등재 순위</b>: 명부의 <b>최상순위자보다 상위</b>에 등재<br>2인 이상 동시 등재 시: 유예 당시의 등재 순위에 따라 선순위 결정',memo:'병역복무=임용연기/복귀후 최상위자 위에 등재',pg:'11p',cat:'신규채용'},
+   {q:'경력경쟁채용이 가능한 경우 5가지는?',a:'① 질병휴직 만료 등으로 퇴직한 자 → <b>퇴직일로부터 2년 이내</b> 재임용<br>② 임용예정직 연구실적 또는 근무실적이 <b>3년 이상</b>인 자<br>③ 도서·벽지 등 특수지역 근무자 및 특수 교과목 담당자<br>④ 교육경력 있는 공무원으로 경쟁시험이 부적당한 경우<br>⑤ 사립학교 교원을 교육공무원으로 임용하는 경우',memo:'퇴직2년내/경력3년이상/특수지역/공무원/사립교원',pg:'10p',cat:'경력경쟁채용'},
+   {q:'신규교사 임용 절차를 순서대로 설명하시오.',a:'채용시험 → 교사임용후보자 직무연수 → 임용후보자명부 작성 → 유·초등학교 교사 교육지원청 배정(공립특수학교 교사 임용: 교육감) → <b>유·초등학교 교사 임용: 교육장</b>',memo:'시험→연수→명부→배정→임용(교육장)',pg:'12p',cat:'신규채용'},
+   {q:'초등학교 보직교사(부장교사) 배치 기준은?',a:'<b>20학급 이하</b>: 10명 이내<br><b>21~26학급</b>: 11명 이내<br><b>27~32학급</b>: 12명 이내<br><b>33학급 이상</b>: 13명 이내<br>★ 학급수 = 일반+특수+특별학급 합산',memo:'20이하=10/21~26=11/27~32=12/33↑=13',pg:'13p',cat:'보직교사'},
+   {q:'유치원 보직교사(부장교사) 배치 기준은?',a:'<b>5학급 이하</b>: 1명<br><b>6~10학급</b>: 2명<br><b>11학급 이상</b>: 3명 이상<br>★ 연구학교·시범유치원에는 1명 추가 가능',memo:'5이하=1/6~10=2/11↑=3이상',pg:'13p',cat:'보직교사'},
+   {q:'보직교사 임용 절차 및 NEIS 처리 방법은?',a:'① 학교장이 <b>학년도 단위</b>로 임용<br>② NEIS [교원인사]-[임용발령]-[임용기안문작성]-[보직(담임)교사]에서 발령<br>③ <b>3월 1일자</b> 임용장 수여 및 임면 사항 발령대장 등재<br>★ 부장교사 발령: 경력사항 입력 + 보직 변경<br>★ 담임교사 발령: 경력사항 입력 안 됨 (보직만 변경)',memo:'학년도단위/NEIS처리필수/부장=경력입력,담임=경력미입력',pg:'14p',cat:'보직교사'},
+  ]},
+  {lbl:'전직·파견',ttl:'전직·파견',cards:[
+   {q:'전직과 승진의 차이는?',a:'<b>전직</b>: 교육공무원의 종류와 자격을 <b>달리하는</b> 임용 (교사↔교육전문직원 등)<br><b>승진</b>: 같은 종류의 직무에 종사하는 바로 <b>아래 직급</b>을 경력·성적 등에 의해 임용 (교사→교감→교장)',memo:'전직=종류·자격다름/승진=같은종류직무 아래직급',pg:'16p',cat:'전직'},
+   {q:'임용된 날로부터 1년 이내 전직 등 제한의 예외 사유는?',a:'① 기구의 개편 또는 직제·정원 변경<br>② 해당 공무원의 <b>승진 또는 강임</b><br>③ 전보권자를 달리하는 <b>기관 간 전보</b><br>④ 임용예정직위 관련 <b>특수 연수 이수자</b><br>⑤ <b>징계처분</b>을 받은 경우<br>⑥ <b>형사사건</b>에 관련된 혐의 있는 경우<br>⑦ 배우자·직계존속 거주 지역 기관으로 전보 / 임신 중·출산 후 1년 미만 교원',memo:'1년내원칙금지/예외: 기구개편·승강임·기관간전보·특수연수·징계·형사·모성보호',pg:'18p',cat:'전직'},
+   {q:'교육전문직원이 교원으로 전직 시 교감·교장으로 전직 가능한 경우는?',a:'교사→전문직 전직 후 <b>5년 이상</b> 근속자: 교감 또는 교장으로 전직 가능<br>교감→전문직 전직 후 <b>2년 이상</b> 근속자: 교감 또는 교장으로 전직 가능<br>교육경력 10년 이상 + 전문직 10년 이상: 전직 직위 제한 없음',memo:'교사→전직5년=교감교장가능/교감→전직2년=가능',pg:'18p',cat:'전직'},
+   {q:'파견 사유별 기간을 정리하시오.',a:'<b>2년(+1년연장)</b>: 국가사업 교육연구, 행정지원, 기관간협력, 국외기관·한국학교<br><b>1년6월(+6월연장)</b>: 능력개발 위한 국내외 교육·연구기관<br><b>1년(+1년연장)</b>: 특수업무, 연수기관 교수요원, 국내 연구기관·민간기관<br>★ 시도교육청 상호 교환파견: 2년, 연장 불가',memo:'2년(+1년)/1년6월(+6월)/1년(+1년)/교환파견=2년연장불가',pg:'20p',cat:'파견'},
+   {q:'파견자의 복무와 보수는?',a:'<b>복무</b>: 파견받은 기관의 장의 지휘·감독<br><b>보수</b>: 원소속기관에서 지급 / 기타 수당: 파견받은 기관에서 지급<br><b>결원보충</b>: 1년 이상 파견 시 결원 보충 가능',memo:'복무=파견기관장 지휘/보수=원소속기관 지급',pg:'21p',cat:'파견'},
+  ]},
+  {lbl:'겸임·직위해제·퇴직',ttl:'겸임·직위해제·퇴직·교장공모',cards:[
+   {q:'겸임의 요건과 기간은?',a:'<b>요건</b>: ① 직위·직무 내용이 유사하고 ② 담당 직무 수행에 지장이 없다고 인정되는 경우<br><b>기간</b>: 1년 이내 (필요 시 연장 가능)<br><b>보수</b>: 겸임 직위 보수가 본직보다 많은 경우 차액 지급 또는 겸임기관에서 지급',memo:'직위유사·직무지장없음/1년(연장가능)/차액지급',pg:'23p',cat:'겸임'},
+   {q:'공무원 겸직허가의 허가기준·허가권자·신청 시기는?',a:'<b>허가기준</b>: 복무규정 제25조 금지요건에 해당하지 않아야 함<br><b>허가권자</b>: 소속기관의 장 (유초중교원·교장=교육장 / 고등학교장=교육감 / 사립=이사장)<br><b>신청시기</b>: 겸직예정일 10일 전까지',memo:'소속기관장허가/유초중교원=교육장/고교장=교육감/10일전신청',pg:'49p',cat:'겸직'},
+   {q:'영리업무 금지 기준 4가지는?',a:'① 상업·공업·금융업 등 영리업무를 스스로 경영하여 영리를 추구함이 현저한 업무<br>② 사기업체의 이사·감사 등 임원이 되는 것<br>③ 공무원 본인의 직무와 관련이 있는 타인의 기업에 대한 투자<br>④ 그 밖에 계속적으로 재산상 이득을 목적으로 하는 업무',memo:'영리추구현저/사기업임원/직무관련투자/재산상이득',pg:'47p',cat:'겸직'},
+   {q:'직위해제 사유 5가지와 급여 지급 기준은?',a:'① 기소(약식명령 제외) → 봉급 <b>50%</b><br>② 금품수수 등 비위 수사 개시 → 봉급 <b>50%</b><br>③ 직무수행능력 현저히 부족·근무태도 불성실 → 봉급 <b>80%</b><br>④ 중징계(파면·해임·강등·정직) 징계의결 요구 중 → 봉급 <b>80%</b><br>⑤ 공수처 수사 → 봉급 <b>50%</b>',memo:'기소·수사·공수처=50% / 능력부족·징계=80%',pg:'25p',cat:'직위해제'},
+   {q:'직위해제 후 3개월이 지나도 직위 부여 불가 시 처리는?',a:'직위해제 후 <b>3개월</b>이 경과해도 직위를 부여할 수 없으면 <b>직권면직</b> 가능<br>★ 능력부족·성적불량으로 직위해제된 자: 3개월 범위에서 대기발령 후 능력개발교육(3~6개월)',memo:'3개월 초과 직위부여불가 → 직권면직',pg:'25p',cat:'직위해제'},
+   {q:'직위해제는 징계처분인가?',a:'직위해제는 <b>징계처분이 아님</b> (독립된 인사처분)<br>동일한 사유로 직위해제 처분 후 다시 징계처분을 해도 일사부재리원칙에 위배되지 않음<br>직위해제 기간은 징계에 따른 효과가 아니므로, 직위해제 기간 중에도 징계 가능',memo:'직위해제≠징계/독립인사처분/일사부재리원칙 미적용',pg:'25p',cat:'직위해제'},
+   {q:'당연퇴직 사유 4가지와 정년은?',a:'① <b>결격사유</b>에 해당하게 된 때<br>② <b>정년</b>에 달한 때 (초·중등교원: <b>만 62세</b> / 유치원 원장: <b>만 65세</b>)<br>③ <b>임기가 만료</b>된 때<br>④ 학교 폐지 등으로 <b>잉여 인원</b>이 된 때',memo:'결격·정년(초중등62세/유원장65세)·임기만료·폐교 → 당연퇴직',pg:'27p',cat:'퇴직'},
+   {q:'명예퇴직 요건과 수당 계산식은?',a:'<b>요건</b>: 교육공무원으로 <b>20년 이상</b> 근속 + <b>정년 전 1년 이상</b> 남은 자가 자진 퇴직<br><b>수당 계산</b>: 잔여기간(정년까지) × <b>1/2</b> × 월봉급액<br>★ 실 재직기간으로 계산 (경력환산율표 무관)',memo:'20년↑+정년1년↑남음/잔여기간×1/2×월봉급',pg:'28p',cat:'명예퇴직'},
+   {q:'교장의 임기와 학기 중 만료 시 처리는?',a:'<b>임기</b>: 4년 (1차에 한하여 중임 가능)<br><b>3~8월 만료</b>: 8월 31일을 임기 만료일로<br><b>9월~다음해2월 만료</b>: 다음 해 2월 말일을 임기 만료일로<br>★ 1차 임기 마치고 정년 잔여기간 4년 미만 → 교장으로 재임용(중임)',memo:'교장임기4년/3~8월만료→8.31/9~2월만료→다음해2.말',pg:'12p',cat:'교장임용'},
+   {q:'교장공모제 유형 3가지와 자격을 비교하시오.',a:'<b>초빙형</b>: 교장 자격증 소지자 (당해 학교 교원이 아닌 자)<br><b>내부형</b>: 해당 학교 근무 교원 (교원 총수 1/2 이상 연명 추천 필요)<br><b>개방형</b>: 전문성 인정 시 비교원도 가능<br>★ <b>임기</b>: 4년 (중임 가능) / 공모교장 재직 횟수는 일반교장 임기에 미산입',memo:'초빙=외부교장/내부=현직1/2추천/개방=비교원가능/임기4년',pg:'33p',cat:'교장공모'},
+  ]},,
+  {lbl:'Q&A 사례',ttl:'임용 Q&A 실전 사례',cards:[
+   {q:'보직교사 임용 후 임기 만료 전 발령을 해지할 경우 NEIS 처리는?',a:'[교원인사]-[임용발령]-[임용기안문작성]-[보직(담임)교사]에서 해당자 조회 후 임용종료일 기록 → <b>[임용종료] 버튼</b> 클릭',memo:'임용종료 버튼 클릭으로 처리',pg:'15p',cat:'보직교사'},
+   {q:'보직교사 희망자가 없을 경우 처리 방법은?',a:'본인의 희망이 우선되어야 하나, 희망자가 없을 경우 해당 부서의 원활한 업무 수행을 위하여 <b>자격, 경력 및 학력 등 제반사항을 고려하여 학교장이 임용</b>할 수 있음',memo:'희망자없으면 학교장이 자격·경력·학력 고려하여 임용',pg:'15p',cat:'보직교사'},
+   {q:'교원 전직 시 전직이 제한되는 경우는?',a:'① 임용된 날로부터 <b>1년 이내</b>인 경우 (예외 사유 제외)<br>② <b>징계처분</b>을 받고 일정 기간이 지나지 않은 경우<br>③ 당해 학교급에서의 근무기간이 <b>4년 미만</b>인 경우 (유형에 따라 상이)',memo:'1년내·징계·4년미만근무=전직제한',pg:'18p',cat:'전직'},
+   {q:'교감이 NEIS에서 보직교사 임용 처리 시 주의사항은?',a:'부장교사 발령은 경력사항에 입력되어 승진·평정·전보 가산점에 영향을 미침<br>담임교사 발령은 경력사항에 입력되지 않고 근무사항의 보직만 변경됨<br>→ 반드시 <b>NEIS로 처리해야</b> 승진평정 등에 반영됨',memo:'부장=경력입력(가산점영향)/담임=경력미입력/반드시NEIS처리',pg:'14p',cat:'보직교사'},
+   {q:'초빙교사 임용 요청 절차는?',a:'① 학교운영위원회 심의<br>② 교육장(또는 교육감)에게 초빙 요청<br>③ 요청받은 교육장이 해당 교사에게 전보 예정 여부 통보<br>④ 해당 교사 동의 시 → 해당 학교로 전보 발령<br>★ 초빙교사는 학교의 장이 지정한 요건을 갖춘 교원이어야 함',memo:'학운위심의→교육장요청→교사동의→전보발령',pg:'34p',cat:'초빙교사'},
+   {q:'원로교사 임용이 가능한 경우는?',a:'교장 2차 임기가 종료되고도 정년까지 잔여기간이 있는 자가 교사로 근무를 희망하는 경우<br>→ 수업 담당 능력과 건강 등을 고려하여 <b>원로교사로 임용</b><br>★ 원로교사 우대: 수업시수 경감 등',memo:'교장2차임기종료후정년잔여=희망시 원로교사',pg:'12p',cat:'교장임용'},
+   {q:'유치원 원장의 임기는?',a:'유치원 원장의 임기: <b>4년</b> (1차에 한하여 중임 가능)<br>★ 초등학교 교장과 동일한 임기 구조',memo:'유치원원장=교장과동일/임기4년/1차중임가능',pg:'12p',cat:'교장임용'},
+   {q:'기간제교원의 채용 절차 주요 사항은?',a:'① 임용 사유 발생<br>② 학교장이 지원자 공개 모집 (학교 홈페이지 등 게시)<br>③ 학교 자체 심사·면접<br>④ 학교장이 임용 결정 및 계약 체결<br>★ NEIS 계약직교원 탭에 등록<br>★ 기간: 1년 이내, 필요시 3년 범위에서 재계약',memo:'공개모집→자체심사→학교장임용결정→계약체결/NEIS등록',pg:'14p',cat:'기간제교원'},
+   {q:'기간제교원에게 적용되지 않는 사항은?',a:'① <b>승진</b>: 기간제교원은 승진 불가<br>② <b>정년 보장</b>: 정년이 없음 (계약 만료 시 자동 종료)<br>③ <b>휴직</b>: 대부분의 휴직 제도 적용 안 됨 (질병 등 일부 예외)<br>★ 호봉 획정은 학교장이 시행',memo:'기간제=승진불가·정년없음·대부분휴직불가/호봉=학교장획정',pg:'14p',cat:'기간제교원'},
+   {q:'파견이 끝난 후 처리 방법은?',a:'파견 사유 소멸 또는 목적 달성 불가 시: 지체 없이 원소속 기관으로 복귀시켜야 함<br>파견 기간 만료 시: 자동으로 원소속 복귀<br>★ 파견 중 원소속 기관의 보수 지급이 원칙',memo:'파견사유소멸=지체없이원소속복귀',pg:'21p',cat:'파견'},
+   {q:'겸직 신고 없이 겸직 시 징계 기준은?',a:'겸직허가 대상 업무를 허가받지 않고 겸직: <b>영리업무금지 및 겸직허가 의무(국가공무원법 제64조) 위반</b><br>→ 징계사유에 해당<br>→ 비위의 정도 및 과실에 따라 <b>최소 견책에서 최대 파면</b>까지',memo:'무허가겸직=징계사유/견책~파면',pg:'51p',cat:'겸직'},
+   {q:'유튜브 활동 겸직허가 대상이 되는 시점은?',a:'구글 광고 계약 파트너 인정 최소 요건 도달 시 = <b>구독자 1,000명 이상 + 연간 총 재생시간 4,000시간 이상</b>부터 겸직허가 신청 대상<br>★ 요건 미달이라도 교원 품위 손상하거나 직무에 지장 초래 시 활동 금지',memo:'구독자1000명+재생4000시간=겸직허가대상/요건미달도품위손상시금지',pg:'59p',cat:'겸직'},
+  ]},
+  {lbl:'신분보장',ttl:'교원 신분 보장 및 면직',cards:[
+   {q:'교육공무원의 신분보장 원칙은?',a:'① 교원은 법률로 정하는 바에 의하지 않고는 의사에 반하여 <b>휴직·강임·면직을 당하지 아니함</b><br>② 형의 선고·징계처분 또는 법률이 정하는 사유에 의하지 않고는 파면·해임되지 않음<br>③ 정년까지 신분 보장',memo:'신분보장=법률에 의하지않으면 휴직·강임·면직 금지',pg:'27p',cat:'신분보장'},
+   {q:'직권면직이 가능한 사유는?',a:'① 직위해제 후 <b>3개월</b> 경과해도 직위 부여 불가<br>② 능력 부족·성적 불량으로 직위해제 후 대기발령 및 능력개발교육에도 직무 감당 불가<br>③ 휴직기간 만료 후 복직 신고하지 않거나 직무 감당 불가<br>④ 전직 또는 파견 거부<br>⑤ 신체정신상 이상으로 직무 감당 불가',memo:'직권면직5: 3월초과직위부여불가·능력부족교육무효·휴직만료복직불가·전직거부·정신신체이상',pg:'27p',cat:'면직'},
+   {q:'교원 사직원 제출 후 수리 전 무단결근 처리는?',a:'사직원을 제출하고 수리되기 전에 무단 결근하면 <b>공무원으로서 직장이탈금지의무 위반</b><br>→ 징계사유에 해당<br>★ 퇴직은 사직원이 수리된 날부터 효력 발생',memo:'사직원수리전무단결근=직장이탈금지위반=징계',pg:'27p',cat:'면직'},
+  ]},
+,
+  {lbl:'교원자격',ttl:'교원 자격·자격연수',cards:[
+   {q:'교원 자격증의 종류는?',a:'<b>유치원</b>: 유치원 정교사(1급·2급), 유치원 준교사, 유치원 원감, 유치원 원장<br><b>초등학교</b>: 초등학교 정교사(1급·2급), 초등학교 준교사, 교감, 교장<br><b>중등학교</b>: 중등학교 정교사(1급·2급), 중등학교 준교사, 교감, 교장<br>★ 자격 취득 방법: 자격연수 이수 후 임용<br>★ 수석교사 자격도 별도 존재',memo:'유치원원장·원감·정교사/초등교장·교감·정교사/중등교장·교감·정교사',pg:'7p',cat:'자격'},
+   {q:'교감 자격연수 대상은?',a:'교사로 <b>일정 기간 이상</b> 재직한 자 중 승진후보자 명부에 등재된 자로서 교육감이 추천<br>★ 자격연수 이수 후 교감 자격 취득<br>★ 서울시 기준: 만 40세 이상 (인사관리원칙에 따라 상이)',memo:'교감자격=교사경력+명부등재+교육감추천+자격연수이수',pg:'12p',cat:'자격'},
+   {q:'교원 자격 취득의 기본 경로는?',a:'<b>교사 → 교감 → 교장</b> 순서로 자격 취득<br>• 2급 정교사 → 1급 정교사(1급 자격연수 이수)<br>• 1급 정교사 → 교감(교감 자격연수 이수)<br>• 교감 → 교장(교장 자격연수 이수)<br>★ 교직 경력이 쌓일수록 상위 자격 취득 가능',memo:'2급→1급→교감→교장 순서/자격연수이수필수',pg:'12p',cat:'자격'},
+   {q:'수석교사 자격 취득 요건은?',a:'1급 정교사 자격 소지 + <b>15년 이상</b> 교직 경력<br>교수·연구활동이 우수한 자를 선발<br>★ 임기: 4년 (1회 재심사 후 연임 가능)<br>★ 수업시수 경감 + 동료교사 수업컨설팅 역할<br>★ 교장·교감 후보자와 별도 경로',memo:'1급정교사+15년이상/수업시수경감/동료컨설팅/임기4년',pg:'12p',cat:'자격'},
+   {q:'전직 금지 기간은 어떻게 정해지는가?',a:'임용된 날로부터 <b>1년 이내</b>는 원칙적으로 전직 불가<br>단, 예외 사유: 기구개편, 승진·강임, 기관간 전보, 특수연수 이수자, 징계처분, 형사사건 관련, 임신·출산 교원 보호<br>★ 전직 시 당해 학교급 경력 <b>4년 미만</b>도 제한 사유 될 수 있음',memo:'임용1년내전직금지(예외사유7가지)',pg:'18p',cat:'전직'},
+  ]},
+  {lbl:'기간제상세',ttl:'기간제교원 상세',cards:[
+   {q:'기간제교원의 재계약 요건과 상한은?',a:'기간제교원 계약 기간: <b>1년 이내</b><br>재계약: 총 계약 기간이 <b>3년 범위 내</b>에서 가능<br>★ 3년 초과 시 재계약 불가 (새로 채용 절차 필요)<br>★ 단, 학교급에 따라 예외 적용 가능',memo:'1년이내/3년범위내재계약/3년초과=재채용',pg:'14p',cat:'기간제교원'},
+   {q:'기간제교원을 채용하지 않아도 되는 경우는?',a:'① 학교장이 학교 운영상 대체 교사 없이 수업 가능하다고 판단한 경우<br>② 대체 교사 구하기 어려운 특수 상황<br>③ 단기 출장·연수 등 짧은 기간 부재 시<br>★ 원칙적으로 교사의 부재 발생 시 기간제교원 채용 권장',memo:'학교장판단으로불채용가능/단기부재=필수아님',pg:'14p',cat:'기간제교원'},
+   {q:'기간제교원에게 적용되는 복무 규정은?',a:'기간제교원에게도 공무원과 동일하게 복무 규정 적용<br>• 근무시간, 결근·조퇴·외출 등 복무 관리<br>• 연가: 계약 기간에 비례하여 지급<br>• 병가: 일반병가 연간 60일 적용<br>★ 단, 병역휴직·육아휴직 등 일부 복잡한 휴직은 제한',memo:'복무규정동일적용/연가비례/병가60일/일부휴직제한',pg:'14p',cat:'기간제교원'},
+  ]},
+,
+  {lbl:'임용Q&A',ttl:'임용 Q&A 실전',cards:[
+   {q:'공무원 임용 전 군인·군무원으로 근무한 경력의 경력연수 인정 여부는?',a:'국가공무원 또는 지방공무원 경력에 해당하므로 <b>100%</b> 경력 인정<br>현역 군인 경력 포함 (예술체육요원·산업기능요원·전문연구요원 제외)<br>★ 호봉획정 시 경력환산율 100% 적용',memo:'군인·군무원경력=100%/예술체육요원등=제외',pg:'130p',cat:'임용원칙'},
+   {q:'교장의 2차 임기 종료 후 퇴직하지 않고 교사로 근무할 수 있는가?',a:'<b>가능하다</b><br>2차 임기 종료 후 정년까지 잔여기간이 있는 경우<br>교사로 근무를 희망하면 수업 담당 능력과 건강 등을 고려하여 <b>원로교사로 임용</b><br>★ 원로교사는 수업시수 경감 등의 우대 가능',memo:'2차임기종료후잔여기간있으면=원로교사임용가능',pg:'12p',cat:'교장임용'},
+   {q:'결원 보충을 위한 기간제교원 채용 시 계약 체결 방법은?',a:'학교장 명의로 계약 체결<br>계약서에 계약 기간, 직무, 보수 등 명시<br>NEIS 계약직교원 탭에 등록<br>★ 최초 계약: 1년 이내<br>★ 필요시: 총 3년 범위 내에서 재계약 가능<br>★ 계약 만료 시 자동 종료 (별도 면직 불필요)',memo:'학교장명의계약/NEIS등록/1년이내/총3년범위재계약',pg:'14p',cat:'기간제교원'},
+   {q:'겸직 허가를 받은 공무원이 담당직무가 변경된 경우 처리는?',a:'직무가 변경된 날부터 <b>1개월 이내</b>에 겸직허가 <b>재심사 신청</b> 의무<br>재심사 결과 허가 취소될 수 있음<br>★ 변경된 직무와 겸직 업무의 이해충돌 여부 재심사',memo:'담당직무변경시=1개월이내재심사신청의무',pg:'49p',cat:'겸직'},
+   {q:'기간제교원 임용 공고 시 게시 방법은?',a:'학교 홈페이지 등에 공개 모집을 원칙으로 함<br>공고 내용: 모집 인원, 담당 업무, 자격 요건, 계약 기간, 보수 등<br>★ 지원자 없을 경우 교육지원청에 지원 요청 가능<br>★ 채용 시 인사기록 등 확인 필수',memo:'학교홈페이지공개모집원칙/공고내용필수',pg:'14p',cat:'기간제교원'},
+  ]},
+  {lbl:'교원인사원칙',ttl:'교원 인사 기본 원칙',cards:[
+   {q:'교원의 직위와 보직의 차이는?',a:'<b>직위</b>: 공무원이 임명될 수 있는 행정 조직의 구체적 자리 (교장, 교감, 교사 등)<br><b>보직</b>: 직위에 있는 공무원에게 부여되는 구체적인 직무 (부장교사, 담임교사 등)<br>★ 직위 없이는 보직을 부여할 수 없음<br>★ 직위해제: 직위 없이 신분만 유지하는 상태',memo:'직위=자리(교장교감교사)/보직=구체직무(부장담임)/직위없으면보직불가',pg:'23p',cat:'임용개관'},
+   {q:'임용권 위임의 원칙은?',a:'교육감이 교육장에게 임용권 위임 가능 (법률 근거 필요)<br>위임받은 임용권은 재위임 불가 (원칙)<br>★ 교육장에게 위임되는 주요 임용권:<br>• 유·초등학교 교사 신규채용 및 임용<br>• 6개월 미만 휴직 발령<br>• 보직교사 임용<br>• 호봉 획정 및 승급',memo:'교육감→교육장 위임가능/재위임불가/교사신규채용등',pg:'9p',cat:'임용원칙'},
+   {q:'인사기록의 관리 원칙은?',a:'<b>정확성</b>: 사실에 근거하여 정확하게 기록<br><b>최신성</b>: 변경 사항은 즉시 업데이트<br><b>비밀성</b>: 개인정보는 당사자 외에 무단 열람 금지<br><b>완전성</b>: 필요한 모든 사항 빠짐없이 기재<br>★ NEIS에 전자적으로 관리가 원칙',memo:'인사기록=정확성·최신성·비밀성·완전성/NEIS전자관리',pg:'9p',cat:'인사발령'},
+  ]},
+
+ ]
+},
+{id:2,ico:'📅',clr:'#27ae60',ttl:'복무',pg:'39~116p',
+ desc:'직무상·신분상 의무, 연가·병가·특별휴가, 근무관리, 겸직허가, 공무원 행동강령',
+ tags:['연가','병가','행동강령'],
+ secs:[
+  {lbl:'복무의무',ttl:'복무 의무',cards:[
+   {q:'교육공무원의 직무상 의무 7가지는?',a:'① <b>성실의무</b>: 법령 준수, 직무 성실 수행<br>② <b>복종의무</b>: 소속 상관 직무상 명령 복종<br>③ <b>친절·공정의무</b>: 국민 전체 봉사자<br>④ <b>종교중립의무</b>: 종교 차별 없이 직무 수행<br>⑤ <b>비밀엄수의무</b>: 재직 중 + 퇴직 후<br>⑥ <b>청렴의무</b>: 사례·증여·향응 수수 금지<br>⑦ <b>품위유지의무</b>: 직무 내외 불문',memo:'성복친종비청품 — 7가지 직무의무',pg:'43p',cat:'복무의무'},
+   {q:'신분상 의무 4가지는?',a:'① <b>직장이탈금지</b>: 허가·정당한 사유 없이 직장 이탈 불가<br>② <b>영리업무·겸직 금지</b>: 소속기관장 허가 없이 다른 직무 겸직 불가<br>③ <b>정치운동 금지</b>: 정당가입, 선거운동 등 금지<br>④ <b>집단행위 금지</b>: 공무 외 집단행위 금지 (사실상 노무종사자 예외)',memo:'직장·겸직·정치·집단 — 4가지 신분의무',pg:'44p',cat:'복무의무'},
+   {q:'비밀엄수의무의 범위는? (비밀의 정의)',a:'직무상 비밀: 법령에 의해 명시된 사항뿐 아니라 정치·경제·군사·외교·사회적 필요에 따라 비밀로 된 사항, 그리고 정부나 공무소 또는 국민이 객관적·일반적으로 외부에 알려지지 않은 것에 상당한 이익이 있는 사항 포함<br>★ <b>퇴직 후에도</b> 비밀엄수의무 적용',memo:'비밀=법령명시+비밀적성+미공개이익/퇴직후에도적용',pg:'43p',cat:'복무의무'},
+   {q:'공무원 행동강령상 금품 수수 금지 기준과 외부강의 신고 의무는?',a:'<b>금품 금지</b>: 동일인 1회 <b>100만원</b> 또는 연 <b>300만원</b> 초과 수수 금지<br>직무관련 대가성 여부 불문 금품 수수 금지<br><b>외부강의 신고</b>: 강의 마친 날로부터 <b>10일 이내</b> 서면 신고<br>월 <b>3회 초과</b> 유료 강의 → 사전 행동강령책임관 검토·기관장 승인',memo:'금품:1회100만·연300만/강의:10일내신고·월3회↑=사전승인',pg:'45p',cat:'행동강령'},
+   {q:'경조사 통지 제한 대상과 허용 예외는?',a:'<b>금지</b>: 직무관련자·직무관련공무원에게 경조사 통지 금지<br><b>허용</b>: ① 자신의 친족 ② 현재·과거 근무기관 소속 직원 ③ 신문·방송·내부통신망 ④ 소속 종교·친목단체 회원',memo:'직무관련자통지금지/친족·동료·매체는 허용',pg:'46p',cat:'행동강령'},
+   {q:'퇴직자 사적 접촉 신고 의무는?',a:'공무원은 <b>퇴직한 날부터 2년이 지나지 않은</b> 퇴직자와의 사적 접촉 시 소속기관장에게 신고<br>예외: 직무와 무관하거나 개인적 친분에 의한 경우, 공식적 행사에서의 만남 등',memo:'퇴직2년내 전직자와 사적접촉=소속기관장 신고',pg:'45p',cat:'행동강령'},
+   {q:'공무원 행동강령의 3가지 대분류는?',a:'① <b>공정한 직무수행</b>: 사적이해관계 신고, 인사청탁 금지, 가족채용 제한 등<br>② <b>부당이득의 수수 금지</b>: 이권개입 금지, 알선·청탁 금지, 금품수수 금지 등<br>③ <b>건전한 공직풍토 조성</b>: 외부강의 사례금 제한, 직무관련자 거래 신고, 경조사 통지 제한',memo:'공정한직무수행/부당이득수수금지/건전한공직풍토',pg:'46p',cat:'행동강령'},
+   {q:'교원의 근무시간은?',a:'일반 공무원: 오전 9시~오후 6시 (주 40시간, 토요일 휴무)<br><b>초·중등 교원</b>: 09:00~17:00 (직무의 특수성 감안)<br>★ 교원의 근무시간에는 점심시간 포함 (급식지도·생활지도 때문)<br>★ 단위학교별 탄력적 근무시간제 가능',memo:'교원근무시간=09~17시/점심포함/탄력근무제가능',pg:'61p',cat:'근무관리'},
+  ]},
+  {lbl:'연가',ttl:'연가',cards:[
+   {q:'재직기간별 연가일수 기준은?',a:'1개월~1년미만: <b>11일</b><br>1년~3년미만: <b>15일</b><br>3년~4년미만: <b>16일</b><br>4년~5년미만: <b>17일</b><br>5년~6년미만: <b>20일</b><br>6년 이상: <b>21일</b>',memo:'1년미만=11일/6년이상=21일(최대)',pg:'75p',cat:'연가'},
+   {q:'연가일수 가산 조건은?',a:'연도 중 결근·휴직(공무상질병휴직 제외)·정직·강등·직위해제 사실이 없는 교원으로<br>① 병가일수가 <b>1일 미만</b>인 교원<br>② 연가실시일수가 <b>3일 미만</b>인 교원<br>→ 각각 재직기간별 연가일수에 <b>1일씩 가산</b> (총 2일 이내)',memo:'결근등없음+병가1일미만또는연가3일미만→각1일가산(총2일이내)',pg:'75p',cat:'연가'},
+   {q:'교원이 수업일 중 연가를 쓸 수 있는 사유는?',a:'① 본인·배우자 직계존속의 <b>생일·기일</b><br>② 배우자·직계존비속·형제자매의 <b>질병·부상 일시 간호</b><br>③ 병가 모두 사용 후에도 <b>계속 요양 필요</b><br>④ 방통대 출석수업·일반대학원 시험<br>⑤ 본인 자녀의 <b>입영일</b><br>⑥ 본인·배우자 부모의 형제·자매 장례식, 본인·배우자 형제·자매의 배우자 장례식<br>⑦ <b>학교장이 상당하다고 인정</b>하는 경우',memo:'수업일연가=생일기일·간호·요양·방통대·입영·장례식·학교장인정',pg:'74p',cat:'연가'},
+   {q:'연가 공제 계산 방식은?',a:'지각·조퇴·외출·반일연가 종별 구분 없이 합산 후 <b>8시간 = 연가 1일</b><br>반일연가 1회 = <b>4시간</b> / 반일연가 2회 = 연가 1일<br>예) 외출15h + 조퇴9h + 지각1h + 반일연가4h = <b>29h ÷ 8 = 3일</b> (잔여5h 미계산)',memo:'8시간=1일/반일연가=4시간/잔여8h미만불계산',pg:'77p',cat:'연가'},
+   {q:'연가 미리쓰기(선사용) 최대 한도는?',a:'6월 미만: <b>3일</b><br>6월~1년 미만: <b>4일</b><br>1년~2년 미만: <b>6일</b><br>2년~3년 미만: <b>7일</b><br>3년~4년 미만: <b>8일</b><br>4년 이상: <b>10일</b><br>★ 연도중 퇴직·휴직 예정자 제외',memo:'6월미만=3/6월~1년=4/1~2년=6/2~3년=7/3~4년=8/4년이상=10',pg:'75p',cat:'연가'},
+   {q:'미사용 연가 이월 처리는?',a:'<b>이월 불가</b>: 미사용 연가는 다음해로 이월하여 허가할 수 없음<br>★ 병가·연가를 모두 사용한 후에는 질병휴직 처리가 원칙<br>★ 연가를 승인받지 않고 출근하지 않으면 결근 처리',memo:'연가 미사용=이월불가/무단결근=결근처리',pg:'74p',cat:'연가'},
+   {q:'연가 재직기간 계산 시 산입하지 않는 기간은?',a:'휴직(공무상질병·부상 휴직 및 법정의무수행 휴직 제외), 정직, 직위해제, 강등 처분에 따라 직무에 종사하지 못하는 기간<br>★ <b>육아휴직 중 일정 기간, 공무상질병 휴직, 법정의무수행 휴직</b>은 재직기간 산입',memo:'휴직·정직·직위해제·강등=불산입/공무상질병·법정의무=산입',pg:'76p',cat:'연가'},
+  ]},
+  {lbl:'병가',ttl:'병가',cards:[
+   {q:'일반병가와 공무상병가의 일수·요건·진단서를 비교하시오.',a:'<b>일반병가</b>: 연간 <b>60일</b> / 6일까지 진단서 없이 가능 / 7일 이상 연속 또는 누계 7일 이상 → 진단서 필수<br><b>공무상병가</b>: 연간 <b>180일</b> (동일사유 연도 구분 없이 180일) / 공무상 질병·부상 발생 시<br>★ 일반·공무상병가는 <b>별도 운영</b> (개인별로 최대 240일)',memo:'일반60일/공무상180일(동일사유연도무관)/6일내진단서없이가능',pg:'79p',cat:'병가'},
+   {q:'병가 30일 이상 연속 시 공휴일·토요일 처리는?',a:'병가 연간 <b>30일 이상</b> (동일사유 또는 각각 병가 합산) → 토요일과 공휴일도 <b>포함하여 계산</b><br>★ 연간 30일 미만 시 → 토요일·공휴일 불산입',memo:'병가합산30일이상=공휴일·토요일포함계산',pg:'80p',cat:'병가'},
+   {q:'일반질병·공무상질병 처리 순서는?',a:'<b>일반질병</b>: 일반병가(60일) → 법정연가 → <b>일반질병휴직(1년+1년)</b><br><b>공무상질병</b>: 공무상병가(180일) → 일반병가(60일) → 법정연가 → <b>공무상질병휴직(3년+2년)</b>',memo:'병가→연가→휴직 순서 필수',pg:'82p',cat:'병가'},
+   {q:'병가 진단서에 관한 유의사항은?',a:'① 한의원에서 발행하는 진단서도 가능<br>② 진단서에 치료기간이 명시되지 않아도 병가 허가 가능<br>③ 의사의 진단서가 아닌 증명서·확인서만으로는 허가 불가<br>④ 진단서는 병가신청과 동시에 제출 원칙<br>⑤ 동일사유의 병가인 경우 최초 제출 진단서로 갈음 가능',memo:'한의원진단서가능/치료기간없어도가능/확인서=불가/동일사유=재제출불필요',pg:'82p',cat:'병가'},
+   {q:'공무상 요양승인 신청 중 처리 방법은?',a:'요양승인 심의 중 → <b>일반 병가와 연가 사용</b> 가능<br>이후 공무상 질병으로 결정된 때 → 사용한 일반병가·연가를 <b>공무상 병가로 소급 처리</b> 가능 (본인 원할 경우)<br>★ 소급처리를 원하지 않을 수도 있음 (개인 선택)',memo:'요양심의중=일반병가·연가사용→공무상결정시소급처리가능',pg:'81p',cat:'병가'},
+  ]},
+  {lbl:'특별휴가',ttl:'특별휴가·공가',cards:[
+   {q:'출산휴가 일수와 배우자 출산휴가는?',a:'<b>출산휴가</b>: 출산 전후 <b>90일</b> (다태아: <b>120일</b>) — 산후 <b>45일 이상</b> 필수 확보 (다태아: 60일 이상)<br><b>배우자 출산휴가</b>: <b>10일</b> (다태아: <b>15일</b>)<br>★ 출산예정일 30일 전~출산 후 120일(다태아150일) 내 3회(다태아5회) 분할 사용 가능',memo:'출산90일(다태아120)/산후45일이상/배우자10일(다태아15)',pg:'86p',cat:'출산'},
+   {q:'유산·사산 휴가 일수는?',a:'<b>임신 11주 이내</b>: 5일<br><b>12~15주</b>: 10일<br><b>16~21주</b>: 30일<br><b>22~27주</b>: 60일<br><b>28주 이상</b>: 90일<br>★ 인공임신중절 수술: 제외 (자연유산·사산만 해당)',memo:'11주이내=5일/12~15주=10일/16~21주=30일/22~27주=60일/28주이상=90일',pg:'86p',cat:'출산'},
+   {q:'경조사별 휴가일수를 정리하시오.',a:'<b>결혼</b>: 본인 5일 / 자녀 1일<br><b>출산</b>: 배우자 20일 (다태아 25일)<br><b>입양</b>: 본인 20일<br><b>사망</b>: 배우자·본인 및 배우자 부모 <b>5일</b> / 조부모·외조부모·자녀·형제자매 <b>3일</b><br>★ 경조사 기간 중 <b>공휴일·토요일 일수 불산입</b>',memo:'결혼5/자녀결혼1/배우자부모사망5/조부모형제3/공휴일불산입',pg:'91p',cat:'경조사'},
+   {q:'본인 결혼 경조사휴가의 사용 기간 제한은?',a:'사유가 발생한 날(결혼식 또는 혼인신고 중 본인 선택)부터 <b>30일 이내</b> 사용 원칙<br>불가피한 경우 <b>90일 이내</b> 사용 가능<br>★ 마지막 날이 30일(또는 90일) 범위 내에 있어야 함',memo:'본인결혼=30일이내(불가피=90일이내)/마지막날기준',pg:'92p',cat:'경조사'},
+   {q:'사망 경조사휴가의 시작일은?',a:'사망일 또는 <b>장례일</b>에서 선택 가능 (장례일 선택 시 증빙자료 요구 가능)<br>사망일 다음날부터 휴가 사용도 가능<br>★ 사유 발생한 날을 포함하여 전후에 <b>연속하여 실시</b>가 원칙 (토요일·공휴일로 분리되는 경우는 예외)',memo:'사망일또는장례일선택/연속실시원칙/공휴일=분리가능',pg:'92p',cat:'경조사'},
+   {q:'원격지 경조사의 경우 추가 이동일수는?',a:'가장 빠른 교통수단으로도 왕복 <b>8시간 이상</b> 소요되는 지역 = 원격지<br>→ 2일 범위 내에서 <b>왕복 소요 일수</b> 가산 가능<br>★ 본인 결혼 경조사휴가의 경우 원격지는 <b>결혼식장</b>을 기준으로 함',memo:'왕복8시간이상=원격지/2일내 소요일수 가산',pg:'92p',cat:'경조사'},
+   {q:'모성보호시간과 육아시간의 차이는?',a:'<b>모성보호시간</b>: 임신 중 여성 교원 / 1일 2시간 (<b>12주 이내</b>·<b>36주 이후</b>는 신청 시 반드시 승인)<br><b>육아시간</b>: 만 8세 이하 OR 초등 2학년 이하 자녀 교원 / 1일 2시간 / <b>36개월</b> 범위 (수업 등 지장 없는 범위)',memo:'모성보호=임신중2시간(12주이내·36주이후반드시승인)/육아=만8↓or초2↓·36개월',pg:'87p',cat:'특별휴가'},
+   {q:'가족돌봄휴가와 난임치료 시술휴가는?',a:'<b>가족돌봄휴가</b>: 연간 <b>10일</b> 범위 (자녀돌봄: 유급·시간단위 / 기타가족: 무급·일단위)<br><b>난임치료 시술휴가</b>: 여성 인공수정 2일 / 동결배아 이식 3일 / 난자채취 4일 / 남성 정자채취 1일',memo:'가족돌봄10일(자녀=유급시간/기타=무급일)/난임:인공2,배아3,난자4,정자1',pg:'88p',cat:'특별휴가'},
+   {q:'공가가 허용되는 경우는?',a:'① 병역법 등에 따른 병역판정검사·소집·검열점호 등<br>② 공무와 관련하여 국회·법원·검찰·경찰 등 국가기관에 소환되었을 때<br>③ 법률에 따라 <b>투표</b>에 참가할 때<br>④ 헌혈에 참가할 때<br>⑤ 건강검진에 참가할 때',memo:'병역·국가기관소환·투표·헌혈·건강검진 = 공가',pg:'87p',cat:'공가'},
+  ]},,
+  {lbl:'겸직·복무사례',ttl:'겸직·영리업무·복무 Q&A',cards:[
+   {q:'임대사업자 등록 없이 다수 부동산 보유 시 겸직허가 대상인가?',a:'임대사업자 등록 여부와 관계없이 주택·상가 등을 <b>다수 소유(2개 이상 임대계약 대상)</b>하여 관리하거나 수시로 매매·임대 등 업무로 판단되는 경우에는 겸직허가를 받아야 함',memo:'임대사업자등록여부무관/2개이상임대대상=겸직허가필요',pg:'59p',cat:'겸직'},
+   {q:'근무시간 중 유튜브 브이로그 촬영 가능 여부는?',a:'<b>원칙적으로 금지</b>: 교원은 근무시간 중 직무에 전념할 의무가 있음<br>예외: 소속 기관, 교육부·교육청 등의 요청에 따라 업무의 일환으로 브이로그 등 영상을 촬영하는 것은 가능<br>★ 소속 기관의 장에게 사전 보고 권장',memo:'근무시간중브이로그=원칙금지/업무일환이면가능',pg:'60p',cat:'겸직'},
+   {q:'SNS에서 업체 협찬을 받아 직·간접 광고 가능 여부는?',a:'<b>할 수 없음</b><br>업체 등으로부터 협찬을 받아 특정 물품을 홍보하는 행위(직·간접 광고) 또는 인터넷 개인 미디어 등을 통해 후원 수익을 취득하는 행위는 <b>국가공무원 복무·징계 관련 예규에 금지</b>되어 있음',memo:'협찬광고·후원수익취득=금지(복무예규위반)',pg:'60p',cat:'겸직'},
+   {q:'공무원의 정치운동 금지 대상 행위는?',a:'① 정당이나 그 밖의 정치단체의 결성에 관여하거나 이에 가입하는 행위<br>② 선거에서 특정 정당 또는 특정인을 지지·반대하기 위한 행위<br>③ 선거 관련 서명 운동에 관여하거나 권유하는 행위<br>④ 직무상 영향력을 이용하여 선거 결과에 영향을 미치는 행위',memo:'정당가입·선거지지반대·서명운동·직무영향력이용=금지',pg:'44p',cat:'복무의무'},
+   {q:'수업 중에 특정 정당 또는 정치인을 지지하는 발언이 문제가 되는 이유는?',a:'교원의 <b>종교중립의무·정치운동금지 의무</b> 위반<br>미성년 학생에 대한 영향력이 크기 때문에 더욱 엄격히 제한됨<br>→ 징계사유 해당<br>★ 교원은 직무 내외를 불문하고 품위유지의무가 있음',memo:'수업중정치발언=종교중립·정치운동금지위반/징계사유',pg:'44p',cat:'복무의무'},
+   {q:'비밀엄수의무 위반의 대표적인 사례는?',a:'① 학생 또는 학부모의 개인정보를 외부에 유출하는 행위<br>② 인사 발령 전 인사 정보를 외부에 유출하는 행위<br>③ 교무회의 비공개 내용을 외부에 발설하는 행위<br>④ 퇴직 후 재직 중 얻은 기밀을 이용하는 행위<br>★ 퇴직 후에도 비밀엄수의무 지속 적용',memo:'학생개인정보유출·인사유출·비공개발설·퇴직후기밀이용=위반',pg:'43p',cat:'복무의무'},
+  ]},
+  {lbl:'연가계산예시',ttl:'연가·병가 계산 예시',cards:[
+   {q:'연도 중 10월에 휴직한 경우 연가 공제 방법은?',a:'연도 중 사실상 직무에 종사한 기간(월)을 계산 후 비례 적용<br>공식: 직무종사기간(월) / 12 × 해당연도 연가일수<br>예) 3.1~10.31(8개월) 근무 후 휴직 → 21일 × (8/12) = <b>14일</b> (소수점 반올림)',memo:'직무종사기간/12×연가일수=비례연가/15일이상=1월',pg:'76p',cat:'연가'},
+   {q:'지각·조퇴·외출 합산하여 연가 공제 계산 예시는?',a:'예시) 지각 2시간, 조퇴 3시간, 외출 4시간, 반일연가 1회(4시간) = 합계 <b>13시간</b><br>13h ÷ 8 = <b>1일 + 5시간</b> → 연가 1일 공제 (잔여 5시간은 미계산)<br>★ 종별 구분 없이 합산 후 8시간=1일',memo:'합산13h÷8=1일공제/나머지5h미계산',pg:'77p',cat:'연가'},
+   {q:'병가 6일 초과 시 진단서 제출 기준은?',a:'연속 6일 이하 or 누계 6일 이하: <b>진단서 불필요</b><br><b>연속 7일 이상</b> 병가 신청 시: 진단서 제출 필수<br><b>누계 7일 이상</b> 병가 신청 시: 진단서 제출 필수<br>★ 연간 병가 일수 계산 시 공휴일·토요일은 포함하지 않음 (30일 미만 시)',memo:'6일이하=진단서불필요/7일이상연속or누계=진단서필수',pg:'79p',cat:'병가'},
+   {q:'연가일수 가산 계산 예시는?',a:'조건: 결근·휴직·정직·강등·직위해제 없음<br>병가 0일 + 연가 2일 사용 → 병가 1일 미만(0일): <b>+1일</b>, 연가 3일 미만(2일): <b>+1일</b> → 총 <b>2일 가산</b><br>병가 0일 + 연가 5일 사용 → 병가 1일 미만: <b>+1일</b>, 연가 3일 이상: 가산 없음 → 총 <b>1일 가산</b>',memo:'병가1일미만→+1일/연가3일미만→+1일(각각독립조건)',pg:'75p',cat:'연가'},
+   {q:'연가 미리쓰기를 한 후 다음연도에 휴직하면 어떻게 되나?',a:'연가 미리쓰기는 다음연도 전 기간 정상근무를 전제로 한 것<br>→ 다음연도에 휴직하면 <b>미리 사용한 연가일수가 결근 처리</b>될 수 있음<br>★ 병가·연가를 모두 사용한 후 연가 미리쓰기 사용은 제한 필요',memo:'연가미리쓰기후휴직=결근처리가능',pg:'75p',cat:'연가'},
+   {q:'공무상 요양승인 미결 중 병가·연가 소진 후 처리는?',a:'공무상 요양승인 심의 중이나 미결인 경우: 일반병가·연가 사용 가능<br>이후 공무상 질병으로 결정되면: 본인 원할 경우 <b>공무상 병가로 소급 처리</b> 가능<br>★ 소급처리 원하지 않을 수도 있음 (개인 선택 사항)',memo:'요양미결=일반병가·연가사용→공무상결정시소급가능',pg:'81p',cat:'병가'},
+  ]},
+  {lbl:'특별휴가상세',ttl:'특별휴가 상세 규정',cards:[
+   {q:'임신 12주 이내 또는 36주 이후 모성보호시간 신청 시 승인 의무가 있는가?',a:'<b>반드시 승인해야 함</b><br>임신 12주 이내 또는 36주 이후(조산 위험 등)에는 모성보호시간(1일 2시간) 신청 시 학교장이 거부할 수 없음<br>★ 그 외 임신 기간에도 원칙적으로 허용',memo:'12주이내·36주이후 모성보호시간=반드시승인/거부불가',pg:'87p',cat:'특별휴가'},
+   {q:'육아시간 사용 가능 기간과 분할 사용 방법은?',a:'<b>기간</b>: 자녀 1명당 <b>36개월</b> 범위 (분할 사용 가능)<br><b>시간</b>: 1일 2시간 이내<br>★ 만 8세 이하 OR 초등학교 2학년 이하 자녀 해당<br>★ 수업 등에 지장이 없는 범위 내에서 허용<br>★ 부부 교원 모두 사용 가능',memo:'36개월범위·1일2시간/만8세이하or초2이하/수업지장없는범위',pg:'87p',cat:'특별휴가'},
+   {q:'공가 처리 가능한 경우 5가지는?',a:'① 병역법 등에 따른 병역판정검사·소집·검열점호 등<br>② 공무와 관련하여 국회·법원·검찰·경찰 등 국가기관에 소환된 경우<br>③ 법률에 따라 <b>투표</b>에 참가할 때<br>④ <b>헌혈</b>에 참가할 때<br>⑤ <b>건강검진</b>에 참가할 때',memo:'병역·국가기관소환·투표·헌혈·건강검진=공가',pg:'87p',cat:'공가'},
+   {q:'난임치료 시술 휴가일수가 다른 이유는?',a:'시술 강도와 회복 기간 차이 반영<br>인공수정(2일) < 동결배아이식(3일) < 난자채취(4일) 순<br>★ 남성은 정자채취 1일<br>★ 시술 당일 이후 연간 횟수 제한 없이 사용 가능<br>★ 유급 휴가로 처리',memo:'인공2<배아3<난자4일/남성정자1일/유급/횟수제한없음',pg:'88p',cat:'특별휴가'},
+   {q:'자녀 입학식·졸업식 날 연가 없이 참석 가능한가?',a:'자녀 입학식·졸업식은 <b>수업일 연가 사유</b>에 해당하지 않음<br>단, "<b>학교장이 상당하다고 인정하는 경우</b>"에 해당한다고 판단하면 허가 가능<br>→ 학교장 재량으로 허가 여부 결정',memo:'자녀입학식졸업식=법정수업일연가사유아님/학교장재량으로허가가능',pg:'74p',cat:'연가'},
+  ]},
+,
+  {lbl:'출장·공무',ttl:'출장·비상근무·행동강령',cards:[
+   {q:'근무지내 출장과 근무지외 출장의 구분 기준은?',a:'<b>근무지내 출장</b>: 동일 시·군·섬 안에서의 출장 또는 여행거리 12km 미만<br><b>근무지외 출장</b>: 동일 시·군 밖으로의 출장 (여행거리 12km 이상)<br>★ 서울시는 특별시이므로 서울 내 출장은 원칙적으로 근무지내 출장',memo:'12km미만·동일시군=근무지내/12km이상·시군밖=근무지외',pg:'68p',cat:'출장'},
+   {q:'출장 공무원의 의무 4가지는?',a:'① <b>공무 수행에 전력</b>: 사적 용무에 시간 소비 금지<br>② <b>출장기간 내 업무 완수</b>: 기간 변경 사유 발생 시 즉시 소속기관장에 보고<br>③ <b>결과 보고서 제출</b>: 귀청 후 지체 없이 제출 (경미사항은 구두 보고)<br>④ 임신 중 공무원: 소속기관장이 <b>장거리·장기간 출장 제한 가능</b>',memo:'공무전력·기간내업무·결과보고·임신출장제한',pg:'68p',cat:'출장'},
+   {q:'비상근무 제1호 발령 기준과 근무 요령은?',a:'<b>발령 기준</b>: 전시·사변 또는 이에 준하는 비상사태가 발생했거나 발생이 임박하여 긴장이 최고조에 이른 경우<br><b>근무 요령</b>: 연가 중지 + 소속공무원 <b>3분의 1 이상</b> 비상근무',memo:'비상1호=최고긴장/연가중지+1/3이상비상근무',pg:'69p',cat:'비상근무'},
+   {q:'공무원증 재발급 및 반납 의무는?',a:'<b>재발급 사유</b>: 분실, 훼손, 기재사항 변경 등 → 재발급 신청서 제출<br><b>종전 공무원증 반납</b>: 재발급 시 반납 필수<br><b>퇴직 시 반납</b>: 소속 공무원 퇴직 시 반납 의무<br>★ 공무 집행 시 공무원증 제시 요구를 받으면 반드시 제시해야 함',memo:'재발급=신청서+종전반납/퇴직시반납/제시요구시반드시제시',pg:'70p',cat:'복무관리'},
+   {q:'파견근무자의 징계 사유 발생 시 처리 방법은?',a:'파견받은 기관의 장이 파견근무자의 <b>소속 기관의 장</b>에게 그 사실을 통보하여야 함<br>★ 파견근무자의 실제 징계 처리는 <b>원소속 기관</b>에서 진행<br>★ 파견기관은 통보 의무만 있음',memo:'파견중징계사유=파견기관이소속기관에통보/실제징계=원소속',pg:'70p',cat:'출장'},
+  ]},
+  {lbl:'복무관리실무',ttl:'복무관리 실무',cards:[
+   {q:'근무상황부 관리 방법은?',a:'각급 기관장은 소속공무원의 복무관리를 위해 <b>근무상황부를 개인별</b>로 비치하여야 함<br>NEIS를 통한 전자적 관리 가능<br>★ 지각, 조퇴, 외출 및 출장은 <b>사전에 학교장의 승인</b> 필요<br>★ 불가피한 경우 사후 승인 가능',memo:'근무상황부개인별비치/NEIS전자관리가능/사전승인원칙',pg:'62p',cat:'복무관리'},
+   {q:'업무 인계인수가 필요한 경우는?',a:'전보·파견·전출·휴직·정직·직위해제·면직 및 장기간 출장·휴가 등일 때<br>→ 학교장이 지정하는 사람에게 <b>담당업무를 인계</b>하여야 함<br>★ 퇴직 시 문서 및 물품 잠금장치 있는 서류함에 보관 및 인계 필수',memo:'전보·파견·휴직·면직시=담당업무인계필수',pg:'62p',cat:'복무관리'},
+   {q:'승인 없이 출근하지 않은 경우 처리는?',a:'승인을 받지 않고 출근하지 않은 때: 교육행정정보시스템(근무상황부)에 <b>결근으로 처리</b><br>★ 사직원 제출 후 수리 전 무단결근도 결근 처리<br>★ 연가 일수 초과 사용도 결근 처리',memo:'무허가결근=결근처리/사직원수리전무단결근도결근',pg:'62p',cat:'복무관리'},
+   {q:'학교 내 성희롱·성폭력 발생 시 교감의 역할은?',a:'① 즉시 보고: 교육지원청 및 관할 성고충처리담당관에 신고<br>② 피해자 보호: 2차 피해 방지 조치 (행위자와 피해자 분리)<br>③ 사건 기록: 관련 내용 문서화<br>④ 행위자 신고: 관할 기관 조사 협조<br>★ 은폐·축소 금지 (징계 대상)',memo:'즉시보고+피해자보호+2차피해방지+문서화+징계조사협조',pg:'45p',cat:'행동강령'},
+   {q:'청렴의무 위반의 직무 범위는?',a:'직무와 관련하여: 당해 공무원이 직무의 결정권을 갖고 있지 않더라도 그 직무행위와 <b>밀접한 관계가 있는 경우</b> 및 <b>사실상 관리하는 직무행위</b>도 포함<br>★ 넓게 해석 (대법원 92누3366)',memo:'청렴의무직무=결정권없어도밀접관련·사실상관리포함',pg:'349p',cat:'복무의무'},
+  ]},
+
+ ]
+},
+{id:3,ico:'💰',clr:'#f39c12',ttl:'호봉 및 승급',pg:'117~190p',
+ desc:'초임호봉 획정, 경력환산율, 사범가산연수, 정기승급, 승급제한, 특별승급',
+ tags:['호봉획정','경력환산','승급제한'],
+ secs:[
+  {lbl:'호봉획정',ttl:'초임호봉 획정',cards:[
+   {q:'초임호봉 획정 공식은?',a:'<b>호봉 = 환산 경력연수 + [(학령 - 16) + 가산연수] + 기산호봉</b><br>• <b>학령</b>: 정규 교육기관 수학기간<br>• <b>가산연수</b>: 사범계 2년, 특수학교(학급) 1년<br>• <b>기산호봉</b>: 유·초·중등 교원은 1호봉',memo:'환산경력 + (학령-16+가산) + 기산호봉',pg:'123p',cat:'호봉획정'},
+   {q:'경력기간 계산 방법(15일 기준)은?',a:'• <b>15일 이상</b> → 1개월로 계산<br>• <b>15일 미만</b> → 버림 (산입 안 함)<br>• 역(曆)에 의한 방법 사용 (민법 제160조)<br>• <b>임용일은 산입</b>, <b>퇴직일은 제외</b>',memo:'15일↑=1월/15일↓=버림/임용일산입·퇴직일제외',pg:'124p',cat:'경력계산'},
+   {q:'역(曆)에 의한 경력기간 계산 사례는?',a:'3.1~3.31 = <b>1월</b><br>3.1~3.30 = <b>29일</b> (실제30일이나29일로산정)<br>2.1~2.28 = <b>1월</b> (2월28일까지인경우)<br>2.1~2.27 = <b>27일</b> (실제일수산정)<br>★ 기산일의 전일에 해당하는 날로 만료 시 = 1월',memo:'3.1~3.31=1월/3.1~3.30=29일/기산일전일만료=1월',pg:'129p',cat:'경력계산'},
+   {q:'사범계 가산연수 2년이 인정되는 경우는?',a:'① <b>사범대학</b> 졸업<br>② 일반대학 <b>교육학과</b> 졸업<br>③ 일반대학 교육계학과 졸업 + <b>교직과정 이수</b> 후 교원자격증 취득<br>④ <b>교육대학원</b>에서 교육학 전공 석사학위 취득<br>⑤ <b>한국교원대학교 대학원</b> 졸업',memo:'사범대·교육학과·교직과정·교육대학원·교원대학원 = 2년',pg:'128p',cat:'가산연수'},
+   {q:'특수학교(학급) 가산연수 1년이 인정되는 경우는?',a:'특수학교(학급) 자격증 소지자로서 특수학교 또는 일반학교 특수학급 담당 교원으로 근무한 기간<br>★ 2000년 1월 1일부터 일반학교 특수학급 담당교원도 1년 가산 인정',memo:'특수학교학급자격증+특수학급근무 = 1년 가산',pg:'128p',cat:'가산연수'},
+   {q:'호봉 획정 시행권자는?',a:'<b>초임호봉 획정</b>: 관할 <b>교육장</b><br><b>호봉 재획정·정정</b>: 관할 <b>교육장</b><br><b>정기 승급</b>: 관할 <b>교육장</b><br>★ 기간제교사 호봉획정 → <b>소속 학교장</b>',memo:'초임·재획정·승급=교육장/기간제=학교장',pg:'122p',cat:'호봉획정'},
+   {q:'호봉 정정의 효력과 방법은?',a:'<b>효력</b>: 잘못된 호봉 획정·승급 → <b>잘못된 발령일자로 소급</b>하여 정정<br><b>방법</b>: 초임호봉획정 방법에 의하여 현 호봉의 <b>정정권자(교육장)</b>가 시행',memo:'잘못된 발령일 소급 정정/교육장이 시행',pg:'122p',cat:'호봉정정'},
+   {q:'호봉 경력 인정의 기본 조건 2가지는?',a:'① <b>유급</b>으로 근무한 기간<br>② <b>주 15시간 이상</b> 근무한 기간<br>★ 예외: 학교 시간강사는 주 15시간 미만도 인정',memo:'유급 + 주15시간이상 / 예외: 시간강사는 미만도 인정',pg:'130p',cat:'경력계산'},
+  ]},
+  {lbl:'경력환산율',ttl:'경력환산율',cards:[
+   {q:'공립 교원으로 근무한 경력의 환산율은?',a:'교원자격 갖추고 교육공무원법상 교육기관에서 근무한 경력: <b>100%</b><br>★ 단, 교원자격증의 종류와 근무한 학교가 일치하지 않는 기간제 교원 경력: <b>80%</b>',memo:'공립교원경력=100%/자격불일치기간제=80%',pg:'130p',cat:'경력환산율'},
+   {q:'사립학교 교원으로 근무한 경력의 환산율은?',a:'관할청에 보고된 사립학교 교원 경력: <b>100%</b><br>관할청에 보고되지 않은 사립학교 교원 경력: <b>50%</b>',memo:'관할청보고사립=100%/미보고사립=50%',pg:'130p',cat:'경력환산율'},
+   {q:'일반직 공무원·군인 경력의 환산율은?',a:'국가공무원 또는 지방공무원: <b>100%</b><br>현역군인 경력 포함 (예외: 예술체육요원·산업기능요원·전문연구요원 제외)<br>고용직공무원: <b>80%</b>',memo:'국가·지방공무원=100%/현역군인=100%/고용직=80%',pg:'130p',cat:'경력환산율'},
+   {q:'대학 시간강사 경력의 환산율은?',a:'고등교육법에 따른 시간강사로 대학에서 근무한 경력: 교육부장관이 정하는 바에 따라 <b>30%~100%</b> 범위 내 환산<br>★ 주 15시간 미만도 인정',memo:'대학시간강사=30~100%/주15시간미만도인정',pg:'130p',cat:'경력환산율'},
+   {q:'연구원으로 근무한 경력의 환산율은?',a:'대학·대학원에서 임용권자의 임명을 받아 연구원으로 근무한 경력: <b>100%</b><br>정부출연연구기관 등에서 연구원으로 근무한 경력: <b>100%</b><br>대학원 석사·박사 학위 취득 최저수업연한 경력도 인정',memo:'대학연구원·정부출연기관연구원=100%',pg:'131p',cat:'경력환산율'},
+  ]},
+  {lbl:'승급',ttl:'정기승급·승급제한·특별승급',cards:[
+   {q:'정기승급 요건 3가지와 승급일은?',a:'① 승급일 = <b>매월 1일</b><br>② 정기승급일 현재 <b>승급제한 기간 중이 아닐 것</b><br>③ 승급기간이 <b>1년 이상</b>이어야 함<br>→ 1년에 대해 <b>1호봉</b>씩 승급 (잔여 월일은 다음 승급기간에 산입)',memo:'매월1일/승급제한해당X/1년이상→1호봉',pg:'122p',cat:'정기승급'},
+   {q:'징계처분별 승급 제한 기간은?',a:'<b>강등·정직</b>: 처분 기간 + <b>18개월</b><br><b>감봉</b>: 처분 기간 + <b>12개월</b><br><b>견책</b>: <b>6개월</b><br><b>직위해제</b>: 직위해제 기간 전체<br><b>병가</b>: 연간 <b>6일 초과</b>분',memo:'강등정직+18월/감봉+12월/견책6월/병가6일초과',pg:'106p',cat:'승급제한'},
+   {q:'육아휴직 중 호봉 승급 기간 산입은?',a:'<b>첫째·둘째 자녀</b>: 자녀 1명당 <b>최초 1년</b>만 산입<br><b>셋째 이후 자녀</b>: <b>전 기간</b> 산입<br><b>한부모·부모양쪽각3월이상·장애자녀</b>: <b>1년 6개월</b>까지 산입<br>★ 2025.1.3.부터 규정 개정',memo:'첫둘=1년/셋째↑=전부/한부모·양쪽3월이상·장애=1년6월',pg:'122p',cat:'승급제한'},
+   {q:'특별승급 인정 경우와 호봉 수는?',a:'① 근무성적 최상위 등급 <b>2회 연속</b><br>② 직무수행 탁월하여 행정 발전에 <b>현저히 기여</b><br>③ 국가기술자격: 기술사·기능장·기사 자격 취득<br>→ <b>1호봉</b> 특별승급',memo:'우수2회연속 또는 특별기여 → 1호봉',pg:'126p',cat:'특별승급'},
+   {q:'승급이 제한되는 주요 사유는?',a:'① 징계처분 (강등·정직+18월, 감봉+12월, 견책6월)<br>② 직위해제 기간<br>③ 병가 연간 6일 초과분<br>④ 육아휴직 (첫째·둘째: 1년 초과분)<br>⑤ 질병휴직·불임난임휴직 기간<br>⑥ 동반휴직·자율연수휴직·가족돌봄휴직 기간',memo:'징계·직위해제·병가초과·질병휴직·동반·자율연수·가족돌봄',pg:'106p',cat:'승급제한'},
+  ]},,
+  {lbl:'호봉계산예시',ttl:'호봉 계산 예시',cards:[
+   {q:'초임호봉 계산 예시: 사범대 졸업, 교사경력 2년, 군복무 2년인 경우는?',a:'학령: 16년 (초등6+중등3+고교3+사범대4) → (학령16-16)=0년<br>가산연수: 사범대 졸업 = <b>2년</b><br>환산경력: 교사경력2년(100%)=2년 + 군복무2년(100%)=2년 → <b>4년</b><br>기산호봉: <b>1호봉</b><br>→ 합계: 4+0+2+1 = <b>7호봉</b>',memo:'환산경력+가산연수+(학령-16)+기산호봉/사범대가산=2년',pg:'123p',cat:'호봉획정'},
+   {q:'경력기간 계산 예시: 2023.3.2.~2025.3.1. 근무 시 인정 경력은?',a:'2023.3.2.~2025.3.1. = 1년 11월 28일 (역에 의한 방법)<br>2024.3.2.가 만료일인데 전일이 2024.3.1. → 1년이 됨<br>2024.3.2.~2025.3.1. = 11개월 28일 (기산일의 전일이 있으므로 역법 적용 후 계산)<br>★ 계산 결과: <b>1년 11개월 28일 → 반올림 등 없이 그대로 적용</b>',memo:'역에의한방법=기산일전일로만료시1월/실제일수아님',pg:'129p',cat:'경력계산'},
+   {q:'15일 기준 적용 예시: 2월 1일~3월 15일 근무 시 경력은?',a:'2월 1일~2월 28일 = 1개월<br>3월 1일~3월 15일 = <b>15일 이상</b> → 1개월로 계산<br>→ 합계: <b>2개월</b> 인정',memo:'15일이상=1월/3.1~3.15=15일→1월인정',pg:'124p',cat:'경력계산'},
+   {q:'15일 기준 적용 예시: 2월 1일~3월 14일 근무 시 경력은?',a:'2월 1일~2월 28일 = 1개월<br>3월 1일~3월 14일 = <b>14일 (15일 미만)</b> → 버림<br>→ 합계: <b>1개월</b>만 인정',memo:'15일미만=버림/3.1~3.14=14일→버림',pg:'124p',cat:'경력계산'},
+   {q:'호봉 획정 시 임용전경력 인정 불가 사례는?',a:'① 무급 근무 경력<br>② 주 15시간 미만 근무 경력 (시간강사 제외)<br>③ 관할청에 보고되지 않은 사립학교 교원 경력 (50% 환산율 적용은 가능)<br>④ 교원자격증 취득 전의 경력<br>⑤ 국내 연구원 경력 중 인사혁신처 미인정 기관 근무 경력',memo:'무급·주15시간미만·미보고사립·자격취득전=불가',pg:'130p',cat:'경력계산'},
+   {q:'군복무 경력의 환산율과 인정 조건은?',a:'<b>현역 군인 경력</b>: <b>100%</b> 환산<br>예외로 제외되는 경우: 예술체육요원, 산업기능요원, 전문연구요원, 승선근무예비역, 군간부후보생 경력<br>★ 방위소집·상근예비역소집·보충역소집·대체역소집 복무 기간 포함',memo:'현역군인=100%/예술체육요원·산업기능요원=제외',pg:'130p',cat:'경력환산율'},
+  ]},
+  {lbl:'승급계산예시',ttl:'승급 계산 예시',cards:[
+   {q:'감봉 2개월 처분을 받은 경우 승급 제한 기간은?',a:'감봉 = 처분 기간 + <b>12개월</b><br>감봉 2개월 → 2개월 + 12개월 = <b>총 14개월</b> 승급 제한',memo:'감봉처분기간+12월/감봉2월→14월제한',pg:'106p',cat:'승급제한'},
+   {q:'정직 3개월 처분을 받은 경우 승급 제한 기간은?',a:'정직 = 처분 기간 + <b>18개월</b><br>정직 3개월 → 3개월 + 18개월 = <b>총 21개월</b> 승급 제한',memo:'정직처분기간+18월/정직3월→21월제한',pg:'106p',cat:'승급제한'},
+   {q:'강등 처분 시 승급 제한 기간은?',a:'강등 = 처분 기간(3개월) + <b>18개월</b><br>→ 3개월 + 18개월 = <b>총 21개월</b> 승급 제한<br>★ 강등은 항상 3개월 직무정지',memo:'강등=3월직무정지+18월=21월제한',pg:'106p',cat:'승급제한'},
+   {q:'연간 병가 7일 사용 시 승급 제한 일수는?',a:'연간 병가 <b>6일 초과</b>분이 승급 제한<br>병가 7일 사용 → <b>1일</b> 승급 제한<br>병가 15일 사용 → <b>9일</b> 승급 제한<br>★ 공무상 병가는 승급 제한에 포함되지 않음',memo:'연간병가6일초과분승급제한/공무상병가=제외',pg:'106p',cat:'승급제한'},
+   {q:'호봉 재획정 시기 3가지는?',a:'① 경력 누락·오류 발견 시<br>② 학위 추가 취득 시 (석사·박사 등)<br>③ 경력 인정 범위 변경으로 인한 재계산<br>★ 재획정 시행권자: <b>관할 교육장</b><br>★ 잘못된 발령일자로 소급하여 정정',memo:'경력오류·학위취득·범위변경=재획정/교육장시행/소급정정',pg:'122p',cat:'호봉정정'},
+   {q:'특별승급을 받기 위한 근무성적 조건은?',a:'<b>최상위 등급을 2회 연속</b>으로 받아야 함<br>예) 교감: 수(30%) 등급 2회 연속<br>교사: A등급(10%) 2회 연속<br>→ <b>1호봉</b> 특별승급<br>★ 또는 직무수행 탁월하여 행정 발전에 현저히 기여한 경우',memo:'최상위2회연속or특별기여=1호봉특별승급',pg:'126p',cat:'특별승급'},
+  ]},
+  {lbl:'경력환산상세',ttl:'경력환산율 상세',cards:[
+   {q:'어린이집 보육교직원 경력의 환산율은?',a:'유아교육법 또는 특수학교교원 자격을 갖추고 임면이 보고된 보육교직원으로 어린이집에서 근무한 경력: <b>100%</b><br>★ 단, 특수학교교원 자격(유치원 과정 제외)을 갖추고 장애영유아어린이집에서 근무한 경력: <b>80%</b>',memo:'유아교육법자격+어린이집=100%/특수유치원외=80%',pg:'130p',cat:'경력환산율'},
+   {q:'재외한국학교 교원으로 근무한 경력의 환산율은?',a:'초·중등교육법에 따른 자격을 갖추고 재외국민교육지원법에 따라 임면된 교원으로 한국학교에서 근무한 경력: <b>100%</b>',memo:'재외한국학교교원=100%환산',pg:'130p',cat:'경력환산율'},
+   {q:'평생교육시설 교원 경력의 환산율은?',a:'초·중등교육법에 따른 자격을 갖추고 평생교육법에 따라 학력이 인정되는 학교형태의 평생교육시설에서 교원으로 근무한 경력: <b>100%</b>',memo:'학력인정평생교육시설교원=100%환산',pg:'130p',cat:'경력환산율'},
+   {q:'교원단체 또는 교원노조 근무 경력의 환산율은?',a:'교육기본법에 따른 교원단체 또는 교원노조 설립 및 운영에 관한 법률에 따라 설립된 노동조합에서 근무한 경력: <b>70%</b>',memo:'교원단체·교원노조근무경력=70%환산',pg:'131p',cat:'경력환산율'},
+  ]},
+,
+  {lbl:'호봉Q&A',ttl:'호봉 Q&A 실전 사례',cards:[
+   {q:'사립학교 기간제교원으로 근무한 경력의 호봉 인정은?',a:'관할청에 보고된 사립학교 기간제교원 경력: <b>100%</b> 인정<br>단, 자격증 종류와 근무한 학교가 일치하지 않는 기간제교원 경력: <b>80%</b><br>관할청에 보고되지 않은 경우: <b>50%</b>',memo:'보고된사립기간제=100%/자격불일치=80%/미보고=50%',pg:'130p',cat:'경력환산율'},
+   {q:'대학원 박사학위 수업연한 경력 인정 기준은?',a:'대학원 석사·박사학위 취득 경력도 호봉 경력으로 인정<br>인정 기간: 각 대학의 학칙으로 정한 <b>최저수업연한</b><br>★ <b>박사학위 수업연한은 최대 3년</b> 이내에서만 인정',memo:'박사수업연한=최대3년인정/학칙최저수업연한기준',pg:'131p',cat:'경력환산율'},
+   {q:'교원노조 가입으로 노조 활동을 한 경우 경력 환산은?',a:'교원노조에서 근무한 경력: <b>70%</b> 환산율 적용<br>★ 다만, 노조전임자로 휴직한 기간: 경력평정에서 <b>10할(100%)</b> 인정 (다른 기준 적용)',memo:'노조근무경력=70%호봉환산/노조전임휴직=경력평정10할',pg:'131p',cat:'경력환산율'},
+   {q:'호봉 획정 시 임용 당일이 산입되는 이유는?',a:'임용일은 공무원 신분이 발생한 날이므로 경력 산입에 포함<br>반면, 퇴직일은 실제로 근무하지 않은 날이므로 제외<br>★ 계산 시 항상 <b>임용일 산입·퇴직일 제외</b> 원칙 적용',memo:'임용일=신분발생일=산입/퇴직일=미근무일=제외',pg:'124p',cat:'경력계산'},
+   {q:'호봉 획정에서 경력기간에 산입되지 않는 기간은?',a:'① 무급 근무 기간<br>② 주 15시간 미만 근무 기간 (시간강사 제외)<br>③ 자격증 취득 전 근무 기간 (자격증과 무관한 경력)<br>④ 관할청 미보고 사립학교 교원 경력 (50% 환산은 가능)<br>★ 특수학교 가산연수: 경력이 아닌 추가 연수 인정',memo:'무급·15시간미만·자격취득전·미보고사립=산입감경',pg:'124p',cat:'경력계산'},
+   {q:'임용 후 학위를 취득한 경우 호봉 재획정이 필요한가?',a:'임용 후 석사·박사 학위 추가 취득: <b>학위에 따른 경력 인정으로 호봉 재획정 필요</b><br>→ 관할 교육장에게 재획정 신청<br>★ 재획정 효력: 학위 취득일(또는 임용일) 소급 적용<br>★ 사범계 가산연수(교육대학원)도 재획정 사유',memo:'임용후학위취득=교육장에재획정신청/학위취득일소급',pg:'122p',cat:'호봉정정'},
+  ]},
+  {lbl:'승급상세',ttl:'승급 상세 규정',cards:[
+   {q:'승급 기산일(起算日)은 어떻게 정해지는가?',a:'호봉 발령일로부터 1년이 되는 날의 <b>매월 1일</b><br>예) 3월 1일 임용 → 다음해 3월 1일 승급<br>★ 잔여 월일은 다음 승급기간에 산입',memo:'승급기산일=호봉발령일로부터1년/매월1일',pg:'122p',cat:'정기승급'},
+   {q:'징계처분 후 처분 기간 중 승급 제한은?',a:'강등 처분 기간(3개월): 승급 제한 기간에 포함됨<br>정직 처분 기간(1~3개월): 승급 제한 기간에 포함됨<br>감봉 처분 기간(1~3개월): 승급 제한 기간에 포함됨<br>→ 강등 3월 + 18월 = 21월 / 정직 2월 + 18월 = 20월',memo:'처분기간 자체도 승급제한기간에 포함/처분기간+추가기간',pg:'106p',cat:'승급제한'},
+   {q:'특별승급 이후 다시 특별승급이 가능한가?',a:'특별승급은 <b>횟수 제한 없이</b> 반복 가능<br>단, 매번 요건을 충족해야 함 (최상위등급 2회 연속 또는 특별기여)<br>★ 특별승급 이후 일반 정기승급도 계속 가능',memo:'특별승급=횟수제한없음/매번요건충족필요',pg:'126p',cat:'특별승급'},
+   {q:'승급을 위한 1년 기간 계산 방법은?',a:'승급 기간: <b>역(曆)에 의한 1년</b> (민법 제160조)<br>호봉 발령일의 전일이 속하는 달의 초일로부터 기산<br>예) 3.1 임용 → 다음해 2.28까지가 1년 → 다음해 3.1에 승급',memo:'역에의한1년/전일기산/3.1임용→다음해3.1승급',pg:'122p',cat:'정기승급'},
+  ]},
+
+ ]
+},
+{id:4,ico:"🏥",clr:"#c9a43c",ttl:"휴직과 복직",pg:"191~286p",
+ desc:"14가지 휴직 유형 전체: 질병·병역·행방불명·유학·고용·육아·입양·불임난임·국내연수·가족돌봄·동반·노조전임·자율연수",
+ tags:["14절 전체","91문항","원본수록"],
+ secs:[
+  {
+    id: 0,
+    label: "개관",
+    title: "휴직 개관",
+    cards: [
+      {
+        q: "휴직제도의 목적은 무엇인가?",
+        a: "공무원이 재직 중 직무에 종사할 수 없는 사유가 발생한 경우, <b>면직시키지 아니하고</b> 일정기간 동안 신분을 유지하면서 질병치료, 법률상 의무이행, 능력개발을 위한 연수기회를 부여하는 등 <b>공무원의 신분을 보장</b>하기 위한 제도",
+        memo: "핵심: 면직 대신 신분 보장 + 일정기간 직무 이탈 허용",
+        pg: "193p",
+        cat: "개관"
+      },
+      {
+        q: "직권휴직과 청원휴직의 차이는?",
+        a: "<b>직권휴직</b>: 임용권자가 직권으로 휴직을 명하는 것 (질병, 병역, 행방불명, 법정의무, 노조전임)<br><b>청원휴직</b>: 본인의 청원(신청)에 의하여 임용권자가 허가하는 것 (유학, 고용, 육아, 입양, 불임난임, 국내연수, 가족돌봄, 동반, 자율연수)",
+        memo: "직권 5종: 질·병·행·법·노 / 청원 9종: 나머지",
+        pg: "193p",
+        cat: "개관"
+      },
+      {
+        q: "6개월 이상의 휴직 처리 절차를 순서대로 설명하시오.",
+        sub: "직권휴직과 청원휴직으로 구분하여",
+        a: "<b>직권휴직</b>: 휴직사유발생 → 휴직여부판단(임용권자) → 휴직발령(임용권자)<br><b>청원휴직</b>: 본인(휴직신청) → 휴직여부판단(임용권자) → 휴직발령(임용권자)",
+        memo: "임용권자 = 교육장(공립일반학교) / 교육감(공립특수학교)",
+        pg: "195p",
+        cat: "개관"
+      },
+      {
+        q: "6개월 미만의 휴직 처리 절차와 위임 근거는?",
+        a: "휴직사유발생 → 휴직여부판단(<b>학교장</b>) → 휴직발령(<b>학교장</b>) → 교육지원청에 보고(NEIS 처리)<br>※ 공립특수학교는 서울특별시교육청에 보고<br><b>근거</b>: 「서울특별시교육감 행정권한의 위임에 관한 규칙」 제6조",
+        memo: "6개월 미만 → 학교장 권한! 특수학교는 교육청 보고",
+        pg: "195p",
+        cat: "개관"
+      },
+      {
+        q: "휴직의 효력 3가지를 설명하시오 (국가공무원법 제73조)",
+        a: "<b>①</b> 신분은 보유하나 직무에 종사하지 못함<br><b>②</b> 휴직기간 중 사유 소멸 시 <b>30일 이내</b> 신고 → 지체 없이 복직조치<br><b>③</b> 휴직기간 만료 시 <b>30일 이내</b> 복직신고 → 당연복직",
+        memo: "핵심 숫자: 30일 이내 신고/복직신고 = 당연복직",
+        pg: "195p, 198p",
+        cat: "개관"
+      },
+      {
+        q: "휴직 기간 중 봉급 감액 규정(공무원보수규정 제28조)을 정리하시오.",
+        a: "<b>① 질병휴직(일반)</b>: 1년 이하→70%, 1년 초과→50%<br><b>② 공무상 질병</b>: 전액지급<br><b>③ 외국유학·1년 이상 국외연수</b>: 50% 지급<br><b>④ 기타(위에 해당 없는 휴직)</b>: 지급 안 함<br><b>⑤ 목적 외 사용</b>: 받은 봉급 환수",
+        memo: "질병: 7할→5할 / 공무상: 전액 / 유학: 5할 / 나머지: 없음",
+        pg: "195p, 199p",
+        cat: "개관"
+      },
+      {
+        q: "결원 보충이 가능한 경우는?",
+        a: "<b>6개월 이상 휴직</b> 시 결원보충 인정 (대부분의 휴직 유형)<br>※ <b>행방불명휴직은 결원보충 불가</b><br>※ 출산휴가+육아휴직 합산 6개월 이상, 병가+질병휴직 합산 6개월 이상도 가능<br>※ 서울시교육청은 별도 정현원관리 방침 따름",
+        memo: "예외: 행방불명휴직 = 결원보충 불가",
+        pg: "199p",
+        cat: "개관"
+      },
+      {
+        q: "별도정원 소멸 시기는 언제인가?",
+        a: "휴직자 복귀 후 <b>당해 직급에 최초로 결원이 발생한 때</b><br>※ 휴직자 복직 시 그 직급에 결원 없어도 반드시 복직시켜야 함. 이 경우 초과 현원은 '과원'이 아닌 '별도정원'으로 관리",
+        memo: "복귀 후 최초 결원 발생 = 별도정원 소멸",
+        pg: "200p",
+        cat: "개관"
+      },
+      {
+        q: "휴직기간 만료 전 15일까지 신청해야 하는 것은?",
+        a: "휴직 중인 자가 <b>휴직기간을 연장</b>하고자 할 때에는 휴직기간 만료 전 <b>15일까지</b> 신청하여야 함 (「교육공무원인사관리규정」 제25조)",
+        memo: "연장 신청 = 만료 15일 전까지",
+        pg: "200p",
+        cat: "개관"
+      },
+      {
+        q: "휴직자의 실태보고 주기와 보고 내용은?",
+        a: "<b>매 반기별</b>(6월 30일, 12월 31일)로 소재지, 연락처, 휴직사유 계속여부 등을 소속기관의 장에게 보고<br>※ 휴직 시작 후 <b>1개월 이내인 경우 보고 생략 가능</b><br>※ 복무 이상 발생 시 즉시 보고",
+        memo: "반기별(6/30, 12/31) 보고 / 1개월 이내 생략 가능",
+        pg: "200p",
+        cat: "개관"
+      },
+      {
+        q: "육아휴직·동반휴직으로 2년 이상 휴직 후 복직 시 필요한 것은?",
+        a: "<b>복직예정자 직무연수</b>를 받은 후 연수이수증 제출<br>• 연수시간: 교육과정, 교수학습, 학생지도 등 직무관련 사항으로 <b>30시간 내외</b><br>• 연수시기: 복직예정일 이전 (불가피시 복직 후 1년 이내)<br>• 출산휴가 포함 2년 이상인 경우 및 2년 미만자도 연수 가능",
+        memo: "육아·동반 2년 이상 → 복직 전 30시간 직무연수 필수",
+        pg: "201p",
+        cat: "개관"
+      }
+    ]
+  },
+  {
+    id: 1,
+    label: "제1절",
+    title: "질병휴직",
+    cards: [
+      {
+        q: "질병휴직의 요건은?",
+        a: "<b>신체·정신상의 장애로 장기요양을 요할 때</b><br>• 합병성·단일성 또는 공무 기인 여부 불문<br>• 직무수행에 상당한 지장을 줄 수 있는 장애 모두 해당",
+        pg: "202-203p",
+        cat: "질병휴직"
+      },
+      {
+        q: "질병휴직의 기간과 횟수는?",
+        a: "<b>기간</b>: 1년 이내 + 부득이한 경우 1년 범위 내 연장 (총 2년 한도)<br><b>공무상 질병</b>: 3년 이내 + 2년 범위 내 연장 (총 5년 한도)<br><b>횟수</b>: 제한 없음 (단, 동일 질병으로 총2년/공무상 5년 초과 불가)",
+        memo: "일반: 1+1=2년 / 공무상: 3+2=5년",
+        pg: "203p",
+        cat: "질병휴직"
+      },
+      {
+        q: "질병휴직 처리절차 7단계를 설명하시오.",
+        a: "① 휴직사유 발생 → ② 본인신청 혹은 학교장 직권신청 → ③ 서류구비(진단서 등) → ④ 교육지원청에 휴직신청 → ⑤ 교육지원청 허가여부 판단 → ⑥ <b>교육장 휴직발령</b> → ⑦ 휴직개시<br>※ 공립특수학교: 교육청 신청, <b>교육감</b> 발령",
+        pg: "202p",
+        cat: "질병휴직"
+      },
+      {
+        q: "질병휴직 시 진단서 요건은?",
+        a: "<b>전치 2월 이상</b>의 국민건강보험 적용 병·의원 또는 한의원 발행<br>※ 「의료법 시행규칙」에 따른 진단서 기재사항이 모두 기재된 <b>의사 소견서도 가능</b>",
+        memo: "전치 2월 이상 / 국민건강보험 적용기관 발행",
+        pg: "204p",
+        cat: "질병휴직"
+      },
+      {
+        q: "질병휴직 복직 시 진단서에 포함되어야 할 내용은?",
+        a: "진단서에 <b>'정상 근무 지장 없음'</b> 또는 '정상적인 근무 가능함' 내용이 포함되어야 함",
+        memo: "복직 진단서 = '정상 근무 지장 없음' 명기 필수",
+        pg: "204p",
+        cat: "질병휴직"
+      },
+      {
+        q: "일반 질병휴직 전 병가·연가 사용 순서는?",
+        a: "<b>일반병가(60일)</b> → <b>법정연가사용</b>(미사용연가 범위 내) → <b>일반 질병휴직(1년)</b>",
+        memo: "병가60 → 연가 → 질병휴직",
+        pg: "205p",
+        cat: "질병휴직"
+      },
+      {
+        q: "공무상 질병휴직 전 병가·연가 사용 순서는?",
+        a: "<b>공무상병가(180일)</b> → <b>일반병가(60일)</b> → <b>법정연가사용</b>(미사용연가 범위 내) → <b>공무상 질병휴직(3년)</b>",
+        memo: "공무상병가180 → 일반병가60 → 연가 → 공무상질병휴직",
+        pg: "205p",
+        cat: "질병휴직"
+      },
+      {
+        q: "질병휴직의 경력인정과 보수 지급 기준은?",
+        a: "<b>경력평정</b>: 미산입 (공무상 질병은 산입)<br><b>호봉승급</b>: 제외 (공무상 질병은 포함)<br><b>봉급</b>: 일반 → 1년 이하 70%, 1년 초과 50% / 공무상 → 전액<br><b>결원보충</b>: 6월 이상 휴직 시",
+        memo: "일반: 경력·승급 불인정, 7할→5할 / 공무상: 경력·승급 인정, 전액",
+        pg: "207p",
+        cat: "질병휴직"
+      },
+      {
+        q: "질병휴직위원회의 구성은?",
+        a: "위원장 포함 <b>3명 이상</b>으로 구성<br>• 1명 이상은 <b>의료전문가</b> 포함 필수<br>• 전체 위원의 <b>2분의 1 이상은 공무원이 아닌 사람</b>으로 구성 (의료전문가는 비공무원으로 봄)",
+        memo: "3명 이상 / 의료전문가 1명 이상 / 비공무원 1/2 이상",
+        pg: "202p",
+        cat: "질병휴직"
+      },
+      {
+        q: "질병휴직위원회 자문 사항 4가지는?",
+        a: "① 질병휴직 또는 불임·난임휴직 명령의 필요성<br>② 휴직자 복직 후 정상적 근무 가능 여부<br>③ 휴직 기간이 끝난 공무원이 직권면직 대상인지 여부<br>④ 공무상 질병휴직자에게 같은 사유로 <b>휴직기간이 3년을 초과하는 경우(필수)</b>",
+        memo: "공무상 3년 초과 연장 시 = 자문 필수(필수사항)",
+        pg: "202p",
+        cat: "질병휴직"
+      },
+      {
+        q: "질병휴직 기간 만료 시 동일 사유로 병가 승인이 가능한가?",
+        a: "<b>불가</b>. 질병휴직 만료 시 복직과 동시에 동일 사유로 연속 병가 승인 불가<br>다만, 복직 후 정상 근무가 상당기간 지속된 경우에만 일반병가 승인 가능",
+        pg: "208p",
+        cat: "질병휴직"
+      },
+      {
+        q: "질병휴직 중 기소된 경우 인사처리는?",
+        a: "휴직 중인 상태에서 <b>기소일자로 직위해제</b>하여야 함",
+        pg: "208p",
+        cat: "질병휴직"
+      },
+      {
+        q: "질병휴직 중 학위 취득 시 경력과 호봉 인정 여부는?",
+        a: "<b>불인정</b>. 질병휴직은 휴직 사유에 부합되지 않으므로 연구실적과 호봉승급 경력 모두 인정 불가",
+        pg: "209p",
+        cat: "질병휴직"
+      }
+    ]
+  },
+  {
+    id: 2,
+    label: "제2절",
+    title: "병역휴직",
+    cards: [
+      {
+        q: "병역휴직의 요건은?",
+        a: "<b>병역법에 의한 병역의 복무를 위하여 징집 또는 소집된 경우</b><br>• 대상: 남성 교육공무원<br>• 현역 장교·부사관·병, 상근예비역, 보충역으로 복무<br>※ 사관학교 무관후보생, 장기부사관은 제외",
+        memo: "징집·소집된 경우 / 남성 교육공무원",
+        pg: "211-212p",
+        cat: "병역휴직"
+      },
+      {
+        q: "병역휴직의 기간은?",
+        a: "<b>복무기간이 만료될 때까지</b><br>• 복무기간: 「병역법」 제18조·제30조, 「군인사법」 제7조에 따른 의무복무기간<br>• 휴직발령 기준일: <b>입영일자</b>로 발령",
+        memo: "기간 = 복무기간 / 횟수 = 성격상 1회",
+        pg: "212p",
+        cat: "병역휴직"
+      },
+      {
+        q: "병역휴직의 경력인정과 보수 지급은?",
+        a: "<b>경력평정</b>: 산입<br><b>호봉승급</b>: 호봉승급기간에 포함<br><b>봉급</b>: 지급 안 함 (단, 2년 이상 근속 후 휴직 시 그 달 봉급 전액 지급)<br><b>결원보충</b>: 6월 이상 휴직 시",
+        memo: "경력·승급 인정! 봉급 지급 안 함",
+        pg: "213p",
+        cat: "병역휴직"
+      },
+      {
+        q: "병역휴직 후 귀가 조치된 자의 처리는?",
+        a: "귀향 처리된 자 → 휴직사유가 소멸된 것으로 보아 <b>지체 없이 복직</b>을 명하여야 함<br>※ 군무이탈자는 <b>직권면직</b> 가능",
+        pg: "214p",
+        cat: "병역휴직"
+      },
+      {
+        q: "군복무 중 장기군복무를 지원한 경우 처리는?",
+        a: "군복무를 위해 휴직 중인 자가 장기군복무를 지원하였을 때 → <b>면직 조치</b>",
+        pg: "214p",
+        cat: "병역휴직"
+      }
+    ]
+  },
+  {
+    id: 3,
+    label: "제3절",
+    title: "행방불명휴직",
+    cards: [
+      {
+        q: "행방불명휴직의 요건과 기간은?",
+        a: "<b>요건</b>: 천재지변·전시·사변 또는 그 밖의 사유로 생사나 소재가 불명한 때<br>• 생사 또는 소재 <b>어느 한 쪽만 불명해도</b> 휴직 가능<br><b>기간</b>: <b>3월 이내</b><br>• 발령기준일: 인지 또는 실종신고일<br><b>횟수</b>: 제한 없음",
+        memo: "기간 3월 이내 / 생사OR소재 불명 = 휴직",
+        pg: "216p",
+        cat: "행방불명"
+      },
+      {
+        q: "행방불명휴직의 경력인정과 보수는?",
+        a: "<b>경력평정</b>: 미산입<br><b>호봉승급</b>: 제외<br><b>봉급</b>: 지급 안 함<br><b>결원보충</b>: <b>불가</b>",
+        memo: "경력·승급·결원보충 모두 불인정",
+        pg: "218p",
+        cat: "행방불명"
+      },
+      {
+        q: "행방불명휴직 3월 이내에 복귀 못하면?",
+        a: "3월 이내 복귀 불가 시 → <b>직권면직</b> 가능 (국가공무원법 제70조제1항제4호)",
+        memo: "3월 내 복귀 불가 = 직권면직",
+        pg: "217p",
+        cat: "행방불명"
+      },
+      {
+        q: "무단결근 중인 교사에게 행방불명휴직이 가능한가?",
+        a: "<b>가능</b>. '기타의 사유'에는 납치 같은 외부요인뿐 아니라 무단가출·잠적 등 내부요인도 포함<br>→ 3월 이내 휴직 명령 가능<br>※ 단, 스스로 잠적이 명백하면 직장이탈금지 위반으로 징계 대상",
+        pg: "218p",
+        cat: "행방불명"
+      }
+    ]
+  },
+  {
+    id: 4,
+    label: "제4절",
+    title: "법정의무수행휴직",
+    cards: [
+      {
+        q: "법정의무수행휴직의 요건과 기간은?",
+        a: "<b>요건</b>: 기타 법률에 따른 의무를 수행하기 위하여 직무를 이탈하게 된 때<br><b>기간</b>: 의무복무기간 또는 임기<br><b>발령기준일</b>: 법률상의 의무수행 개시일<br><b>횟수</b>: 제한 없음",
+        memo: "기간 = 복무기간·임기 / 병역휴직과 유사",
+        pg: "219-220p",
+        cat: "법정의무"
+      },
+      {
+        q: "법정의무수행휴직의 경력인정과 보수는?",
+        a: "<b>경력평정</b>: 산입<br><b>호봉승급</b>: 호봉승급기간에 포함<br><b>봉급</b>: 지급 안 함<br><b>결원보충</b>: 6월 이상 휴직 시",
+        memo: "경력·승급 인정 (병역휴직과 동일)",
+        pg: "221p",
+        cat: "법정의무"
+      },
+      {
+        q: "국가대표 선수 강화훈련 참가는 법정의무수행휴직 사유가 되는가?",
+        a: "<b>안 됨</b>. 대한체육회가 주관하는 선수강화훈련 참가는 <b>법률의 규정에 의한 의무수행이 아님</b><br>→ 파견근무로 처리 가능 (국가공무원법 제32조의4, 교육공무원임용령 제7조의3제1항제1호)",
+        pg: "221p",
+        cat: "법정의무"
+      }
+    ]
+  },
+  {
+    id: 5,
+    label: "제5절",
+    title: "유학휴직",
+    cards: [
+      {
+        q: "유학휴직의 요건(서울시교육청 허가 기준)은?",
+        a: "<b>교육경력</b>: 정규교사 실 교육경력 <b>3년 이상</b> (휴직·파견·연수 제외)<br><b>학위취득 어학능력(영어권)</b>: TOEFL IBT 96점 이상 / TEPS 350점 이상 / TOEIC 870점 이상 / IELTS 6.5 이상<br><b>어학연수 어학능력(영어권)</b>: TOEFL IBT 86점 이상 / TEPS 265점 이상 / TOEIC 790점 이상 / IELTS 5.5 이상<br>※ 어학능력시험 성적 유효기간: 휴직 청원일 기준 <b>2년</b>",
+        memo: "경력 3년↑ / 학위: IBT96·TEPS350·TOEIC870·IELTS6.5 / 연수: IBT86·TEPS265·TOEIC790·IELTS5.5",
+        pg: "223p, 229p",
+        cat: "유학휴직"
+      },
+      {
+        q: "유학휴직의 기간은?",
+        a: "<b>학위취득</b>: 3년 이내 + 3년 범위 내 연장 가능 (총 최대 6년)<br><b>어학연수</b>: <b>1년</b>에 한하고 연장 불가<br>※ 최초 1년 또는 2년 휴직해도 최초 3년 기간 모두 사용한 것으로 간주",
+        memo: "학위: 3+3=6년 / 어학: 1년(연장불가)",
+        pg: "223p",
+        cat: "유학휴직"
+      },
+      {
+        q: "해외 어학연수 목적의 유학휴직 횟수 제한은?",
+        a: "재직기간 중 총 <b>2회까지</b> 가능<br>단, 동일 목적의 휴직은 <b>복직 후 5년이 경과된 자</b>에 한하여 신청 가능",
+        memo: "어학연수: 총 2회, 복직 후 5년 경과 후 재신청",
+        pg: "224p",
+        cat: "유학휴직"
+      },
+      {
+        q: "유학휴직의 경력인정과 보수는?",
+        a: "<b>경력평정</b>: <b>50% 산입</b><br><b>호봉승급</b>: 호봉승급기간에 포함 (승급 인정)<br><b>봉급</b>: <b>50%</b> 지급 (교육공무원은 최대 6년까지)<br><b>결원보충</b>: 6월 이상 휴직 시",
+        memo: "경력 5할, 봉급 5할",
+        pg: "228p",
+        cat: "유학휴직"
+      },
+      {
+        q: "유학휴직 중 대학 또는 전공을 변경한 경우 처리는?",
+        a: "임용권자 허락 없이 대학 변경 또는 전공 변경 → <b>휴직사유의 소멸</b>로 간주, 지체 없이 복직<br>단, 본인 귀책이 아닌 부득이한 경우 → 임용권자에게 <b>신고 후 허가</b>받아야 함",
+        memo: "무허가 대학·전공 변경 = 휴직사유 소멸",
+        pg: "224p",
+        cat: "유학휴직"
+      },
+      {
+        q: "유학휴직 중 석사학위를 조기 취득한 경우는?",
+        a: "<b>휴직사유의 소멸</b>로 봄. 휴직기간이 남았다는 이유로 박사과정을 계속 이수할 수 없음<br>※ 유학휴직은 수업기간을 초과할 수 없음",
+        pg: "224p",
+        cat: "유학휴직"
+      },
+      {
+        q: "사설어학원을 통한 어학연수로 유학휴직이 가능한가?",
+        a: "<b>불가</b>. 외국대학 등 공인기관(정규교육기관)이 개설한 교육과정에서 어학연수 시만 허용<br>사설어학원, 개인교습기관을 통한 어학연수는 제외",
+        pg: "223p",
+        cat: "유학휴직"
+      },
+      {
+        q: "유학휴직 만료 후 바로 고용휴직이 가능한가?",
+        a: "<b>제한</b>이 타당함. 유학휴직 허가의 본래 취지(복직 후 관련 분야 근무)에 상반되므로 고용휴직을 제한함이 타당",
+        pg: "231p",
+        cat: "유학휴직"
+      }
+    ]
+  },
+  {
+    id: 6,
+    label: "제6절",
+    title: "고용휴직",
+    cards: [
+      {
+        q: "고용휴직의 대상기관과 '고용'의 정의는?",
+        a: "<b>대상기관</b>: 국제기구, 외국기관, 국내외 대학·연구기관, 다른 국가기관, 재외교육기관, 대통령령 민간단체<br><b>고용</b>: 정식 근로계약 체결 + 상시노동력 제공 + 일정액 임금 수령<br>※ 용역계약·과제연구·시간제근무·무보수 근로 = 해당 안 됨<br>※ <b>외국 사기업체 = 포함 안 됨</b>",
+        memo: "외국 사기업 = 불가! 정식 근로계약+임금 수령 필수",
+        pg: "232p",
+        cat: "고용휴직"
+      },
+      {
+        q: "고용휴직의 기간과 횟수는?",
+        a: "<b>기간</b>: 고용기간 동안 (고용기간 초과 연장 불가)<br>• 고용계약기간 임의변경 불가 (징계사유)<br><b>횟수</b>: 제한 없음",
+        memo: "기간 = 고용기간 / 임의변경 징계",
+        pg: "234p",
+        cat: "고용휴직"
+      },
+      {
+        q: "고용휴직 경력환산 기준(2000.4.1. 이후)은?",
+        a: "<b>상근</b>: 주당 15시간 이상 또는 주당 40시간(법정근무시간) 이상 → 100% 인정<br><b>비상근</b>: 주당 6~14시간 → 50% 인정<br>※ 주당 5시간 이하 → 인정 안 함<br>※ 5시간 이하가 6개월 이상 계속되면 <b>휴직사유 소멸</b>로 복직",
+        memo: "15시간↑=100% / 6~14시간=50% / 5시간↓=불인정",
+        pg: "236p",
+        cat: "고용휴직"
+      },
+      {
+        q: "고용휴직의 경력인정과 보수는?",
+        a: "<b>경력평정</b>: 100% 산입 (비상근 50%)<br><b>호봉승급</b>: 100% 산입 (비상근 50%)<br><b>봉급</b>: 지급 안 함<br><b>결원보충</b>: 6월 이상 휴직 시",
+        memo: "상근: 경력·승급 100% / 비상근: 50%",
+        pg: "236p",
+        cat: "고용휴직"
+      },
+      {
+        q: "주당 수업시수 5시간 이하에 고용된 경우 고용휴직이 가능한가?",
+        a: "<b>불가</b>. 주당 수업시수 5시간 이하는 고용휴직 불가<br>※ 5시간 이하가 6개월 이상 계속 시 <b>휴직사유 소멸</b>로 복직조치",
+        pg: "234p",
+        cat: "고용휴직"
+      },
+      {
+        q: "재외교육기관의 범위는?",
+        a: "「재외국민의 교육지원 등에 관한 법률」에 의한 교육기관<br>• 교육부장관 승인을 얻어 외국에 설립된 <b>한국학교</b><br>• 재외공관의 장에게 등록한 <b>한글학교</b><br>• 교육부장관이 설치한 <b>한국교육원</b><br>※ 한국정부 승인 없이 외국정부 승인만 받은 외국 사립학교 = 해당 안 됨",
+        pg: "238p",
+        cat: "고용휴직"
+      },
+      {
+        q: "고용휴직 공무원이 퇴직금을 받을 수 있는가?",
+        a: "<b>받을 수 없음</b>. 국가와 민간기업 등으로부터 동일 사항의 퇴직금·퇴직수당 수령 불가<br>• 국민연금·고용보험 등 가입 불가<br>• 국제기구 등 강제 가입의 경우는 예외",
+        pg: "239p",
+        cat: "고용휴직"
+      }
+    ]
+  },
+  {
+    id: 7,
+    label: "제7절",
+    title: "육아휴직",
+    cards: [
+      {
+        q: "육아휴직 대상 자녀의 범위는?",
+        a: "<b>만 8세 이하 또는 초등학교 2학년 이하</b>의 자녀 (어느 하나만 해당해도 가능)<br>• 만 8세가 속하는 <b>학기 말</b>까지 휴직 가능<br>• 초등학교 2학년인 경우 <b>2학년 말</b>까지<br>• 만 9세 초등2학년 → 가능 / 만 8세 초등3학년 → 가능<br>• 친생자+양자 포함 / 이혼 시 양육권 보유자 / 재혼 시 배우자 양육권 자녀 포함",
+        memo: "만8세↓ OR 초2↓ (어느 하나만 해당해도 OK)",
+        pg: "241p",
+        cat: "육아휴직"
+      },
+      {
+        q: "육아휴직의 기간과 횟수는?",
+        a: "<b>기간</b>: 자녀 1명에 대하여 <b>3년 이내</b> (분할 가능)<br><b>횟수</b>: 제한 없음 (단, 다른 자녀로 계속 휴직 시 복직 후 재휴직)<br>• 부부(교육)공무원: 동일 자녀 동시 및 순차 휴직 가능",
+        memo: "자녀 1명당 3년 / 분할 가능 / 횟수 제한 없음",
+        pg: "241p",
+        cat: "육아휴직"
+      },
+      {
+        q: "육아휴직의 경력인정과 호봉승급은?",
+        a: "<b>경력평정</b>: 모든 자녀 육아휴직기간 전부 산입<br><b>호봉승급</b>: 자녀당 최초 <b>1년</b>만 인정 (셋째 이후 자녀는 전기간 인정)<br>※ 한부모·부모 모두 각 3월 이상·장애자녀 부모: <b>1년 6개월</b>까지 승급 인정",
+        memo: "경력평정: 전부 / 호봉: 첫째둘째=1년, 셋째↑=전부",
+        pg: "244p",
+        cat: "육아휴직"
+      },
+      {
+        q: "육아휴직수당 지급 기준은?",
+        a: "<b>1~6개월</b>: 월봉급액 (상한: 3개월까지 250만원, 4~6개월 200만원 / 하한: 70만원)<br><b>7개월 이후</b>: 월봉급액의 80% (상한 160만원)<br>※ 지급기간: 최대 1년 (한부모·양쪽 부모 각 3월 이상 사용 시 최대 18개월)",
+        memo: "1~6개월: 봉급100%(250→200만), 7개월~: 80%(160만)",
+        pg: "245p",
+        cat: "육아휴직"
+      },
+      {
+        q: "두 번째 육아휴직(같은 자녀, 부모 순차)의 수당 지급 기준은?",
+        a: "두 번째 육아휴직자:<br>• 1~2개월: 250만원 / 3개월: 300만원 / 4개월: 350만원 / 5개월: 400만원 / 6개월: 450만원 (상한, 봉급 100%)<br>• 7개월 이후: 월봉급액 80% (상한 160만원)",
+        memo: "두 번째: 1개월 250→ 6개월 450 (단계별 상한 상향)",
+        pg: "245p",
+        cat: "육아휴직"
+      },
+      {
+        q: "육아휴직 중 출산휴가 사용이 가능한가?",
+        a: "<b>불가</b>. 육아휴직 상태에서는 출산휴가 사용 불가<br>→ 첫째 자녀 육아휴직을 복직한 후 출산휴가 신청 (남은 일수 내에서)",
+        pg: "248p",
+        cat: "육아휴직"
+      },
+      {
+        q: "2년 이상 육아휴직 후 복직 시 필요한 것은?",
+        a: "<b>복직예정자 직무연수</b> 이수 후 연수이수증 제출<br>• 연수시기: 복직예정일 이전 (불가피 시 복직 후 1년 이내)",
+        memo: "2년 이상 → 복직 전 직무연수 필수",
+        pg: "244p",
+        cat: "육아휴직"
+      },
+      {
+        q: "첫째 휴직에 이어 둘째 휴직을 연속으로 하려면?",
+        a: "① 첫째에 대한 <b>복직신청</b><br>② 동시에 둘째에 대한 <b>휴직신청</b><br>→ 각각의 자녀에 대해 복직 및 휴직 허가받아야 함<br>※ 복직 없이 이어서 하면 첫째 휴직의 연장으로 간주 (둘째 수당 불지급)",
+        memo: "복직+동시 신청 안 하면 → 첫째 연장으로 간주!",
+        pg: "242p",
+        cat: "육아휴직"
+      },
+      {
+        q: "쌍생아 출산 시 육아휴직은?",
+        a: "각각의 자녀에 대해 3년씩, <b>최대 6년</b>의 휴직기간 전부를 경력으로 인정",
+        pg: "248p",
+        cat: "육아휴직"
+      },
+      {
+        q: "육아휴직 중 명절휴가비를 지급할 수 있는가?",
+        a: "<b>지급 불가</b>. 명절휴가비는 지급기준일(설날·추석) 현재 재직 중인 공무원에게 지급<br>※ 출산휴가 중은 지급, 육아휴직 중은 지급 안 함",
+        pg: "250p",
+        cat: "육아휴직"
+      }
+    ]
+  },
+  {
+    id: 8,
+    label: "제8절",
+    title: "입양휴직",
+    cards: [
+      {
+        q: "입양휴직의 요건과 기간, 횟수는?",
+        a: "<b>요건</b>: 만 19세 미만의 아동(육아휴직 대상 아동 제외)을 입양하는 경우<br><b>기간</b>: 자녀 1명에 대하여 <b>6개월 이내</b><br><b>횟수</b>: 입양 아동 <b>1명당 1회</b><br>• 부부교원: 동시 휴직 가능",
+        memo: "만19세 미만 / 6개월 이내 / 1명당 1회",
+        pg: "253p",
+        cat: "입양휴직"
+      },
+      {
+        q: "입양휴직의 경력인정과 보수는?",
+        a: "<b>경력평정</b>: 산입<br><b>호봉승급</b>: 호봉승급기간에 포함<br><b>봉급</b>: 지급 안 함<br><b>결원보충</b>: 6월 이상 휴직 시",
+        memo: "경력·승급 인정 / 봉급 없음",
+        pg: "254p",
+        cat: "입양휴직"
+      },
+      {
+        q: "육아휴직 대상인 아동을 입양하는 경우 어느 휴직을 사용해야 하는가?",
+        a: "육아휴직 요건에 해당하는 아동을 입양하는 경우 → <b>육아휴직</b>을 활용",
+        pg: "253p",
+        cat: "입양휴직"
+      }
+    ]
+  },
+  {
+    id: 9,
+    label: "제9절",
+    title: "불임·난임휴직",
+    cards: [
+      {
+        q: "불임·난임휴직의 요건과 기간, 횟수는?",
+        a: "<b>요건</b>: 불임·난임으로 인하여 장기간의 치료가 필요한 교육공무원<br><b>기간</b>: 1년 이내 + 부득이한 경우 1년 연장 가능 (총 2년)<br><b>횟수</b>: 제한 없으나 동일사유로 1년(부득이 2년) 초과 불가<br>※ 공무원 본인만 대상 (배우자 치료 → 불가)",
+        memo: "1+1=2년 / 본인만 가능",
+        pg: "255-256p",
+        cat: "불임난임"
+      },
+      {
+        q: "불임·난임휴직의 진단서 발급기관은?",
+        a: "「모자보건법」 제11조의3에 따른 <b>난임시술 의료기관</b>에서 발급하는 진단서<br>※ 확인: 임신육아종합포털 아이사랑(www.childcare.go.kr)",
+        memo: "모자보건법 제11조의3 난임시술기관 발급 진단서",
+        pg: "255p",
+        cat: "불임난임"
+      },
+      {
+        q: "불임·난임휴직의 경력인정과 보수는?",
+        a: "<b>경력평정</b>: 미산입<br><b>호봉승급</b>: 제외<br><b>봉급</b>: 1년 이하 70%, 1년 초과 50% (질병휴직과 동일)<br><b>결원보충</b>: 6월 이상 휴직 시",
+        memo: "경력·승급 불인정 / 봉급: 질병휴직과 동일(7→5할)",
+        pg: "257p",
+        cat: "불임난임"
+      },
+      {
+        q: "불임·난임휴직 중 임신이 된 경우 처리는?",
+        a: "계속 휴직이 필요하면 <b>육아휴직으로 전환</b>해야 함",
+        memo: "임신 확인 → 불임난임 종료, 육아휴직으로 전환",
+        pg: "258p",
+        cat: "불임난임"
+      },
+      {
+        q: "불임·난임휴직 중 학교에 제출해야 할 서류 주기는?",
+        a: "<b>6개월마다</b> 난임시술 의료기관 등에서 발급하는 진료확인서 또는 통원확인서를 소속기관의 장에게 제출 (필수)",
+        memo: "6개월마다 진료확인서 제출 (필수)",
+        pg: "257p",
+        cat: "불임난임"
+      }
+    ]
+  },
+  {
+    id: 10,
+    label: "제10절",
+    title: "국내연수휴직",
+    cards: [
+      {
+        q: "국내연수휴직의 요건은?",
+        a: "<b>정규교사 실 교육경력 3년 이상</b> (서울시교육청)<br>• 교육경력: 정규교사로 임용되어 실제로 서울특별시에 근무한 경력만<br>• 야간·계절제 수업 불가<br>• 로스쿨(법학전문대학원) 불가<br>• 담당과목 관련 전공만 가능<br>• KOICA 해외봉사단 선발 가능",
+        memo: "3년 이상 / 주간 / 담당과목 관련 전공 / 야간·계절 불가",
+        pg: "261p",
+        cat: "국내연수"
+      },
+      {
+        q: "국내연수휴직의 기간과 경력인정은?",
+        a: "<b>기간</b>: 3년 이내 (3년 내에서 연장 가능)<br><b>경력평정</b>: <b>50%</b> 산입<br><b>호봉승급</b>: 휴직기간 중 승급 제한 (단, 학위취득 시 10할 인정으로 재획정)<br><b>봉급</b>: 지급 안 함",
+        memo: "경력 5할 / 학위취득 시 승급 인정(재획정)",
+        pg: "261-263p",
+        cat: "국내연수"
+      },
+      {
+        q: "국내연수휴직 중 교육과정 수료만 한 경우(학위 미취득) 복직 사유가 되는가?",
+        a: "<b>복직 사유 해당 안 됨</b>. 학위취득이 목적이므로, 교육과정 수료만 하고 학위를 못 받은 경우에는 조기복직 사유로 볼 수 없어 계속 휴직신분 유지 가능",
+        pg: "263p",
+        cat: "국내연수"
+      },
+      {
+        q: "국내연수휴직 중 면직(의원면직) 처리 시 유의사항은?",
+        a: "일단 <b>복직</b>하여 호봉을 재획정한 후 면직 처리 (해당 교원에게 불이익이 없도록)",
+        memo: "국내연수 중 면직 → 복직 후 호봉 재획정 → 면직",
+        pg: "264p",
+        cat: "국내연수"
+      }
+    ]
+  },
+  {
+    id: 11,
+    label: "제11절",
+    title: "가족돌봄휴직",
+    cards: [
+      {
+        q: "가족돌봄휴직의 돌봄 대상자 범위는?",
+        a: "조부모, 부모(배우자의 부모 포함), 배우자, 자녀, 손자녀<br>※ <b>조부모·손자녀</b>의 경우: 본인 외에 돌볼 사람이 없는 등 조건 충족 시만 가능<br>※ 부부공무원: 1인만 가능",
+        memo: "조·부·배·자·손 / 조부모·손자녀는 본인 외 없을 때만",
+        pg: "265-266p",
+        cat: "가족돌봄"
+      },
+      {
+        q: "가족돌봄휴직의 기간과 횟수는?",
+        a: "<b>기간</b>: 1회 1년 이내, 재직기간 중 총 <b>3년 이내</b><br>• 기존 가사휴직 사용기간 합산하여 3년<br>• 1년을 초과하게 되면 1년 만료 시 복직 후 새로운 가족돌봄휴직 신청<br><b>횟수</b>: 제한 없음 (단, 총 3년 초과 불가)",
+        memo: "1회 1년 이내 / 총 3년 이내 / 기존 가사휴직 합산",
+        pg: "266-267p",
+        cat: "가족돌봄"
+      },
+      {
+        q: "가족돌봄휴직은 임용권자가 반드시 승인해야 하는가?",
+        a: "<b>아니오</b>. 육아휴직과 달리 가족돌봄휴직은 임용권자가 반드시 명하여야 하는 것이 아님<br>→ 부양·돌봄이 필요한 상황인지, 기관 내 인력운영상황 등을 종합 고려하여 판단",
+        memo: "가족돌봄 ≠ 의무 승인 (육아휴직 = 의무)",
+        pg: "270p",
+        cat: "가족돌봄"
+      },
+      {
+        q: "가족돌봄휴직의 경력인정과 보수는?",
+        a: "<b>경력평정</b>: 미산입<br><b>호봉승급</b>: 승급기간에 미산입<br><b>봉급</b>: 지급 안 함<br><b>결원보충</b>: 6월 이상 휴직 시",
+        memo: "경력·승급 불인정 / 봉급 없음",
+        pg: "269p",
+        cat: "가족돌봄"
+      },
+      {
+        q: "부당 가족돌봄휴직의 사례는?",
+        a: "• 부양대상자를 국내에 두고 본인은 어학연수·자녀유학을 위해 해외 출국<br>• 부양대상자가 직장을 다니고 있는 경우<br>• '부양'은 <b>경제적 부양이 아닌 물리적 부양</b>을 의미함",
+        pg: "268p",
+        cat: "가족돌봄"
+      },
+      {
+        q: "기존 가사휴직 3년을 모두 사용한 경우 가족돌봄휴직이 가능한가?",
+        a: "<b>불가</b>. 기존 가사휴직과 가족돌봄휴직은 합산하여 재직기간 중 총 3년 이내이므로, 이미 3년 사용 시 새로운 가족돌봄휴직은 불가",
+        pg: "269p",
+        cat: "가족돌봄"
+      }
+    ]
+  },
+  {
+    id: 12,
+    label: "제12절",
+    title: "동반휴직",
+    cards: [
+      {
+        q: "동반휴직의 요건과 기간, 횟수는?",
+        a: "<b>요건</b>: 배우자가 국외근무를 하거나 유학휴직(제5호)에 해당하게 된 경우<br><b>기간</b>: 3년 이내 + 3년 범위 내 연장 가능 (총 배우자의 국외근무·유학기간 초과 불가)<br><b>횟수</b>: 제한 없음 (사유가 달라지면 새로운 휴직으로 인정)",
+        memo: "3+3=6년 한도 / 배우자 국외근무·유학 기간 초과 불가",
+        pg: "272p",
+        cat: "동반휴직"
+      },
+      {
+        q: "동반휴직의 경력인정과 보수는?",
+        a: "<b>경력평정</b>: 미산입<br><b>호봉승급</b>: 휴직기간 중 승급 제한<br><b>봉급</b>: 지급 안 함<br><b>결원보충</b>: 6월 이상 휴직 시",
+        memo: "경력·승급 불인정 / 봉급 없음",
+        pg: "274p",
+        cat: "동반휴직"
+      },
+      {
+        q: "동반휴직 중 출산휴가를 사용하려면?",
+        a: "동반휴직의 목적에 부합되지 않으므로 <b>복직 후 출산휴가</b> 사용<br>단, 육아휴직으로는 동반휴직 복직 후 같은 날 신청 가능 (해외 거리·건강 이유로 복직명령+육아휴직명령 동일 날 발령 가능)",
+        pg: "276p",
+        cat: "동반휴직"
+      },
+      {
+        q: "남편이 개인적으로 유학한 경우도 동반휴직 사유가 되는가?",
+        a: "<b>사유가 됨</b>. 배우자가 직장 소속이 아니어도 개인적 유학의 경우도 동반휴직 가능<br>※ 배우자가 외국인인 경우도 요건 성립",
+        pg: "275p",
+        cat: "동반휴직"
+      },
+      {
+        q: "동반휴직 중 취득한 학위를 경력으로 인정받을 수 있는가?",
+        a: "<b>인정받기 어렵다</b>. 동반휴직 중 석사학위 취득은 휴직 사유(배우자 동반)에 부합하지 않으므로 경력 불인정",
+        pg: "276p",
+        cat: "동반휴직"
+      }
+    ]
+  },
+  {
+    id: 13,
+    label: "제13절",
+    title: "노조전임자휴직",
+    cards: [
+      {
+        q: "노조전임자휴직의 요건과 기간은?",
+        a: "<b>요건</b>: 「교원의 노동조합 설립 및 운영 등에 관한 법률」 제5조에 따라 노동조합 전임자 허가를 받은 교육공무원<br><b>기간</b>: 전임기간",
+        pg: "279p",
+        cat: "노조전임"
+      },
+      {
+        q: "노조전임자휴직의 경력인정과 보수는?",
+        a: "<b>경력평정</b>: 100% 산입<br><b>호봉승급</b>: 100% 산입<br><b>봉급</b>: 지급 안 함<br><b>결원보충</b>: 서울시교육청 현재 충원하지 않음 (기간제 교사 활용)",
+        memo: "경력·승급 100% / 봉급 없음 / 결원보충 안 함(서울)",
+        pg: "281p",
+        cat: "노조전임"
+      },
+      {
+        q: "노조전임자는 휴직기간 만료 전에 복직이 가능한가?",
+        a: "<b>원칙적으로 불가</b>. 단, 전임자 허가가 취소되거나 임용권자의 복직허가가 있는 경우 가능",
+        pg: "280p",
+        cat: "노조전임"
+      }
+    ]
+  },
+  {
+    id: 14,
+    label: "제14절",
+    title: "자율연수휴직",
+    cards: [
+      {
+        q: "자율연수휴직의 요건은?",
+        a: "<b>대상</b>: 「공무원연금법」 제25조에 따른 <b>재직기간 10년 이상</b>인 교원<br><b>사유</b>: 자기개발을 위해 학습·연구 등이 필요하거나, 수업·생활지도 등을 위해 신체적·정신적 회복이 필요할 때<br>※ 재직기간 확인: 공무원연금가입내역서 (퇴직급여 재직기간)",
+        memo: "재직기간 10년 이상 (연금법상 재직기간)",
+        pg: "282p",
+        cat: "자율연수"
+      },
+      {
+        q: "자율연수휴직의 기간, 횟수, 시작일은?",
+        a: "<b>기간</b>: 1년 이내 (학기단위 허가)<br><b>횟수</b>: 재직 중 <b>1회</b> (1년 내 단절 없이 연장도 1회로 봄)<br><b>시작일</b>: (초등) 매년 3.1. 또는 9.1. / (유아·중등) 매년 3.1. 원칙",
+        memo: "1년 이내 / 재직 중 1회 / 초등: 3.1또는9.1",
+        pg: "282-283p",
+        cat: "자율연수"
+      },
+      {
+        q: "자율연수휴직의 경력인정과 보수는?",
+        a: "<b>경력평정</b>: 미산입<br><b>호봉승급</b>: 휴직기간 중 승급 제한<br><b>봉급</b>: 지급 안 함<br><b>결원보충</b>: 6월 이상 휴직 시",
+        memo: "경력·승급 불인정 / 봉급 없음",
+        pg: "284p",
+        cat: "자율연수"
+      },
+      {
+        q: "자율연수휴직 가능 인원 기준은?",
+        a: "<b>초등</b>: 제한 없음 (2017년 변경)<br><b>유아·중등</b>: 해당 학년도 교원 정원의 <b>5% 이내</b> (소수점 첫째 자리 반올림, 1명 미달 시 1명 가능)<br>※ 예) 정원 6명 유치원: 6×5%=0.3명 → 1명 가능",
+        memo: "초등: 제한없음 / 유아·중등: 정원의 5%",
+        pg: "283p",
+        cat: "자율연수"
+      }
+    ]
+  }
+  ]
+},
+{id:5,ico:'💻',clr:'#29b4d8',ttl:'NEIS 인사기록',pg:'287~324p',
+ desc:'NEIS 인사기록 탭별 구성, 권한관리, 교감 승인 업무, 인사기록 수정 절차',
+ tags:['탭별구성','권한관리','교감업무'],
+ secs:[
+  {lbl:'NEIS구성',ttl:'NEIS 인사기록 탭별 구성',cards:[
+   {q:'NEIS 인사기록 탭 중 교원이 직접 신청 가능한 항목은?',a:'<b>교원 직접 신청 4종</b>: 가족 / 자격취득 / 연수 / 포상·서훈<br>★ 가족 탭: 가족수당·육아시간과 연계<br>★ 나머지 항목: 교육(지원)청에 업무관리시스템으로 신청',memo:'교원직접신청4종: 가족·자격취득·연수·포상서훈',pg:'297p',cat:'NEIS탭'},
+   {q:'NEIS 인사기록 탭 전체 구성(23개 탭)에서 주요 탭은?',a:'근무사항(교육청기록) / 개인신상(본인수정가능) / 병역(호봉연계) / 가족(교원신청·교감승인·가족수당연계) / 학력(호봉연계) / 임용전경력(호봉연계) / 임면사항 / 휴직 / 자격면허 / 자격취득(교원신청·교감승인) / 연수(교원신청·교감승인) / 포상서훈(교원신청·교감승인) / 징계형벌 / 비고(교감기록)',memo:'가족·자격취득·연수·포상서훈=교원신청+교감승인/병역·학력·임용전경력=호봉연계',pg:'297p',cat:'NEIS탭'},
+   {q:'NEIS 인사기록 중 호봉과 연계되는 탭은?',a:'<b>병역</b>: 병역의무복무기간 호봉 경력 반영<br><b>학력</b>: 학령 계산에 활용<br><b>임용전경력</b>: 초임호봉 획정 시 경력환산에 반영',memo:'병역·학력·임용전경력 = 호봉 연계 3종',pg:'297p',cat:'NEIS탭'},
+   {q:'교감이 NEIS에서 직접 기록하거나 승인하는 항목은?',a:'<b>교감 직접 기록</b>: 개인신상, 외국어능력, 비고, 승급기록, 보충기재란<br><b>교감 승인(교원신청→교감승인)</b>: 가족, 자격취득, 연수, 포상·서훈<br>★ 교감은 교육지원청 인사기록 정책에 따라 권한 부여받아야 함',memo:'교감기록:개인신상·비고등5종/교감승인:가족·자격취득·연수·포상',pg:'297p',cat:'교감업무'},
+   {q:'교감 NEIS 개인정보변경승인 절차는?',a:'교원인사 → 인사기록 → 개인정보변경관리 → 개인정보변경승인 → 가족, 자격취득, 연수, 포상/서훈 탭 선택 → 신청기간 조절 후 조회 → 신청건 선택 후 승인<br>★ 교감은 권한을 부여받은 후 처리 가능',memo:'교원인사>인사기록>개인정보변경관리>변경승인>탭선택>승인',pg:'294p',cat:'교감업무'},
+  ]},
+  {lbl:'권한관리',ttl:'NEIS 권한관리·퇴직처리',cards:[
+   {q:'NEIS 인사이동 시 권한 인수인계 절차는?',a:'시스템관리 → 권한관리 → 사용자권한관리 → <b>권한인계인수</b><br>① 인계자·인수자 성명 입력 후 찾기<br>② 업무그룹 선택(전체체크) → 추가 버튼<br>③ 단위업무별자료권한 → 메뉴별권한 확인<br>④ 승인요청 → 저장 → 결재라인 지정 → 승인',memo:'권한인계인수 메뉴에서 단계별 처리',pg:'295p',cat:'권한관리'},
+   {q:'권한관리자의 의무는?',a:'권한관리자는 업무분장에 따라 업무담당자에게 권한을 부여하고, <b>업무가 변경되었을 경우 즉시 기존의 권한을 삭제</b> 처리하여야 함<br>★ 퇴직 처리 후에도 개인별권한등록에서 업무그룹·자료권한 삭제 여부 확인 필수',memo:'업무변경시=즉시권한삭제/퇴직후=권한삭제확인',pg:'294p',cat:'권한관리'},
+   {q:'타조직 사용자 미회수 권한 삭제 방법은?',a:'시스템관리 → 권한관리 → 사용자권한관리 → <b>권한일괄삭제</b><br>① 삭제 대상 및 사용자명 선택 → 조회<br>② 개인별 권한 등록에서 한번 더 확인<br>③ 권한일괄삭제 클릭',memo:'권한일괄삭제 메뉴에서 처리',pg:'296p',cat:'권한관리'},
+   {q:'임용구분별 NEIS 퇴직처리 방법은?',a:'<b>공립 정규교원</b>: [교원인사]-[임용발령]-[면직/퇴직] / 교육청 처리 / 임용기안 시행 시 권한 자동회수<br><b>기간제교사·시간강사</b>: [교원인사]-[계약직교원]-[인사기록관리]-[계약직교원퇴직] / 학교 처리<br><b>원어민보조교사</b>: [비공무원인사]-[원어민보조교사관리] / 학교 처리',memo:'정규=교육청처리·자동회수/기간제=학교처리',pg:'294p',cat:'퇴직처리'},
+   {q:'개인별 불필요 권한 삭제 방법은?',a:'시스템관리 → 권한관리 → 사용자권한관리 → <b>개인별권한등록</b><br>① 사용자명 찾기 → 조회 → 업무그룹/단위업무별자료권한/메뉴별권한 확인<br>② 삭제대상 사용자 그룹 체크 박스 선택 → 삭제 클릭<br>★ 사용자그룹과 자료권한을 <b>함께 삭제</b>하여야 함',memo:'개인별권한등록에서 사용자그룹+자료권한 함께삭제',pg:'296p',cat:'권한관리'},
+  ]},,
+  {lbl:'NEIS실무',ttl:'NEIS 실무 처리',cards:[
+   {q:'교감이 NEIS 비고란에 기재해야 하는 사항은?',a:'① <b>불문경고</b> 처분 내용 (징계·형벌탭 아닌 비고란에 등재)<br>② 교원의 복무 관련 특이사항<br>③ 각종 인사 관련 기재 필요 사항<br>★ 비고란은 교감이 직접 기록하는 항목<br>★ 불문경고·견책 합쳐 3회 이상이면 포상 추천 제외 시 비고란 확인 필수',memo:'불문경고=비고란기재/교감이직접기록/포상추천시확인필수',pg:'297p',cat:'NEIS탭'},
+   {q:'가족수당 관련 NEIS 처리 절차는?',a:'① 교원이 NEIS 가족 탭에 가족 등록 신청<br>② 교감이 가족 내용 확인 후 승인<br>③ 가족수당 자동 연계 처리<br>★ 미등록 시 가족수당 미지급 가능<br>★ 연간 1회 정기 확인 권장',memo:'가족탭등록→교감승인→가족수당자동연계/미등록=미지급',pg:'297p',cat:'교감업무'},
+   {q:'NEIS 인사기록 수정이 필요한 경우 처리 방법은?',a:'① 교원이 수정 내용을 교감에게 신청<br>② 교감이 확인 및 승인 (직접 신청 4종의 경우)<br>③ 그 외 항목: 교육지원청에 업무관리시스템으로 수정 신청<br>★ 호봉 관련(병역·학력·임용전경력): 교육장이 처리',memo:'교원신청4종=교감승인/나머지=교육지원청/호봉관련=교육장',pg:'297p',cat:'NEIS탭'},
+   {q:'퇴직 처리 시 사용자 권한 자동회수가 되는 경우는?',a:'<b>공립 정규교원</b>의 면직·퇴직 임용기안을 시행하면 NEIS에서 <b>권한이 자동으로 회수</b>됨<br>★ 기간제교사·시간강사는 학교에서 직접 퇴직 처리하고, 개인별 권한등록에서 권한 삭제 여부 수동 확인 필요',memo:'정규교원퇴직=임용기안시행시자동회수/기간제=수동삭제확인',pg:'294p',cat:'퇴직처리'},
+   {q:'교원의 자격취득 NEIS 등록 방법은?',a:'① 교원이 자격취득 탭에 신규 자격 정보 입력 신청<br>② 자격증 사본 첨부<br>③ 교감이 내용 확인 후 승인<br>★ 자격취득이 호봉 재획정 사유가 될 경우 교육장에게 보고',memo:'자격취득=교원신청→교감승인/호봉재획정사유=교육장보고',pg:'297p',cat:'NEIS탭'},
+   {q:'NEIS에서 교감이 근무성적 평정 처리 시 주의사항은?',a:'교감 근무성적 평정은 교감 자신이 직접 입력하는 것이 아님<br>교감에 대한 평정: <b>학교장(평정자 50%) + 교육장(확인자 50%)</b>가 평정<br>★ 근무성적평정확인위원회 심의를 거쳐 확인자 평정<br>★ 교감은 교사의 근무성적 평정 결과를 NEIS에서 확인 가능',memo:'교감평정=학교장50%+교육장50%/확인자=위원회심의필수',pg:'404p',cat:'교감업무'},
+   {q:'연수 이수 실적 NEIS 입력 방법은?',a:'① 교원이 연수 탭에 이수 실적 입력 신청<br>② 이수 증빙서류 첨부 (연수기관 발급 이수증)<br>③ 교감이 내용 확인 후 승인<br>★ 직무연수·자격연수 모두 연수성적 평정에 반영',memo:'교원신청→교감승인/직무·자격연수모두반영',pg:'297p',cat:'NEIS탭'},
+  ]},
+,
+  {lbl:'NEIS상세',ttl:'NEIS 상세 기능',cards:[
+   {q:'NEIS 교원 급여 관련 처리 중 교감이 확인해야 할 사항은?',a:'① 가족수당 지급 근거: 가족 탭 등록 여부 확인<br>② 교원 보직교사 수당: 보직교사 NEIS 발령 여부<br>③ 담임교사 수당: 담임교사 발령 여부<br>④ 연구부장 수당: 부장교사 발령 여부<br>★ NEIS 처리 누락 시 수당 미지급 가능성 있음',memo:'가족수당=가족탭/교원수당=보직발령여부확인',pg:'297p',cat:'교감업무'},
+   {q:'NEIS에서 교원 정보 공개 관련 주의사항은?',a:'교원 개인정보(인사기록)는 <b>개인정보 보호법</b> 준수 필요<br>교원의 근무성적 평정 결과는 본인의 요청 시 공개<br>★ 타인의 인사기록 열람 원칙적 금지<br>★ 이상 접근 시 시스템 로그 기록 → 감사 대상',memo:'교원개인정보=보호법준수/타인인사기록열람금지',pg:'294p',cat:'NEIS탭'},
+   {q:'NEIS 교원 인사 관련 주요 탭과 교감이 처리하는 탭은?',a:'<b>교감이 직접 기록</b>: 개인신상, 외국어능력, 비고, 승급기록, 보충기재란<br><b>교감이 승인</b>: 가족, 자격취득, 연수, 포상서훈<br><b>교육지원청 처리</b>: 임면사항, 병역, 학력, 임용전경력, 호봉<br>★ 비고란 기재: 불문경고, 특이사항 등',memo:'교감직접=개인신상비고등/교감승인=4종/교육청=임면호봉등',pg:'297p',cat:'NEIS탭'},
+   {q:'NEIS 접근 권한 종류는?',a:'<b>업무그룹 권한</b>: 특정 메뉴 그룹에 접근 가능한 권한<br><b>단위업무별자료권한</b>: 특정 학교·학년·학급 자료에만 접근 가능<br><b>메뉴별권한</b>: 특정 메뉴에서 조회·입력·수정·삭제 등 가능한 범위<br>★ 권한은 최소한의 원칙 적용 (필요 최소한의 권한만 부여)',memo:'업무그룹+단위업무자료권한+메뉴별권한/최소한원칙',pg:'295p',cat:'권한관리'},
+   {q:'신규교사 발령 시 NEIS에서 처리해야 할 순서는?',a:'① 교육청에서 임용발령 시행<br>② 학교에서 NEIS 인사기록 탭 확인 (자동 이관)<br>③ 교감이 개인신상·비고란 등 입력<br>④ 가족수당 관련 교원에게 가족 탭 등록 안내<br>⑤ 보직교사(담임 포함) 발령 처리<br>★ 신규교사 연수 이수 후 NEIS에 연수 실적 등록 안내',memo:'임용발령→인사기록확인→교감입력→가족탭안내→보직발령',pg:'294p',cat:'교감업무'},
+   {q:'NEIS 개인정보 처리 시 준수사항은?',a:'① 교원 개인정보 수집·이용: 법령 근거 필요<br>② 수집 목적 외 이용·제공 금지<br>③ 개인정보 파기: 보유 기간 만료 또는 목적 달성 시<br>④ 개인정보 침해 신고: 한국인터넷진흥원 또는 교육청에 신고<br>★ 개인정보 보호법 위반 시 과태료 또는 형사처벌',memo:'개인정보=법령근거+목적외이용금지+파기의무',pg:'294p',cat:'NEIS탭'},
+  ]},
+
+ ]
+},
+{id:6,ico:'⚖️',clr:'#c0392b',ttl:'상훈과 징계',pg:'325~388p',
+ desc:'포상 종류·재직기간, 징계 종류·효력·절차·시효, 징계부가금, 소청심사, 불문경고',
+ tags:['포상','징계','소청심사'],
+ secs:[
+  {lbl:'상훈',ttl:'상훈·포상',cards:[
+   {q:'퇴직자 정부 포상 재직기간 기준은?',a:'<b>청조근정훈장</b>: <b>33년 이상</b><br><b>황조근정훈장</b>: <b>30년 이상~33년 미만</b><br><b>홍조근정훈장</b>: <b>28년 이상~30년 미만</b><br><b>국무총리 표창</b>: <b>25년 이상~28년 미만</b><br><b>교육부장관 표창</b>: <b>15년 이상~25년 미만</b>',memo:'청조33↑/황조30/홍조28/국무총리25/교육부15',pg:'332p',cat:'포상'},
+   {q:'재직기간 계산 시 포함·제외되는 기간은?',a:'<b>산입</b>: 공무원·군인·병역의무복무, 국공립·사립교원, 기간제교사, 공무상질병·병역·법정·노조·고용휴직<br><b>제외</b>: 직위해제(무죄확정·취소시 산입), 가족돌봄·동반휴직<br>★ 유학휴직: <b>50% 산입</b><br>★ 육아휴직: 2025.1.7. 이후 퇴직자부터 <b>전기간 산입</b>',memo:'직위해제제외/유학50%/육아25년이후전부',pg:'332p',cat:'포상'},
+   {q:'재직기간 산정 계산 방법은?',a:'12월 = 1년 / <b>30일 = 1월</b>로 계산<br>최종 합산하여 일수가 <b>15일 이상</b>이면 1월로 계산<br>예) 32년 11월 15일 → 33년으로 계산<br>★ 임용일은 산입, 퇴직일은 제외 (단, 군복무 전역일·계약만료일은 산입)',memo:'30일=1월/최종15일이상=1월/임용일산입·퇴직일제외',pg:'333p',cat:'포상'},
+   {q:'포상·표창 대상자 추천 절차는?',a:'포상·표창 공문 확인 → <b>교원인사자문위원회 개최</b>(3배수 추천) → 최종 추천대상자 선정 → 제출<br>★ 추천기준에 의거 <b>추천대상자수의 3배수</b> 추천',memo:'공문확인→인사자문위원회(3배수)→최종선정→제출',pg:'333p',cat:'포상'},
+  ]},
+  {lbl:'징계종류',ttl:'징계 종류·효력',cards:[
+   {q:'징계의 종류와 효력을 중징계·경징계로 구분하시오.',a:'<b>중징계</b><br>• <b>파면</b>: 신분 박탈, 퇴직급여 1/2 감액, <b>5년</b> 임용 결격<br>• <b>해임</b>: 신분 박탈, <b>3년</b> 임용 결격<br>• <b>강등</b>: 1계급 하향 + <b>3개월</b> 직무정지 + 봉급 2/3 감액<br>• <b>정직</b>: <b>1~3개월</b> 직무정지 + 봉급 전액 미지급<br><b>경징계</b><br>• <b>감봉</b>: <b>1~3개월</b> 봉급 1/3 감액<br>• <b>견책</b>: 훈계·반성',memo:'파면5년/해임3년/강등3월+1계급/정직1~3월/감봉1/3감액/견책훈계',pg:'340p',cat:'징계종류'},
+   {q:'파면과 해임의 퇴직급여 차이는?',a:'<b>파면</b>: 퇴직급여 <b>1/2 감액</b> (5년 미만 재직자는 전액 미지급)<br><b>해임</b>: 퇴직급여 감액 없음 (전액 지급)<br>★ 재직기간에 따라 다름 (5년 이상이면 파면도 1/2 지급)',memo:'파면=퇴직급여1/2감액/해임=퇴직급여전액지급',pg:'340p',cat:'징계종류'},
+   {q:'강등 처분의 효력은?',a:'① <b>1계급 하향</b> 강임<br>② <b>3개월</b>간 직무에 종사하지 못함<br>③ 그 기간 중 봉급의 <b>2/3</b>를 감액하여 지급<br>★ 승급 제한: 강등 처분 기간 + <b>18개월</b>',memo:'1계급하향+3월직무정지+봉급2/3감액/승급제한+18월',pg:'340p',cat:'징계종류'},
+   {q:'음주운전에 따른 징계 기준은?',a:'혈중알코올 <b>0.03% 이상~0.08% 미만</b>: 면허 정지 기준<br>혈중알코올 <b>0.08% 이상~0.2% 미만</b>: 최초라도 <b>중징계</b><br>혈중알코올 <b>0.2% 이상</b> 또는 <b>음주측정 불응</b>: 최초라도 <b>배제징계(파면·해임) 가능</b>',memo:'0.08~0.2=중징계/0.2이상·측정불응=배제징계가능',pg:'363p',cat:'징계종류'},
+  ]},
+  {lbl:'징계절차',ttl:'징계 절차·시효·징계부가금',cards:[
+   {q:'징계 절차를 순서대로 설명하시오.',a:'① 징계사유 발생<br>② <b>징계의결 요구</b> (소속기관장 → 징계위원회, <b>통보받은 날 1개월 이내</b>)<br>③ 징계위원회 <b>심의·의결</b> (<b>접수일로부터 60일 이내</b>, 성관련비위 30일)<br>④ 징계의결 결과 통보 (징계위원장→징계의결요구권자)<br>⑤ <b>징계처분</b> (의결서 통보받은 날 <b>15일 이내</b>)<br>⑥ <b>처분사유설명서 교부</b><br>⑦ <b>소청심사 청구</b> (설명서 받은 날 30일 이내)',memo:'통보1월내의결요구→60일내의결→15일내처분→소청30일',pg:'353p',cat:'징계절차'},
+   {q:'징계 시효 기간은?',a:'<b>일반 비위</b>: 징계사유 발생일로부터 <b>3년</b><br><b>금품·횡령·배임 등 재산상 이익</b>: <b>5년</b><br><b>성폭력·성희롱·성매매·아동청소년대상 성범죄</b>: <b>10년</b><br>★ 감사원 조사 또는 수사기관 수사 중: <b>시효 정지</b><br>★ 무죄·취소 결정·판결 확정 시: 확정일로부터 3개월 이내 재징계 의결 요구 가능',memo:'일반3년/금품재산5년/성범죄10년/감사수사중=시효정지',pg:'342p',cat:'시효'},
+   {q:'징계위원회 심사·재심사 청구 기간은?',a:'징계의결요구권자가 징계의결이 <b>가볍다고 인정</b>하면 → 징계의결 통보받은 날로부터 <b>15일 이내</b>에 상급기관 징계위원회(특별징계위원회)에 심사·재심사 청구',memo:'징계가볍다고 인정=15일이내 상급기관에 재심사청구',pg:'354p',cat:'징계절차'},
+   {q:'징계부가금 부과 대상과 최대 배수는?',a:'<b>대상</b>: 금품·향응 수수, 공금 횡령·유용 비위<br><b>부과 금액</b>: 금품비위금액 등의 <b>최대 5배</b> 이내<br>★ 직무관련성 유무와 상관없이 부과<br>★ 金品비위금액 미수 시 → 징계부가금 부과 대상 아님',memo:'금품향응·횡령유용=비위금액의5배이내/미수=부과안됨',pg:'364p',cat:'징계부가금'},
+   {q:'징계부가금 부과 기준표는?',a:'<b>고의+심한 정도</b>: 금품비위금액의 <b>4~5배</b><br><b>중과실+심한 정도</b>: <b>3~4배</b><br><b>경과실+심한 정도</b>: <b>2~3배</b><br><b>경과실+약한 정도</b>: <b>1~2배</b><br>★ 횡령·배임·절도·사기·유용의 경우: 별도 기준 적용',memo:'고의심함=4~5배/중과실심함=3~4배/경과실심함=2~3배/경과실약함=1~2배',pg:'364p',cat:'징계부가금'},
+  ]},
+  {lbl:'소청·불문경고',ttl:'소청심사·불문경고·징계위원회',cards:[
+   {q:'소청심사 청구 기간과 면직처분의 효력은?',a:'<b>청구기간</b>: 처분사유설명서 받은 날로부터 <b>30일 이내</b><br><b>대상기관</b>: 교원소청심사위원회<br><b>면직처분의 효력</b>: 소청심사위원회 <b>최종결정이 있을 때까지 후임자 보충 불가</b><br>★ 불문경고도 소청 제기 가능',memo:'설명서받은날30일이내/면직=최종결정까지보충불가',pg:'341p',cat:'소청'},
+   {q:'불문경고의 효력과 승진 제한 여부는?',a:'<b>처리</b>: 징계위원회 의결 후 소속기관장 명의 서면경고 → 인사기록카드 <b>비고란</b>에 기재<br><b>효력</b>: ① 인사기록 등재 ② 5년 이내 동일·유사 비위 재발 시 징계 <b>가중</b><br><b>승진 제한</b>: <b>없음</b> (징계처분 아님)<br>★ 불문경고·견책 합쳐 3회 이상 처분 받은 자: 포상 추천 제외',memo:'불문경고=비고란기재/5년재발가중/승진제한없음/3회이상=포상추천제외',pg:'345p',cat:'불문경고'},
+   {q:'초등학교 교사 경징계·중징계 담당 징계위원회는?',a:'<b>경징계 (유·초·중학교 교사)</b>: <b>교육지원청 일반징계위원회</b><br>• 위원장: 교육지원국장 / 민간위원 4명 이상 포함<br><b>중징계 (유·초·중학교 교사)</b>: <b>시·도교육청 일반징계위원회</b><br>• 위원장: 부교육감 / 민간위원 4명 이상 포함<br>★ 고등학교 교사의 경·중징계: <b>시·도교육청 일반징계위원회</b>',memo:'초등경징계=교육지원청/초등중징계=시도교육청/고교=시도교육청',pg:'344p',cat:'징계위원회'},
+   {q:'징계위원회 구성의 성별 제한은?',a:'특정 성(性)이 위원장 포함 위원 수의 <b>10분의 6을 초과</b>하지 않도록 해야 함<br>★ 성폭력·성희롱 관련 징계 사건 시 → 피해자와 같은 성별의 위원이 위원장 제외한 위원 수의 <b>3분의 1 이상</b> 포함',memo:'특정성별6/10초과금지/성범죄사건=피해자성별1/3이상',pg:'344p',cat:'징계위원회'},
+   {q:'징계위원 임기와 위촉 기준은?',a:'<b>임기</b>: 3년 (한 차례만 연임 가능)<br><b>공무원 위원</b>: 소속 공무원(장학관·교육연구관·5급 이상 일반직) 중 임명<br><b>민간 위원</b>: 학교운영위원회 비교원위원, 법관·검사·변호사 5년 이상, 법률학·행정학·교육학 조교수 이상, 공무원 20년 이상 퇴직자 등',memo:'임기3년1회연임/민간위원4명이상포함',pg:'344p',cat:'징계위원회'},
+   {q:'적극행정에 대한 징계면제는 어떻게 적용되는가?',a:'고의 또는 중과실에 의하지 않은 비위로서<br>① 공공의 이익을 위한 정책 수립·집행 과정에서 발생한 것으로 인정되는 경우<br>② 국가의 이익이나 국민생활에 큰 피해를 방지하기 위해 적극적으로 정책을 수립·집행하는 과정에서 발생한 경우<br>→ 징계의결 하지 않음',memo:'고의·중과실없음+공공이익정책수행→징계면제',pg:'346p',cat:'징계절차'},
+  ]},,
+  {lbl:'징계Q&A',ttl:'징계 Q&A 실전 사례',cards:[
+   {q:'위법한 상관의 명령에 복종한 경우도 징계가 되는가?',a:'<b>그렇다</b><br>상급자의 종용과 결재에 따라 허위공문서 작성 및 동 행사에 책임이 있는 이상 징계해임 처분은 적법함<br>상사의 명령이 명백히 위법한 때에는 이에 따라야 할 의무가 없음<br>→ 불법 명령에 복종한 하관도 책임에서 자유롭지 않음 (대법원 판결)',memo:'위법명령복종=징계가능/명백위법명령=복종의무없음',pg:'349p',cat:'징계Q&A'},
+   {q:'연가허가 전에 근무지를 이탈한 경우 징계 여부는?',a:'<b>징계 사유 해당</b><br>법정연가일수 범위 내에서 신청했더라도 연가허가 있기 전에 근무지를 이탈한 행위는 직장이탈금지의무 위반<br>→ 특단의 사정이 없는 한 징계사유 (대법원 96누2521)',memo:'연가허가전근무지이탈=직장이탈금지위반=징계사유',pg:'349p',cat:'징계Q&A'},
+   {q:'직위해제 기간 중 출근의무가 있는가?',a:'직위해제처분 기간 중에는 담당직무가 없으므로 출근의무 없음<br>단, <b>대기명령을 받고 과제를 부여받은 경우</b>에는 임용권자 등의 교육훈련 또는 특별한 연구과제 부여 등의 조치에 응하기 위해 출근 의무 있음<br>→ 서울고법 판결',memo:'직위해제기간=출근의무없음/대기명령+과제=출근의무있음',pg:'349p',cat:'징계Q&A'},
+   {q:'동일한 사유로 직위해제와 징계가 모두 가능한가?',a:'<b>가능하다</b><br>직위해제와 징계처분은 성질이 다른 별개의 처분<br>동일한 사유로 직위해제 처분 후 다시 감봉처분을 해도 일사부재리원칙에 위배되지 않음<br>(대법원 83누184)',memo:'직위해제+동일사유징계=가능/일사부재리원칙미적용',pg:'350p',cat:'징계Q&A'},
+   {q:'징계처분 취소소송 결과 무효 선언 후 재징계가 가능한가?',a:'<b>가능하다</b><br>하자가 있는 징계의결의 무효를 선언하고 그 후 같은 징계사유로 재징계한 것은 이중 징계처분에 해당하지 않음<br>(대법원 70누160)',memo:'징계무효선언후재징계=이중징계아님/가능',pg:'351p',cat:'징계Q&A'},
+   {q:'징계시효 정지 시 사유가 종료한 날의 의미는?',a:'"수사가 종료한 날"이란 수사가 종료한 날을 말하는 것이지 수사된 사건에 대한 판결이 확정된 날이 아님<br>→ 수사 종료 후 징계시효가 재개됨<br>(대법원 78누250)',memo:'수사종료=판결확정일아님/수사종료일부터시효재개',pg:'349p',cat:'징계Q&A'},
+   {q:'형사상 책임이 없어도 징계사유가 되는가?',a:'<b>그렇다</b><br>공무원의 품위유지의무에 반하는 행위는 형사상 책임이 없는 것이라 하더라도 징계사유가 됨<br>→ 주권자인 국민의 수임자로서 직책을 다하는 공직자로서 공직의 체면·위신을 손상하는 행위에 직접적 영향 있는 행위이면 징계 가능<br>(대법원 84누654)',memo:'형사책임없어도징계가능/품위손상=징계사유',pg:'350p',cat:'징계Q&A'},
+  ]},
+  {lbl:'징계양정',ttl:'징계 양정·가중·감경',cards:[
+   {q:'징계 양정 기준에서 비위의 정도와 과실을 구분하시오.',a:'<b>비위의 정도</b>: 비위 결과의 중대성<br>• 심함: 국민의 신뢰를 크게 훼손하는 경우<br>• 약함: 비위 결과가 경미한 경우<br><b>과실의 정도</b>:<br>• 고의: 결과를 알면서 고의적으로 행위<br>• 중과실: 결과 예측 가능했음에도 부주의<br>• 경과실: 통상적 주의를 기울였으면 예방 가능했던 경우',memo:'비위정도(심함·약함) × 과실(고의·중과실·경과실) = 양정기준',pg:'355p',cat:'징계양정'},
+   {q:'징계 감경이 가능한 경우는?',a:'① 공적이 있는 경우: 훈장·포장·대통령표창 등 수상<br>② 자진 신고한 경우<br>③ 뉘우침이 뚜렷하고 재발 방지가 기대되는 경우<br>④ 적극행정의 일환으로 발생한 비위<br>★ 음주운전의 경우 감경 적용 지양',memo:'공적있음·자진신고·뚜렷한뉘우침·적극행정=감경가능/음주운전=감경지양',pg:'360p',cat:'징계양정'},
+   {q:'중징계와 경징계의 관할 징계위원회를 구분하시오.',a:'<b>유·초·중학교 교사 경징계</b>: 교육지원청 일반징계위원회<br><b>유·초·중학교 교사 중징계</b>: 시도교육청 일반징계위원회<br><b>고등학교 교사 경·중징계</b>: 시도교육청 일반징계위원회<br><b>장학관·교육연구관</b>: 교육부 특별징계위원회',memo:'유초중경=교육지원청/유초중중=시도교육청/고교=시도교육청',pg:'344p',cat:'징계위원회'},
+   {q:'교원 성범죄 관련 징계 특례는?',a:'성폭력·성희롱·성매매 관련 징계 의결 기간: <b>접수일로부터 30일 이내</b> (일반 60일)<br>피해자와 같은 성별 위원이 위원장 제외한 위원 수의 <b>3분의 1 이상</b> 포함 필수<br>★ 피해자 의사 존중<br>★ 징계시효: <b>10년</b>',memo:'성범죄징계의결=30일이내/피해자성별1/3이상/시효10년',pg:'344p',cat:'징계위원회'},
+   {q:'소청심사 결과에 불복하는 방법은?',a:'교원소청심사위원회의 결정에 불복하는 경우<br>→ 결정서 받은 날부터 <b>60일 이내</b>에 <b>행정법원</b>에 행정소송 제기<br>★ 소청심사 청구 → 결정 → 행정소송 → 항소 → 상고 순',memo:'소청결정불복=60일내행정법원소송',pg:'341p',cat:'소청'},
+  ]},
+  {lbl:'포상제도',ttl:'포상 제도 상세',cards:[
+   {q:'포상·표창의 종류와 수여 기관을 정리하시오.',a:'<b>훈장(5등급)</b>: 청조→황조→홍조→근정(국무총리)→근정(교육부) 순<br><b>대통령 표창</b>: 공로가 현저한 교원<br><b>국무총리 표창</b>: 교원 교육공적<br><b>교육부장관 표창</b>: 교육공적<br><b>교육감 표창</b>: 지역 교육공적<br><b>교육장 표창</b>: 학교급 교육공적',memo:'훈장5종/대통령·국무총리·교육부·교육감·교육장 표창',pg:'332p',cat:'포상'},
+   {q:'재직기간 계산 시 사립학교 경력 산입 기준은?',a:'관할청에 보고된 사립학교 교원 경력: <b>전기간 산입</b><br>관할청에 보고되지 않은 사립학교 교원 경력: <b>산입 안 됨</b><br>★ 포상 재직기간 산입 기준 (호봉환산율과 달리 100%/50%가 아니라 전부 또는 0)',memo:'보고된사립=전부산입/미보고사립=불산입(호봉과다름)',pg:'332p',cat:'포상'},
+   {q:'불문경고·견책 받은 자의 포상 추천 제한은?',a:'불문경고와 견책을 합하여 <b>3회 이상</b> 처분을 받은 자는 포상 추천 제외<br>★ 적극행정에 의한 경우: 소명 후 추천 가능<br>★ 단, 음주운전 등 3회 이상 처분 시 추천 제외',memo:'불문경고+견책합쳐3회이상=포상추천제외/적극행정=소명후가능',pg:'345p',cat:'포상'},
+  ]},
+,
+  {lbl:'징계사례',ttl:'징계 처분 사례',cards:[
+   {q:'학생 체벌에 의한 징계 사례는?',a:'초등학교 교사가 가정폭력 피해 비밀전학 학생을 훈계하는 과정에서 머리를 10회 정도 때리고 손바닥으로 뺨을 5회 때리는 등 신체학대 행위<br>→ <b>감봉 1월</b> 처분 (교원소청심사위원회)',memo:'학생체벌=감봉1월/신체학대행위',pg:'350p',cat:'징계사례'},
+   {q:'위력에 의한 제자 성추행 징계 사례는?',a:'교사가 경진대회 지도 과정에서 신체접촉 있었음. 학생들이 성추행 피해를 구체적으로 진술<br>→ 위력으로 피해자를 추행한 사실 인정 → <b>해임</b> 처분 유지 (교원소청심사위원회)',memo:'위력성추행=해임/피해자진술+위력인정',pg:'350p',cat:'징계사례'},
+   {q:'현금 취거 행위에 대한 징계 사례는?',a:'교수가 CD기에서 피해자가 인출해 놓은 현금 20만원을 취거하여 기소유예 처분<br>→ 교원에게는 더 높은 도덕성 요구됨<br>→ <b>감봉 3월</b> 처분 유지 (교원소청심사위원회)',memo:'현금취거=감봉3월/교원=더높은도덕성요구',pg:'351p',cat:'징계사례'},
+   {q:'공무원 음주운전 혈중알코올 농도별 처리 기준은?',a:'<b>0.03% 이상~0.08% 미만</b>: 면허 정지 / 초범 = 경징계<br><b>0.08% 이상~0.2% 미만</b>: 면허 취소 / 최초라도 <b>중징계</b><br><b>0.2% 이상 또는 음주측정 불응</b>: 최초라도 <b>배제징계(파면·해임) 가능</b><br>★ 면허취소 기준: 0.08% 이상',memo:'0.03~0.08=면허정지/0.08~0.2=중징계/0.2이상=배제징계가능',pg:'363p',cat:'징계사례'},
+   {q:'성별 관련 비위 징계 특례는?',a:'① 징계 의결 기간: <b>30일 이내</b> (일반 60일보다 짧음)<br>② 피해자와 같은 성별의 위원이 <b>전체 위원의 1/3 이상</b> 포함 필수<br>③ 피해자의 의사 최대한 존중<br>④ 징계 시효: <b>10년</b><br>★ 음주운전 시 징계 감경 적용 지양',memo:'성비위=30일의결/피해자성별1/3이상/시효10년',pg:'344p',cat:'징계절차'},
+  ]},
+  {lbl:'상훈실무',ttl:'포상·훈장 실무',cards:[
+   {q:'교원 포상 추천 시 인사자문위원회 구성 기준은?',a:'포상 공문 확인 → <b>교원인사자문위원회 개최</b> → 3배수 추천<br>★ 인사자문위원회: 교장을 포함한 교원 및 학부모 대표 등으로 구성<br>★ 포상 추천 대상자수의 <b>3배수</b> 추천<br>★ 불문경고·견책 3회 이상 교원 제외',memo:'포상추천=인사자문위원회(3배수)/3회이상처분=제외',pg:'333p',cat:'포상'},
+   {q:'포상·표창 재직기간 산정 시 30일과 15일 기준은?',a:'<b>30일 = 1월</b>로 계산 (거주기간과 동일 원칙)<br>최종 일수 합산 시 <b>15일 이상</b> → 1월로 계산<br>예) 32년 11개월 15일 → 33년으로 계산 → <b>청조근정훈장</b> 대상<br>★ 임용일은 산입, 퇴직일은 제외',memo:'30일=1월계산/최종15일이상=1월/임용일산입퇴직일제외',pg:'333p',cat:'포상'},
+   {q:'훈장 수여 시기와 방법은?',a:'정부 포상은 원칙적으로 <b>스승의 날(5월 15일)</b>에 수여하나 별도 시기 지정 가능<br>교육부장관이나 교육감이 추천 → 국가보훈부 협의 → 대통령 결재<br>★ 서훈은 사망한 경우 추서 가능<br>★ NEIS 포상서훈 탭에 등록',memo:'스승의날원칙/교육부→국가보훈부→대통령결재/사망시추서가능',pg:'332p',cat:'포상'},
+  ]},
+,
+  {lbl:'징계감경',ttl:'징계 감경·감경제외',cards:[
+   {q:'징계 감경이 가능한 공적 사유는?',a:'① 훈장 또는 포장을 받은 공적<br>② 국무총리 이상 표창 (교사의 경우 청장 이상 또는 교육감 이상 표창)<br>③ 모범공무원으로 선발된 공적<br>★ 단, 징계처분·경고처분 전의 공적은 감경대상에서 제외<br>★ 감경 공적이 여러 개여도 <b>1단계</b>만 감경',memo:'훈장·포장/국무총리이상(교사=청장이상)/모범공무원/1단계만감경',pg:'367p',cat:'징계감경'},
+   {q:'징계 감경 기준표는?',a:'파면 → <b>해임</b><br>해임 → <b>강등</b><br>강등 → <b>정직</b><br>정직 → <b>감봉</b><br>감봉 → <b>견책</b><br>견책 → <b>불문(경고)</b>',memo:'파면→해임→강등→정직→감봉→견책→불문 순으로 1단계감경',pg:'367p',cat:'징계감경'},
+   {q:'징계 감경을 할 수 없는 비위(감경 제외 사유)는?',a:'① 금품·향응 수수, 횡령·유용<br>② 금품 비위 미신고·미고발<br>③ 시험문제 유출, 성적 조작, 학교생활기록부 허위기재<br>④ 성(性) 관련 비위<br>⑤ 음주운전 또는 음주측정 불응<br>⑥ 학생에 대한 신체적·정신적·정서적 폭력<br>⑦ 인사 관련 비위<br>⑧ 학교폭력 고의 은폐<br>⑨ 성 관련 비위 2차 피해<br>⑩ 공직선거법 위반',memo:'금품성적비위성범죄음주학생폭력인사비위학폭은폐=감경불가',pg:'368p',cat:'징계감경'},
+   {q:'징계의결 요구 시 필요한 서류는?',a:'① 교육공무원징계의결요구서<br>② 교육공무원 인사기록카드 사본<br>③ 확인서<br>④ 혐의 내용 입증 공문서 등 증거자료<br>⑤ 혐의 관련 조사기록 또는 수사기록<br>⑥ 혐의 관련자 조치사항 및 증거자료<br>⑦ 관계 법규 발췌문<br>⑧ 성관련 비위의 경우: 외부 전문가 의견서(필수)',memo:'요구서+인사기록+확인서+증거자료+수사기록/성비위=외부전문가의견서',pg:'366p',cat:'징계절차'},
+  ]},
+  {lbl:'소청실무',ttl:'소청심사 실무',cards:[
+   {q:'소청심사 결정의 종류는?',a:'① <b>각하</b>: 소청 요건을 갖추지 못한 경우<br>② <b>기각</b>: 소청 이유가 없는 경우 (원 처분 유지)<br>③ <b>인용(취소)</b>: 소청 이유가 있는 경우 (처분 취소 또는 변경)<br>④ <b>수정</b>: 원 처분을 더 가벼운 처분으로 변경<br>★ 소청심사위원회는 원 처분보다 더 무거운 처분으로 변경 불가',memo:'소청결정=각하·기각·인용(취소)·수정/원처분보다가중불가',pg:'341p',cat:'소청'},
+   {q:'소청심사 결정 후 행정소송 기간은?',a:'소청심사위원회 결정서를 받은 날부터 <b>60일 이내</b>에 행정법원에 행정소송 제기 가능<br>★ 소청심사를 거치지 않고 바로 행정소송 제기도 가능 (임의적 전치주의)<br>★ 다만, 소청심사를 거친 후 소송 제기 시 결정서 받은 날 60일',memo:'소청결정후=60일내행정소송/임의적전치주의',pg:'341p',cat:'소청'},
+   {q:'면직처분 효력 정지 신청이 가능한가?',a:'면직처분에 대해 소청심사 청구 시: 최종결정이 있을 때까지 후임자 보충 불가<br>★ 별도로 법원에 <b>집행정지 신청</b>도 가능 (행정소송법에 의거)<br>★ 집행정지 인용 시 처분 효력 일시 정지',memo:'면직소청=후임보충불가/집행정지신청도가능',pg:'341p',cat:'소청'},
+  ]},
+
+ ]
+},
+{id:7,ico:'📈',clr:'#8e44ad',ttl:'승진 및 평정',pg:'389~442p',
+ desc:'교감·교장 승진 요건, 경력평정 만점·등급, 근무성적 평정 분포, 연수성적, 가산점',
+ tags:['경력평정','근무성적','승진'],
+ secs:[
+  {lbl:'경력평정',ttl:'경력평정',cards:[
+   {q:'경력평정 만점 기준(기본경력 15년, 초과경력 5년)은?',a:'<b>기본경력</b>(15년):<br>• 가경력: <b>64점</b> (1월당 0.3555점)<br>• 나경력: <b>60점</b> (1월당 0.3333점)<br>• 다경력: <b>56점</b> (1월당 0.3111점)<br><b>초과경력</b>(5년):<br>• 가경력: <b>6점</b> (1월당 0.1000점)<br>• 나경력: <b>5점</b> (1월당 0.0833점)<br>• 다경력: <b>4점</b> (1월당 0.0666점)',memo:'기본15년:가64/나60/다56 / 초과5년:가6/나5/다4',pg:'397p',cat:'경력평정'},
+   {q:'경력평정 시 10할 평정(100% 산입)되는 휴직 유형은?',a:'① 공무상 질병·부상 휴직<br>② 병역 휴직<br>③ 법정의무수행 휴직<br>④ 고용휴직 중 <b>상근</b> 근무기간<br>⑤ 육아휴직·입양휴직<br>⑥ 노조전임자 휴직',memo:'공무상·병역·법정의무·고용상근·육아입양·노조전임 = 10할',pg:'397p',cat:'경력평정'},
+   {q:'경력평정 시 5할 평정(50% 산입)되는 휴직 유형은?',a:'① 해외 유학휴직<br>② 고용휴직 중 <b>비상근</b> 근무기간<br>③ 국내연수휴직',memo:'유학·고용비상근·국내연수 = 5할',pg:'397p',cat:'경력평정'},
+   {q:'경력평정 기간 계산 방법은?',a:'월수 단위로 계산 / 1월 미만은 <b>일 단위</b>로 계산<br>기본·초과경력 합산 후 소수점 이하 <b>넷째 자리에서 반올림</b>하여 셋째 자리까지<br>★ 불리한 경력(기간제교원·일시퇴직기간)은 당사자에게 유리한 방향으로 제외 가능',memo:'월단위/1월미만=일단위/소수점3째자리/유리한방향',pg:'397p',cat:'경력평정'},
+   {q:'직위해제 기간의 경력평정 처리는?',a:'원칙적으로 직위해제 기간은 경력평정에서 <b>제외</b><br>단, 다음의 경우 재직기간으로 평정:<br>① 징계위원회가 징계하지 않기로 의결한 경우<br>② 징계처분이 무효·취소로 확정된 경우<br>③ 형사사건 기소로 직위해제된 자가 <b>무죄</b>로 확정된 경우',memo:'직위해제=원칙제외/무죄확정·징계취소=재직기간으로평정',pg:'397p',cat:'경력평정'},
+   {q:'고용휴직의 연도별 경력평정 인정율(2000.4.1 이후)은?',a:'<b>상근</b>: 주당 <b>15시간 이상</b> 또는 법정근무시간(40시간) → <b>10할</b><br><b>비상근</b>: 주당 <b>6~14시간</b> → <b>5할</b><br><b>불인정</b>: 주당 <b>5시간 이하</b><br>1994.9.21. 이전: 모두 인정 / 1994.9.22.~2000.3.31.: 10시간 이상 10할, 9시간 이하 5할',memo:'15시간↑=10할/6~14시간=5할/5이하=불인정',pg:'398p',cat:'경력평정'},
+  ]},
+  {lbl:'근무성적',ttl:'교감·교사 근무성적 평정',cards:[
+   {q:'교감 근무성적 평정 분포 비율은?',a:'<b>수</b>: 95점 이상 → <b>30%</b><br><b>우</b>: 90~95점 미만 → <b>40%</b><br><b>미</b>: 85~90점 미만 → <b>20%</b><br><b>양</b>: 85점 미만 → <b>10%</b><br>★ "양" 평정 시 최초 정기승급일부터 <b>6개월 승급 제한</b>',memo:'수30/우40/미20/양10/양=6개월승급제한',pg:'405p',cat:'근무성적'},
+   {q:'교감 근무성적 평정자·확인자와 가중치는?',a:'<b>평정점</b>: 100점 만점<br>평정자 평정점(50%) + 확인자 평정점(50%)으로 산출<br>평정사항: 근무수행태도(20점), 교육활동·교육연구지원(40점), 행정사무관리(20점), 기타(20점)<br>★ 확인자가 평정할 때 <b>근무성적평정확인위원회</b> 심의를 거쳐야 함',memo:'평정자50%+확인자50%=100점/확인자=위원회심의필수',pg:'404p',cat:'근무성적'},
+   {q:'교사 근무성적 평정 구성과 가중치는?',a:'<b>학교장(근무성적) 평정</b>: <b>80점</b><br><b>동료교원 다면평가</b>: <b>20점</b> → 합산 100점<br>★ 2개월 미만 근무 시 평정 없음<br>★ 10개월 초과 연수·외부파견 시 평정 대상 제외, 파견 전 2회 평정 평균으로 대체',memo:'80%학교장+20%다면평가/2개월미만=평정없음',pg:'406p',cat:'근무성적'},
+   {q:'교사 근무성적 평정 등급별 분포 비율은?',a:'<b>A(최우수)</b>: <b>10%</b> 이내<br><b>B(우수)</b>: 누적 <b>40%</b> 이내<br><b>C(보통)</b>: 누적 <b>90%</b> 이내<br><b>D(미흡)</b>: 나머지<br>★ 자기실적평가서: 다면평가 시작 전까지 반드시 제출',memo:'A:10%/B:40%/C:90%이내/D:나머지',pg:'406p',cat:'근무성적'},
+   {q:'근무성적 평정 예외(평정 안 하는 경우)는?',a:'① 휴직·직위해제 또는 기타 사유로 평정단위 학년도 중 <b>2개월 미만</b>을 근무한 경우<br>② 평정단위 학년도의 <b>10개월을 초과</b>한 연수나 교육기관 외의 기관 파견<br>→ 파견 전 2회의 근무성적 평정 평균으로 대체',memo:'2개월미만=평정없음/10개월초과파견=직전2회평균대체',pg:'404p',cat:'근무성적'},
+  ]},
+  {lbl:'연수성적·가산점',ttl:'연수성적·가산점',cards:[
+   {q:'연수성적 평정 기준은?',a:'<b>평정 기간</b>: 최근 <b>5년간</b>의 연수실적<br><b>자격연수</b>: 만점 <b>30점</b><br><b>직무연수</b>: 이수시간에 비례 가산<br>★ 특별연수(파견) 포함 / 자율연수는 제외 가능',memo:'최근5년/자격연수30점/직무연수환산',pg:'407p',cat:'연수성적'},
+   {q:'가산점 종류와 최대 점수는?',a:'<b>연구학교</b>: 주임교사·부장교사 0.5점/학년, 일반교사 0.25점/학년<br><b>도서·벽지 근무</b>: 등급에 따라 차등 가산<br>★ 가산점 최대치: 각 항목별 상한 있음<br>★ 가산점은 승진 후보자 명부 작성 시 반영',memo:'연구학교·도서벽지등 가산점/승진후보자명부반영',pg:'408p',cat:'가산점'},
+  ]},,
+  {lbl:'승진요건',ttl:'승진 요건 및 절차',cards:[
+   {q:'교감 승진의 기본 요건은?',a:'① <b>경력평정</b>: 교사로 15년 이상 근무 + 초과경력 5년까지 인정<br>② <b>근무성적 평정</b>: 최근 5년간 평정 반영<br>③ <b>연수성적</b>: 최근 5년 자격연수 + 직무연수 이수 실적<br>④ <b>나이</b>: 만 40세 이상 (서울시 기준)<br>⑤ <b>교장 자격연수</b> 대신 교감 자격연수 이수 필요',memo:'경력15년+근무성적+연수성적+만40세(서울)/교감자격연수',pg:'397p',cat:'승진'},
+   {q:'승진 후보자 명부의 유효기간과 관리는?',a:'<b>유효기간</b>: 작성일로부터 <b>2년</b><br><b>관리권자</b>: 교육감 (초등·중등 각각)<br><b>작성 주기</b>: 매년 작성 (정기)<br>★ 명부 등재자가 2명 이하 시 하위 명부에서 충원 가능<br>★ 명부는 공개하지 않음 (비공개)',memo:'유효2년/교육감관리/매년작성/비공개',pg:'400p',cat:'승진'},
+   {q:'근무성적 평정 시 자기실적평가서 제출 기한은?',a:'다면평가 시작 전까지 반드시 제출해야 함<br>★ 자기실적평가서는 다면평가의 기초 자료로 활용<br>★ 미제출 시 다면평가 점수에 영향을 줄 수 있음',memo:'자기실적평가서=다면평가시작전제출',pg:'406p',cat:'근무성적'},
+   {q:'교사 다면평가(동료교원 평가) 방법과 가중치는?',a:'<b>가중치</b>: 20점 (전체 100점 중)<br><b>방법</b>: 동학년·동부서 교원이 평가 (학교별 기준 상이)<br><b>평가 항목</b>: 수업전문성, 교육활동, 동료협력, 학생생활지도 등<br>★ 학교장 평정(80점)과 합산하여 100점',memo:'다면평가=20점/학교장80점+다면20점=100점',pg:'406p',cat:'근무성적'},
+   {q:'경력평정 시 다경력이 적용되는 경우는?',a:'<b>다(다) 경력</b>: 교사 경력 외의 기타 교육공무원 경력 또는 일반직 공무원 경력으로 인정되는 경우<br>예: 장학사·교육연구사로 근무한 경력<br>★ 가경력 > 나경력 > 다경력 순으로 점수가 낮아짐',memo:'다경력=장학사교육연구사등/가>나>다 점수순',pg:'397p',cat:'경력평정'},
+   {q:'승진 후보자 명부 작성 시 동점자 처리 방법은?',a:'동점자가 있는 경우 다음 순서로 우선순위 결정:<br>① 경력평정 점수 높은 순<br>② 근무성적 평정 점수 높은 순<br>③ 연수성적 점수 높은 순<br>④ 나이 많은 순<br>★ 서울시 교육청 기준',memo:'동점자=경력>근무성적>연수성적>나이 순',pg:'400p',cat:'승진'},
+  ]},
+  {lbl:'평정실무',ttl:'평정 실무 및 절차',cards:[
+   {q:'교장의 교사 근무성적 평정 시기는?',a:'매 학년도 말 (서울시 기준: <b>2월 말</b>)<br>★ 중도 퇴직·이동 예정자: 이동 전에 평정<br>★ 신규 임용 후 2개월 미만 근무자: 평정 대상 제외',memo:'매학년도말2월/이동예정=이동전평정/2개월미만=제외',pg:'406p',cat:'근무성적'},
+   {q:'연수성적 평정 시 직무연수 이수시간 환산 방법은?',a:'직무연수 이수시간을 총 합산하여 기준 점수에 비례 가산<br>자격연수 만점: 30점<br>직무연수: 이수시간에 비례하여 가산 (이수시간이 많을수록 높은 점수)<br>★ 최근 5년간 연수 실적만 인정',memo:'최근5년/자격연수30점/직무연수이수시간비례가산',pg:'407p',cat:'연수성적'},
+   {q:'근무성적 평정 대상에서 제외되는 경우는?',a:'① 해당 학년도 중 <b>2개월 미만</b> 근무한 경우<br>② 해당 학년도의 <b>10개월을 초과</b>한 연수나 교육기관 외의 기관 파견<br>→ 제외 시: 파견 전 2회의 평정 결과 평균으로 대체',memo:'2개월미만=제외/10개월초과파견=제외→직전2회평균',pg:'404p',cat:'근무성적'},
+   {q:'교감 근무성적 평정자와 확인자는?',a:'<b>평정자</b>: <b>학교장</b> (50점)<br><b>확인자</b>: 관할 <b>교육장</b> (50점)<br>★ 확인자(교육장)는 근무성적평정확인위원회 심의를 거쳐야 함<br>★ 합산하여 100점 만점',memo:'교감평정=학교장50점+교육장50점/교육장=위원회심의',pg:'404p',cat:'근무성적'},
+  ]},
+,
+  {lbl:'근무성적계산',ttl:'근무성적 계산 방법',cards:[
+   {q:'교사 근무성적 합산점 계산 공식은?',a:'합산점(100점) = 근무성적평정점(60점) + 다면평가점(40점)<br>• <b>근무성적평정점</b>: (평정자점수 × 0.2) + (확인자점수 × 0.4)<br>• <b>다면평가점</b>: (정성평가 × 0.32) + (정량평가 × 0.08)',memo:'합산=근무성적60+다면40/근무성적=평정자20+확인자40/다면=정성32+정량8',pg:'409p',cat:'근무성적'},
+   {q:'교사 근무성적 평정자·확인자와 가중치는?',a:'<b>평정자(학교장)</b>: 20점 (만점 100점 환산) — 전체의 20%<br><b>확인자(교육장)</b>: 40점 (만점 100점 환산) — 전체의 40%<br><b>다면평가</b>: 40점 (정성32+정량8) — 전체의 40%<br>★ 최종 합산: 100점 만점',memo:'평정자20%+확인자40%+다면40%=100점',pg:'409p',cat:'근무성적'},
+   {q:'교사 근무성적 평정점이 없는 경우 대체 방법은?',a:'평정이 없는 학년도: 전후 평정점의 <b>평균</b>으로 대체<br>전의 평정점도 없는 경우: <b>85점</b>으로 처리<br>★ 전직된 경우 전직 전 직위에서 받은 근무성적평정을 당해 평정으로 함',memo:'평정없음=전후평균/전후도없음=85점처리',pg:'410p',cat:'근무성적'},
+   {q:'교사 근무성적 결과를 본인에게 공개해야 하는가?',a:'평정대상자의 요구가 있는 경우 특별한 사정이 없는 한 <b>본인의 최종 근무성적평정점을 알려주어야 함</b><br>★ 유초중 교사: 교육지원청에서 공개<br>★ 고등학교 교사: 시교육청에서 공개<br>단, 공정한 인사관리 업무에 현저한 지장 초래 시 일정기간 비공개 가능',memo:'요구있으면원칙공개/유초중=교육지원청/고교=시교육청',pg:'410p',cat:'근무성적'},
+   {q:'복수 교감인 경우 근무성적 평정 주의사항은?',a:'피평정자가 2인인 경우(복수교감 등): 분포비율을 맞추기 위해 그 중 1인을 <b>무조건 하위 평정해서는 안 됨</b><br>→ 성실도와 관계없이 1인을 불이익하게 평정하는 사례가 없도록 주의',memo:'복수교감=분포맞추기위해무조건하위평정금지',pg:'411p',cat:'근무성적'},
+   {q:'남녀 통합 평정 원칙은?',a:'남녀 통합 평정이 어느 한 성이 불리하게 작용되지 않도록 유의<br>능력이 우수한 여교원이 상위 평정에서 제외되는 불합리한 평정 금지<br>★ 평정자와 확인자 모두 남녀 차별 평정 금지',memo:'남녀통합평정=성차별금지',pg:'411p',cat:'근무성적'},
+  ]},
+,
+  {lbl:'승진명부',ttl:'승진 후보자 명부',cards:[
+   {q:'승진 후보자 명부의 구성 요소는?',a:'① <b>경력평정점</b>: 기본경력(15년)+초과경력(5년)<br>② <b>근무성적 평정점</b>: 최근 3개 학년도 반영<br>③ <b>연수성적 평정점</b>: 최근 5년 자격연수+직무연수<br>④ <b>가산점</b>: 연구학교, 도서벽지, 특수학급 등<br>→ 합산하여 순위 결정',memo:'경력평정+근무성적+연수성적+가산점=순위결정',pg:'397p',cat:'승진'},
+   {q:'근무성적 평정 시 최근 3년 반영 가중치는?',a:'<b>최근 1년 이내</b>: 0.34 (34%)<br><b>최근 1년전 2년 이내</b>: 0.33 (33%)<br><b>최근 2년전 3년 이내</b>: 0.33 (33%)<br>→ 합산: 100점 만점으로 환산<br>★ 가장 최근 평정에 약간 더 높은 가중치',memo:'최근1년=0.34/1~2년전=0.33/2~3년전=0.33',pg:'408p',cat:'근무성적'},
+   {q:'특수학급 가산점은 어떻게 부여되는가?',a:'특수학급 담당 교원으로 근무한 기간에 대해 가산점 부여<br>★ 해당 학년도 동안 <b>특수학급을 담당</b>한 경우에만 인정<br>★ 일정 기간 이상 근무 시 가산점 반영 (기간 요건 있음)<br>★ 도서·벽지 가산점과 중복 적용 불가 (일부 예외 있음)',memo:'특수학급담당교원=가산점부여/도서벽지와중복불가',pg:'408p',cat:'가산점'},
+   {q:'교장·교감 임용을 위한 승진에 필요한 핵심 서류는?',a:'① 교감·교장 자격연수 이수증<br>② 근무성적 평정 결과<br>③ 경력평정 확인서<br>④ 연수성적 확인서<br>⑤ 가산점 확인서<br>★ 서울시교육청: 승진 후보자 명부에 등재된 자를 교육감이 추천',memo:'자격연수+근무성적+경력평정+연수성적+가산점',pg:'400p',cat:'승진'},
+   {q:'도서·벽지 근무 가산점 등급과 부여 기준은?',a:'<b>1등급(벽지)</b>: 도서·벽지 교육진흥법에 따른 벽지 학교 근무<br><b>2등급(도서)</b>: 도서 지역 학교 근무<br>★ 서울시: 도서·벽지 해당 학교 거의 없음<br>★ 근무기간에 비례하여 가산점 부여<br>★ 특수학급 가산점과 별도 산정',memo:'벽지1등급·도서2등급/근무기간비례/서울=해당학교거의없음',pg:'408p',cat:'가산점'},
+  ]},
+  {lbl:'교원보수',ttl:'보수 관련',cards:[
+   {q:'교원 봉급표의 적용 원칙은?',a:'교원은 <b>공무원보수규정</b>에 따른 교원 봉급표 적용<br>호봉에 따라 봉급 결정<br>각종 수당: 직급보조비, 정근수당, 가족수당, 담임수당, 부장수당 등 별도 지급<br>★ 봉급 = 호봉에 따른 기본급<br>★ 보수 = 봉급 + 각종 수당',memo:'봉급=호봉기본급/보수=봉급+수당',pg:'122p',cat:'보수'},
+   {q:'호봉이 잘못 획정되어 봉급을 초과 수령한 경우 처리는?',a:'호봉 잘못 획정 확인 시: 정정권자(교육장)가 호봉 정정<br>초과 수령한 봉급: <b>반납</b>하여야 함<br>★ 국가배상법에 따라 부당이득 반환 의무<br>★ 정정 시점부터 정정된 호봉 적용 (소급 정정)',memo:'호봉잘못획정→정정→초과수령봉급반납/잘못된발령일소급',pg:'122p',cat:'보수'},
+  ]},
+
+ ]
+},
+{id:8,ico:'🔄',clr:'#e67e22',ttl:'전보',pg:'443~482p',
+ desc:'전보 원칙·의무전보주기, 근무기간 산정, 거주기간 산정, 파견 인정, 전보 제한 사유',
+ tags:['의무전보','4년주기','거주기간'],
+ secs:[
+  {lbl:'전보원칙',ttl:'전보 원칙·대상자 선정',cards:[
+   {q:'전보 대상자 근무기간 산정 방법은?',a:'<b>15일 이상</b> → 1개월 / <b>15일 미만</b> → 버림<br>휴직·파견(서울시교육청 산하기관 제외): 근무기간에서 제외<br>단, <b>2023.3.1. 이후 최대 1년 이내의 육아휴직</b>은 산입<br>직위해제·정직: 포함 / 해직: 제외<br>신규교사 현임교 발령일이 <b>3월 31일 이전</b>이면 당해 연도 <b>3월 1일 발령자</b>로 간주',memo:'15일↑=1월/휴직파견제외/육아23년이후1년내산입/3.31전=3.1간주',pg:'452p',cat:'근무기간'},
+   {q:'전보 대상자 근무기간 산정 시 파견 기간 인정 여부는?',a:'<b>근무기간 제외</b>: 서울교대대학원(2년), 서울대대학원(2년), 교원대대학원(2년), 학습연구년제(1년), 서울교육연구년제(1년)<br><b>근무기간 인정</b>: 서울대·서울교대·교원대·숙명여대·국제영어대학원(6월 이내), 교육부·서울시교육청·산하기관 파견',memo:'대학원2년파견=제외/6월이내단기연수=인정/교육청산하기관=인정',pg:'452p',cat:'근무기간'},
+  ]},
+  {lbl:'거주기간',ttl:'거주기간 산정',cards:[
+   {q:'거주기간 산정 방법의 핵심은?',a:'<b>기준일</b>: 전보년도 <b>2월 말일</b><br>역에 의한 계산: 모든 월을 <b>30일</b>로 계산<br>휴직·직위해제·정직: 거주기간 제외<br>(단, 2023.3.1.이후 1년이내 육아휴직 인정)<br><b>정규교사 임용 이후</b> 거주기간만 인정<br>관외 이전 후 재전입 시 <b>최근 전입일 이후</b>만 인정',memo:'2월말기준/30일=1월/임용후거주만인정/최근전입이후',pg:'452p',cat:'거주기간'},
+   {q:'서울시 시외 거주자의 인접 교육지원청 인정 지역은?',a:'동부: 가평·구리·남양주·양평<br>서부: 고양·양주·파주<br>남부: 광명·군포·부천·수원·시흥·안산·안양·오산·의왕·화성 등<br>북부: 남양주·동두천·의정부·포천 등<br>강동송파: 광주·성남·안성·용인·여주·이천·하남<br>강남서초: 과천·성남·안성·용인',memo:'시외거주=인접청 관내거주자로 간주/본인선택 시계진입도로경계지점',pg:'452p',cat:'거주지'},
+   {q:'거주기간 인정의 예외 사항은?',a:'① 타 지역 건설 중인 주택으로 입주 예정인 자(전보일 후 1년 이내): 입주 계약된 주소를 거주지로 인정<br>② 실거주지와 주민등록지가 다른 경우: 주민등록지 원칙 (단, 현 소속 교육지원청 관내에 주민등록이 있고 실거주지가 타 교육지원청인 경우 실거주지 인정)<br>③ 서울 시내 거주자가 현 소속 교육지원청 인접 시외 지역으로 이주: 관내 계속 거주로 인정',memo:'입주예정=계약주소인정/실거주≠주민등록=주민등록원칙(예외있음)',pg:'453p',cat:'거주기간'},
+   {q:'강동송파·강남서초교육지원청 관내 거주자의 특별 전보 규정은?',a:'<b>강동송파·강남서초 상호 간 전보 배제</b><br>강동송파 관내 학교에 근무하고 강남서초 관내 거주 시: 강남서초교육지원청으로 전보<br>강남서초 관내 학교 근무 후 강동송파·강남서초 외의 타 교육지원청으로 전보 가능',memo:'강동송파·강남서초 상호간전보=배제',pg:'452p',cat:'거주지'},
+  ]},
+  {lbl:'전보제한',ttl:'전보 제한 사유·교장',cards:[
+   {q:'전보 제한 사유는?',a:'① 임용된 날로부터 <b>1년 이내</b> (기구개편·승진·징계 등은 예외)<br>② <b>임신 중 또는 출산 후 1년</b>이 지나지 않은 교원<br>③ 배우자·직계존속이 거주하는 지역 기관으로의 전보 (오히려 우선 전보)<br>④ 징계처분 후 일정 기간<br>★ 현주소 변경: 매년 <b>12월 31일까지</b>만 인정',memo:'1년내금지/임신출산1년/징계후제한/주소변경12.31까지',pg:'458p',cat:'전보제한'},
+   {q:'거주기간 기준일과 현주소 변경 기준일은?',a:'<b>거주기간 기준일</b>: 전보년도 <b>2월 말일</b><br><b>현주소 변경 인정</b>: 매년 <b>12월 31일까지</b> 변경 인정 (이후 변경은 다음 연도 기준일에 적용)',memo:'거주기간기준=2월말일/주소변경=12월31일까지',pg:'452p',cat:'전보제한'},
+   {q:'신규교사 현임교 발령일이 3월 31일 이전인 경우 처리는?',a:'당해 연도 <b>3월 1일 발령자</b>로 간주하여 근무기간 산정<br>★ 3월 31일 이후 발령자는 실제 발령일 기준으로 계산',memo:'3.31이전발령=당해연도3.1발령자로간주',pg:'452p',cat:'근무기간'},
+  ]},,
+  {lbl:'전보계산예시',ttl:'전보 계산 예시',cards:[
+   {q:'전보 근무기간 계산 예시: 2022.3.1~2025.2.28 근무, 2023.9.1~2024.2.28 육아휴직 시 근무기간은?',a:'전체 기간: 36개월<br>육아휴직: 6개월 (2023.3.1 이후 1년 이내 산입 가능한 경우)<br>2023.9.1~2024.2.28 = 6개월 → <b>1년 이내이므로 산입</b><br>→ 실제 근무기간: 36개월 (전체 산입)',memo:'2023.3.1이후육아휴직1년이내=산입/전체36개월인정',pg:'452p',cat:'근무기간'},
+   {q:'신규교사 3월 15일 발령 시 근무기간 산정은?',a:'3월 15일 발령 → <b>3월 31일 이전</b>이므로 당해 연도 <b>3월 1일 발령자</b>로 간주<br>→ 3월 1일부터 근무기간 계산 시작',memo:'3.15발령→3.31이전→3.1발령자로간주',pg:'452p',cat:'근무기간'},
+   {q:'신규교사 4월 1일 발령 시 근무기간 산정은?',a:'4월 1일 발령 → <b>3월 31일 이후</b>이므로 <b>실제 발령일(4.1)</b>부터 근무기간 계산<br>★ 3월 31일 이전 발령과 이후 발령은 처리 방법이 다름',memo:'4.1발령=3.31이후→실제발령일4.1부터계산',pg:'452p',cat:'근무기간'},
+   {q:'전보 거주기간 계산 예시: 2023.1.1 서울 거주 시작, 2024.3.1 임용, 2026.2.28 기준일인 경우는?',a:'임용 이전 거주기간 불인정<br><b>임용일(2024.3.1)부터</b> 계산 시작<br>2024.3.1~2026.2.28 = <b>24개월</b><br>→ 인정 거주기간: 24개월 (2년)',memo:'임용전거주불인정/임용일2024.3.1부터24개월인정',pg:'452p',cat:'거주기간'},
+   {q:'전보 관외 이전 후 재전입 시 거주기간은?',a:'관외로 이전했다가 다시 관내로 전입한 경우<br>→ <b>최근 전입일 이후</b> 거주기간만 인정<br>예) 2020.1.1 전입→2022.6.1 관외이전→2024.1.1 재전입<br>→ 2024.1.1부터만 거주기간 인정',memo:'관외이전후재전입=최근전입일이후만인정',pg:'452p',cat:'거주기간'},
+   {q:'30일 계산 적용 예시: 1개월 15일 거주한 경우는?',a:'전보 거주기간은 모든 월을 <b>30일</b>로 계산<br>1개월(30일) + 15일 = <b>45일</b><br>45일 ÷ 30 = <b>1개월 15일</b> 인정<br>★ 실제 월별 일수(28/29/30/31일)가 아닌 일률적으로 30일 적용',memo:'거주기간=모든월30일계산/31일월도30일로계산',pg:'452p',cat:'거주기간'},
+  ]},
+  {lbl:'전보유형',ttl:'전보 유형·특수전보',cards:[
+   {q:'의무전보와 희망전보의 차이는?',a:'<b>의무전보</b>: 장기근무자·선거법위반자 등 반드시 전보해야 하는 경우<br><b>희망전보</b>: 교원이 희망하는 지역·학교로 전보 신청<br>★ 서울시교육청: 매년 2월 전보<br>★ 전보 우선순위: 배우자·직계존속 거주 교원 우선',memo:'의무전보=반드시/희망전보=본인신청/매년2월',pg:'458p',cat:'전보유형'},
+   {q:'배우자 또는 직계존속 거주 지역으로의 전보는?',a:'<b>전보 제한이 아니라 전보 우선순위</b>가 됨<br>배우자 또는 직계존속이 거주하는 지역 기관으로 전보를 원하는 경우 → 우선 배려<br>★ 1년 이내 전직 등 제한의 예외 사유로도 해당',memo:'배우자·직계존속거주지역=전보우선배려/제한아님',pg:'458p',cat:'전보유형'},
+   {q:'임신 중이거나 출산 후 1년 미만 교원의 전보는?',a:'임신 중 또는 출산 후 1년이 지나지 않은 교원은 <b>전보 제한</b><br>→ 당해 교원 동의 없이는 전보 불가<br>★ 1년 이내 전직 등 제한의 예외 사유에도 해당 (임신·출산 교원 보호)',memo:'임신중·출산후1년=전보제한/교원동의없이불가',pg:'458p',cat:'전보제한'},
+   {q:'징계처분 후 전보 제한 기간은?',a:'<b>파면·해임</b>: 신분 소멸로 해당 없음<br><b>강등·정직</b>: 처분 기간 + 일정 기간 제한<br><b>감봉</b>: 1~3개월 후 전보 가능<br><b>견책</b>: 즉시 가능<br>★ 징계 후 전보 제한은 인사관리원칙에 따라 달리 적용',memo:'징계후전보제한=인사관리원칙따름',pg:'458p',cat:'전보제한'},
+   {q:'서울시 교육지원청 간 전보 방법은?',a:'교육지원청 간 전보는 <b>교육감</b>이 결정<br>교육지원청 내 전보는 <b>교육장</b>이 결정<br>★ 교육지원청 관할 변경 시 새 교육지원청으로 전보<br>★ 전보 일자: 원칙적으로 3월 1일',memo:'교육지원청간전보=교육감/교육지원청내=교육장',pg:'452p',cat:'전보유형'},
+  ]},
+,
+  {lbl:'교장전보',ttl:'교장·교감 전보',cards:[
+   {q:'교감의 의무 전보 시기는?',a:'교감 발령 후 해당 학교에서 일정 기간 근무 후 전보 대상<br>★ 서울시교육청 인사관리원칙에 따름<br>★ 원칙적으로 <b>4년</b> 이후 전보 (학교급별 상이)<br>★ 임기형 교장과 달리 교감은 임기 없이 직급으로 근무',memo:'교감전보=4년이후원칙/임기없음',pg:'458p',cat:'전보유형'},
+   {q:'교원 희망지 전보 신청 시 제출 서류는?',a:'① 전보희망원 (전보 희망 지역·학교 기재)<br>② 가족관계증명서 (배우자·직계존속 거주 확인 시)<br>③ 주민등록등본 (거주지 확인)<br>④ 기타 특별 사유 증빙서류<br>★ 제출 기한: 전보 계획 공문에 명시된 기한 내',memo:'전보희망원+가족관계증명서+주민등록등본',pg:'452p',cat:'전보유형'},
+   {q:'서울시교육청의 전보 일자 원칙은?',a:'원칙적으로 <b>3월 1일</b>자로 전보 실시<br>★ 특별한 사유(기구개편 등)가 있는 경우 다른 날짜 가능<br>★ 학기 중 전보는 원칙적으로 제한 (교육과정 연속성 보장)',memo:'전보=원칙3.1자/학기중전보=원칙제한',pg:'452p',cat:'전보유형'},
+   {q:'전보 후 학교에서 NEIS 처리 방법은?',a:'① 전보 발령문 수령<br>② NEIS [교원인사]-[임용발령]-[전보발령] 메뉴에서 처리<br>③ 전입교원: 발령일자·발령기관 확인 후 인사기록 이관<br>④ 전출교원: 발령일자까지 근무상황 처리 후 이관<br>★ 전보 시 권한 인수인계 절차 반드시 이행',memo:'전보시NEIS전보발령+권한인수인계필수',pg:'452p',cat:'전보유형'},
+   {q:'거주기간 산정 시 군 복무 기간 처리는?',a:'군 복무 기간(현역 복무)은 거주기간 산정에서 <b>제외</b><br>★ 단, 군 복무 기간이 서울 관내인 경우도 거주기간 미인정<br>★ 정규교사 임용 이후 거주기간만 인정하는 원칙의 연장선',memo:'군복무기간=거주기간불산입',pg:'452p',cat:'거주기간'},
+  ]},
+  {lbl:'전보Q&A',ttl:'전보 Q&A',cards:[
+   {q:'육아휴직 기간이 근무기간에 산입되는 조건은?',a:'<b>2023.3.1. 이후</b> 육아휴직 기간만 해당<br>산입 가능한 육아휴직 기간: 최대 <b>1년 이내</b><br>→ 총 육아휴직 기간이 1년 초과인 경우: <b>1년만</b> 산입<br>★ 2023.3.1. 이전 육아휴직: 전보 근무기간에서 제외',memo:'2023.3.1이후육아휴직만/최대1년산입',pg:'452p',cat:'근무기간'},
+   {q:'학습연구년제 파견 기간의 전보 근무기간 처리는?',a:'학습연구년제 파견(1년): 근무기간에서 <b>제외</b><br>서울교육연구년제 파견(1년): 근무기간에서 <b>제외</b><br>단, 서울시교육청 산하기관 파견: 근무기간에 <b>산입</b><br>★ 일반적으로 대학원 파견(2년)과 연구년 파견(1년)은 제외',memo:'학습연구년제·서울연구년제=제외/교육청산하기관파견=산입',pg:'452p',cat:'근무기간'},
+   {q:'전보 계획 수립 시 교감이 고려해야 할 사항은?',a:'① 전보 대상자 목록 확인 (의무전보 대상 포함)<br>② 거주기간 및 근무기간 계산 검토<br>③ 특별 배려 대상자 확인 (임신·출산·장애 등)<br>④ 교육지원청 전보 지침 숙지<br>⑤ NEIS 근무기간·거주기간 정확성 확인<br>★ 전보 계획은 교육지원청이 수립하나 학교 협조 필요',memo:'전보계획시=대상자확인+거주기간검토+특별배려+지침숙지',pg:'452p',cat:'전보유형'},
+  ]},
+ ]
+},
+];
+
+// ═══ STATE ═══
+let cCH=null,cSEC=0,cCards=[],cIdx=0;
+let status={},isFlip=false,cMode='card';
+
+// ═══ INIT ═══
+function init(){buildSB();buildHGrid();buildHSegs();updateGS();}
+
+function buildSB(){
+  const el=document.getElementById('sbchs');
+  CHS.forEach((ch,i)=>{
+    const cnt=ch.secs.reduce((s,sec)=>s+sec.cards.length,0);
+    const d=document.createElement('div');d.className='sbi';d.id='sb'+ch.id;d.onclick=()=>loadCh(ch.id);
+    d.innerHTML='<div class="sbiico">'+ch.ico+'</div><div class="sbiinfo"><div class="sbinum">제'+ch.id+'장</div><div class="sbinm">'+ch.ttl+'</div></div><span class="sbbadge">'+cnt+'</span>';
+    el.appendChild(d);if(i<CHS.length-1){const dv=document.createElement('div');dv.className='sbdiv';el.appendChild(dv);}
+  });
+}
+
+function buildHGrid(){
+  const g=document.getElementById('hgrid');
+  CHS.forEach(ch=>{
+    const cnt=ch.secs.reduce((s,sec)=>s+sec.cards.length,0);
+    const d=document.createElement('div');d.className='cc rdy';d.onclick=()=>loadCh(ch.id);
+    d.innerHTML='<div class="cctop"><div><div class="ccnum">제'+ch.id+'장</div><div class="ccico" style="background:'+ch.clr+'22">'+ch.ico+'</div></div><span class="ccbdg">학습 가능</span></div>'
+      +'<div class="ccnum" style="margin-top:7px">제'+ch.id+'장</div><div class="cctitl">'+ch.ttl+'</div><div class="ccdesc">'+ch.desc+'</div>'
+      +'<div class="ccbot"><div class="cctags">'+ch.tags.map(t=>'<span class="cctag">'+t+'</span>').join('')+'</div><div class="ccpg">'+ch.pg+'</div></div><span class="ccarr">→</span>';
+    g.appendChild(d);
+  });
+}
+
+function buildHSegs(){
+  const s=document.getElementById('hsegs');
+  CHS.forEach(ch=>{
+    const d=document.createElement('div');d.className='hpseg';d.id='hs'+ch.id;d.style.background='rgba(255,255,255,.08)';d.title=ch.ttl;s.appendChild(d);
+  });
+}
+
+function goHome(){
+  cCH=null;document.getElementById('home').classList.add('show');
+  document.getElementById('stabs').style.display='none';document.getElementById('ca').style.display='none';
+  updateGS();setTB('HOME','인사실무 매뉴얼 학습앱 v2');setSBOn('sb-home');closeSB();
+}
+
+function loadCh(id){
+  cCH=CHS.find(c=>c.id===id);cSEC=0;
+  document.getElementById('home').classList.remove('show');
+  document.getElementById('stabs').style.display='flex';document.getElementById('ca').style.display='flex';
+  buildTabs();loadSec(0);setTB('제'+cCH.id+'장',cCH.ttl);setSBOn('sb'+id);closeSB();
+}
+
+function buildTabs(){
+  const el=document.getElementById('stabs');el.innerHTML='';
+  cCH.secs.forEach((s,i)=>{
+    const b=document.createElement('button');b.className='stab'+(i===0?' on':'');b.textContent=(s.lbl||s.label||'')+' '+(s.ttl||s.title||'');b.onclick=()=>loadSec(i);el.appendChild(b);
+  });
+}
+
+function loadSec(i){
+  cSEC=i;document.querySelectorAll('.stab').forEach((t,j)=>t.classList.toggle('on',j===i));
+  cCards=[...cCH.secs[i].cards];cIdx=0;setMode(cMode);renderCard();updSt();
+}
+
+function renderCard(){
+  if(!cCards.length)return;
+  const c=cCards[cIdx];
+  document.getElementById('comp').classList.remove('show');
+  document.getElementById('cw').style.display='block';document.getElementById('ctrl').style.display='flex';document.getElementById('pg').style.display='block';
+  document.getElementById('qt').innerHTML=c.q;
+  document.getElementById('ccat').textContent=c.cat||c.category||'';document.getElementById('cpg').textContent=c.pg||c.page||'';
+  document.getElementById('at').innerHTML=c.a;
+  const am=document.getElementById('amemo');am.style.display=c.memo?'block':'none';
+  if(c.memo)am.innerHTML='<span style="font-weight:700;color:#b8942a">&#x1F4A1; 핵심 암기 | </span>'+c.memo;
+  document.getElementById('ccatb').textContent=c.cat||c.category||'';document.getElementById('cpgb').textContent=c.pg||c.page||'';
+  isFlip=false;document.getElementById('cf').classList.remove('flipped');
+  document.getElementById('pb').disabled=cIdx===0;document.getElementById('nb').disabled=cIdx===cCards.length-1;
+  const pct=Math.round(((cIdx+1)/cCards.length)*100);
+  document.getElementById('pf').style.width=pct+'%';document.getElementById('plbl').textContent=(cIdx+1)+' / '+cCards.length;document.getElementById('ppct').textContent=pct+'%';
+}
+
+function flipCard(){isFlip=!isFlip;document.getElementById('cf').classList.toggle('flipped',isFlip);}
+function prevCard(){if(cIdx>0){cIdx--;renderCard();}}
+function nextCard(){if(cIdx<cCards.length-1){cIdx++;renderCard();}else showComp();}
+function markKnown(){const k=c=>c.q||c.q;status[cCards[cIdx].q]='kn';updSt();updateGS();nextCard();}
+function markRetry(){status[cCards[cIdx].q]='rt';updSt();updateGS();nextCard();}
+
+function showComp(){
+  const all=cCards.length,kn=cCards.filter(c=>status[c.q]==='kn').length,rt=cCards.filter(c=>status[c.q]==='rt').length;
+  document.getElementById('csk').textContent=kn;document.getElementById('csr').textContent=rt;document.getElementById('cst2').textContent=all;
+  document.getElementById('comp').classList.add('show');document.getElementById('cw').style.display='none';document.getElementById('ctrl').style.display='none';document.getElementById('pg').style.display='none';
+}
+
+function filterRetry(){
+  const sec=cCH.secs[cSEC];const r=sec.cards.filter(c=>status[c.q]==='rt'||!status[c.q]);
+  if(!r.length){alert('복습이 필요한 카드가 없습니다! 🎉');return;}
+  cCards=r;cIdx=0;document.getElementById('comp').classList.remove('show');
+  document.getElementById('cw').style.display='block';document.getElementById('ctrl').style.display='flex';document.getElementById('pg').style.display='block';setMode('card');renderCard();
+}
+
+function resetSec(){
+  cCards=[...cCH.secs[cSEC].cards];cIdx=0;document.getElementById('comp').classList.remove('show');
+  document.getElementById('cw').style.display='block';document.getElementById('ctrl').style.display='flex';document.getElementById('pg').style.display='block';renderCard();
+}
+
+function shuffleCards(){
+  for(let i=cCards.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cCards[i],cCards[j]]=[cCards[j],cCards[i]];}cIdx=0;renderCard();
+}
+
+function setMode(m){
+  cMode=m;document.querySelectorAll('.mbtn').forEach((b,i)=>b.classList.toggle('on',['card','list','table'][i]===m));
+  const card=m==='card',list=m==='list',tbl=m==='table';
+  document.getElementById('cw').style.display=card?'block':'none';document.getElementById('ctrl').style.display=card?'flex':'none';document.getElementById('pg').style.display=card?'block':'none';
+  document.getElementById('comp').classList.remove('show');
+  document.getElementById('lv').classList.toggle('show',list);document.getElementById('tv').classList.toggle('show',tbl);
+  if(list)buildList();if(tbl)buildTbl();
+}
+
+function buildList(){
+  const sec=cCH.secs[cSEC];const el=document.getElementById('li');el.innerHTML='';
+  sec.cards.forEach((c,i)=>{
+    const st=status[c.q];const d=document.createElement('div');d.className='li'+(st==='kn'?' kn':st==='rt'?' rt':'');
+    d.innerHTML='<div class="lnum">Q'+(i+1)+'</div><div class="lq">'+c.q.replace(/<[^>]*>/g,'')+'</div>'+(st==='kn'?'<span class="ls skn">✅</span>':st==='rt'?'<span class="ls srt">❌</span>':'')+'<div style="color:rgba(255,255,255,.2);font-size:9.5px;white-space:nowrap;margin-left:3px">'+(c.pg||c.page||'')+'</div>';
+    d.onclick=()=>{cCards=[...sec.cards];cIdx=i;setMode('card');renderCard();};el.appendChild(d);
+  });
+}
+
+function buildTbl(){
+  const el=document.getElementById('tc');
+  if(cCH.id===4){
+    const rows=[['질병(일반)','미산입','1년=1호봉','1+1=2년','70%→50%','가능(1년이상)'],['공무상질병','산입(10할)','전부인정','3+2=5년','전액','가능(1년이상)'],['병역','산입(10할)','전부인정','복무기간','없음','가능(1년이상)'],['행방불명','미산입','제외','3월이내','없음','불가(유일)'],['법정의무','산입(10할)','전부인정','복무기간','없음','가능(1년이상)'],['유학','5할','전부인정','학위3+3=6년','50%','가능(1년이상)'],['고용(상근)','10할','전부인정','고용기간','없음','가능(1년이상)'],['육아','전부산입','첫둘=1년/셋째=전부','자녀당3년','없음','가능(1년이상)'],['입양','산입','인정','6개월이내','없음','가능(1년이상)'],['불임·난임','미산입','제외','1+1=2년','70%→50%','가능(1년이상)'],['국내연수','5할','학위취득시재획정','3년이내','없음','가능(1년이상)'],['가족돌봄','미산입','미산입','총3년','없음','가능(1년이상)'],['동반','미산입','제외','3+3=6년','없음','가능(1년이상)'],['노조전임','10할','전부인정','전임기간','없음','서울=없음'],['자율연수','미산입','제외','1년(1회)','없음','가능(1년이상)']];
+    let h='<table><thead><tr><th>휴직종류</th><th>경력평정</th><th>호봉승급</th><th>기간</th><th>봉급</th><th>결원보충</th></tr></thead><tbody>';
+    rows.forEach(r=>{h+='<tr>';r.forEach((c,i)=>{let cl='';if(i===0)cl='trgd';else if(c.includes('미산입')||c.includes('제외')||c.includes('없음')||c.includes('불가'))cl='trd';else if(c.includes('산입')||c.includes('전액')||c.includes('인정')||c.includes('가능'))cl='trg';else if(c.includes('%'))cl='trbl';h+='<td class="'+cl+'">'+c+'</td>';});h+='</tr>';});
+    h+='</tbody></table>';el.innerHTML=h;
+  }else{
+    const sec=cCH.secs[cSEC];
+    let h='<table><thead><tr><th>#</th><th>질문 요약</th><th>핵심 암기</th><th>페이지</th></tr></thead><tbody>';
+    sec.cards.forEach((c,i)=>{h+='<tr><td class="trgd">Q'+(i+1)+'</td><td>'+c.q.replace(/<[^>]*>/g,'')+'</td><td class="trg">'+(c.memo||'')+'</td><td style="color:rgba(255,255,255,.3)">'+(c.pg||c.page||'')+'</td></tr>';});
+    h+='</tbody></table>';el.innerHTML=h;
+  }
+}
+
+function updSt(){
+  if(!cCH)return;
+  const sec=cCH.secs[cSEC].cards;
+  const kn=sec.filter(c=>status[c.q]==='kn').length,rt=sec.filter(c=>status[c.q]==='rt').length;
+  document.getElementById('stk').textContent=kn;document.getElementById('str').textContent=rt;document.getElementById('stu').textContent=sec.length-kn-rt;
+}
+
+function updateGS(){
+  let t=0,kn=0,rt=0,seen=0;
+  CHS.forEach(ch=>ch.secs.forEach(sec=>sec.cards.forEach(c=>{t++;if(status[c.q]==='kn'){kn++;seen++;}else if(status[c.q]==='rt'){rt++;seen++;}})));
+  const pct=t?Math.round(seen/t*100):0;
+  ['tbtl','sbt','hstl'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=t;});
+  ['tbkn','sbk','hskn'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=kn;});
+  ['tbrt','sbr','hsrt'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=rt;});
+  document.getElementById('sbpf').style.width=pct+'%';document.getElementById('sbpct').textContent=pct+'%';
+  document.getElementById('hpf').style.width=pct+'%';const hp=document.getElementById('hspct');if(hp)hp.textContent=pct+'%';
+  CHS.forEach(ch=>{
+    const seg=document.getElementById('hs'+ch.id);if(!seg)return;
+    let ct=0,ck=0;ch.secs.forEach(sec=>sec.cards.forEach(c=>{ct++;if(status[c.q]==='kn')ck++;}));
+    const cp=ct?ck/ct:0;seg.style.background=cp>0?'linear-gradient(90deg,#27ae60 '+Math.round(cp*100)+'%,rgba(255,255,255,.08) '+Math.round(cp*100)+'%)':'rgba(255,255,255,.08)';
+  });
+}
+
+function setTB(n,t){document.getElementById('tbc').textContent=n;document.getElementById('tbt').textContent=t;}
+function setSBOn(id){document.querySelectorAll('.sbi').forEach(e=>e.classList.remove('on'));const e=document.getElementById(id);if(e)e.classList.add('on');}
+function togSB(){document.getElementById('sb').classList.toggle('open');document.getElementById('ov').classList.toggle('show');}
+function closeSB(){document.getElementById('sb').classList.remove('open');document.getElementById('ov').classList.remove('show');}
+
+document.addEventListener('keydown',e=>{
+  if(!cCH||cMode!=='card')return;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')nextCard();
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')prevCard();
+  if(e.key===' '){e.preventDefault();flipCard();}
+  if(e.key==='k'||e.key==='K')markKnown();
+  if(e.key==='r'||e.key==='R')markRetry();
+});
+
+init();
+</script>
+</body>
+</html>
