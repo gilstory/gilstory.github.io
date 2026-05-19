@@ -1466,33 +1466,87 @@ function buildSB(){
     const cnt=ch.secs.reduce((s,sec)=>s+sec.cards.length,0);
     const grp=document.createElement('div');grp.className='sbch-group';
     const hdr=document.createElement('div');hdr.className='sbch-hdr';hdr.id='sb'+ch.id;
-    hdr.innerHTML='<div class="sbiico">'+ch.ico+'</div><div class="sbiinfo"><div class="sbinum">\uC81C'+ch.id+'\uC7A5</div><div class="sbinm">'+ch.ttl+'</div></div><span class="sb-cnt">'+cnt+'</span><span class="sb-arr">&#9660;</span>';
+
+    // 왼쪽 영역: 클릭 → 챕터 전체 카드 로드
+    const lft=document.createElement('div');
+    lft.style.cssText='display:flex;align-items:center;gap:9px;flex:1;min-width:0;cursor:pointer;padding:2px 0';
+    lft.innerHTML='<div class="sbiico">'+ch.ico+'</div>'
+      +'<div class="sbiinfo"><div class="sbinum">제'+ch.id+'장</div>'
+      +'<div class="sbinm">'+ch.ttl+'</div></div>'
+      +'<span class="sb-cnt">'+cnt+'</span>';
+    lft.onclick=(e)=>{e.stopPropagation();loadChAll(ch.id);};
+
+    // 오른쪽 화살표: 클릭 → 섹션 목록만 토글
+    const arr=document.createElement('span');arr.className='sb-arr';arr.innerHTML='&#9660;';
+    arr.title='섹션 목록 열기/닫기';
+    arr.onclick=(e)=>{
+      e.stopPropagation();
+      const secEl=document.getElementById('sbsec'+ch.id);
+      const isOpen=secEl.classList.contains('open');
+      if(isOpen){secEl.classList.remove('open');hdr.classList.remove('open');}
+      else{secEl.classList.add('open');hdr.classList.add('open');}
+    };
+
+    hdr.appendChild(lft);hdr.appendChild(arr);
+
+    // 섹션 목록
     const secs=document.createElement('div');secs.className='sbch-secs';secs.id='sbsec'+ch.id;
     ch.secs.forEach((sec,si)=>{
       const item=document.createElement('div');item.className='sbsec-item';item.id='sbseci'+ch.id+'-'+si;
-      item.innerHTML='<div class="sbsec-dot"></div><div class="sbsec-nm">'+(sec.lbl||sec.label||'\uC139\uC158'+(si+1))+'</div><span class="sbsec-cnt">'+sec.cards.length+'</span>';
+      item.innerHTML='<div class="sbsec-dot"></div>'
+        +'<div class="sbsec-nm">'+(sec.lbl||sec.label||'섹션'+(si+1))+'</div>'
+        +'<span class="sbsec-cnt">'+sec.cards.length+'</span>';
       item.onclick=(e)=>{e.stopPropagation();loadChSec(ch.id,si);};
       secs.appendChild(item);
     });
-    hdr.onclick=()=>{
-      const isOpen=secs.classList.contains('open');
-      if(isOpen){secs.classList.remove('open');hdr.classList.remove('open');}
-      else{secs.classList.add('open');hdr.classList.add('open');loadCh(ch.id);}
-    };
+
     grp.appendChild(hdr);grp.appendChild(secs);el.appendChild(grp);
   });
 }
 
+// 챕터 전체 카드 로드 (모든 섹션 합쳐서 무작위 섞기)
+function loadChAll(id){
+  cCH=CHS.find(c=>c.id===id);
+  const all=[];
+  cCH.secs.forEach(sec=>all.push(...sec.cards));
+  for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+  cCards=all;cIdx=0;cSEC=-1;
+  document.getElementById('home').classList.remove('show');
+  document.getElementById('ca').style.display='flex';
+  setMode('card');renderCard();updSt();
+  setTB('제'+cCH.id+'장',cCH.ttl+' 전체 ('+all.length+'문항)');
+  document.querySelectorAll('.sbch-hdr').forEach(e=>e.classList.remove('on'));
+  const hdr=document.getElementById('sb'+id);
+  if(hdr){hdr.classList.add('on');hdr.classList.add('open');}
+  const secEl=document.getElementById('sbsec'+id);
+  if(secEl)secEl.classList.add('open');
+  document.querySelectorAll('.sbsec-item').forEach(e=>e.classList.remove('on'));
+  closeSB();
+}
+
+// 특정 섹션만 로드
 function loadChSec(chId,secIdx){
-  loadCh(chId);
-  setTimeout(()=>loadSec(secIdx),60);
+  cCH=CHS.find(c=>c.id===chId);cSEC=secIdx;
+  cCards=[...cCH.secs[secIdx].cards];cIdx=0;
+  document.getElementById('home').classList.remove('show');
+  document.getElementById('ca').style.display='flex';
+  setMode('card');renderCard();updSt();
+  const secLbl=cCH.secs[secIdx].lbl||cCH.secs[secIdx].label||('섹션'+(secIdx+1));
+  setTB('제'+cCH.id+'장',secLbl+' ('+cCards.length+'문항)');
+  document.querySelectorAll('.sbch-hdr').forEach(e=>e.classList.remove('on'));
+  const hdr=document.getElementById('sb'+chId);
+  if(hdr){hdr.classList.add('on');hdr.classList.add('open');}
+  const secEl=document.getElementById('sbsec'+chId);
+  if(secEl)secEl.classList.add('open');
+  setSBSecOn(chId,secIdx);
+  closeSB();
 }
 
 function buildHGrid(){
   const g=document.getElementById('hgrid');
   CHS.forEach(ch=>{
     const cnt=ch.secs.reduce((s,sec)=>s+sec.cards.length,0);
-    const d=document.createElement('div');d.className='cc rdy';d.onclick=()=>loadCh(ch.id);
+    const d=document.createElement('div');d.className='cc rdy';d.onclick=()=>loadChAll(ch.id);
     d.innerHTML='<div class="cctop"><div><div class="ccnum">제'+ch.id+'장</div><div class="ccico" style="background:'+ch.clr+'22">'+ch.ico+'</div></div><span class="ccbdg">학습 가능</span></div>'
       +'<div class="ccnum" style="margin-top:7px">제'+ch.id+'장</div><div class="cctitl">'+ch.ttl+'</div><div class="ccdesc">'+ch.desc+'</div>'
       +'<div class="ccbot"><div class="cctags">'+ch.tags.map(t=>'<span class="cctag">'+t+'</span>').join('')+'</div><div class="ccpg">'+ch.pg+'</div></div><span class="ccarr">→</span>';
@@ -1576,14 +1630,20 @@ function showComp(){
 }
 
 function filterRetry(){
-  const sec=cCH.secs[cSEC];const r=sec.cards.filter(c=>status[c.q]==='rt'||!status[c.q]);
+  const baseCards=(cSEC===-1)?cCards:cCH.secs[cSEC].cards;
+  const r=baseCards.filter(c=>status[c.q]==='rt'||!status[c.q]);
   if(!r.length){alert('복습이 필요한 카드가 없습니다! 🎉');return;}
   cCards=r;cIdx=0;document.getElementById('comp').classList.remove('show');
   document.getElementById('cw').style.display='block';document.getElementById('ctrl').style.display='flex';document.getElementById('pg').style.display='block';setMode('card');renderCard();
 }
 
 function resetSec(){
-  cCards=[...cCH.secs[cSEC].cards];cIdx=0;document.getElementById('comp').classList.remove('show');
+  if(cSEC===-1){
+    const all=[];cCH.secs.forEach(sec=>all.push(...sec.cards));
+    for(let i=all.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[all[i],all[j]]=[all[j],all[i]];}
+    cCards=all;
+  }else{cCards=[...cCH.secs[cSEC].cards];}
+  cIdx=0;document.getElementById('comp').classList.remove('show');
   document.getElementById('cw').style.display='block';document.getElementById('ctrl').style.display='flex';document.getElementById('pg').style.display='block';renderCard();
 }
 
@@ -1601,11 +1661,12 @@ function setMode(m){
 }
 
 function buildList(){
-  const sec=cCH.secs[cSEC];const el=document.getElementById('li');el.innerHTML='';
-  sec.cards.forEach((c,i)=>{
+  const cards=(cSEC===-1)?cCards:cCH.secs[cSEC].cards;
+  const el=document.getElementById('li');el.innerHTML='';
+  cards.forEach((c,i)=>{
     const st=status[c.q];const d=document.createElement('div');d.className='li'+(st==='kn'?' kn':st==='rt'?' rt':'');
-    d.innerHTML='<div class="lnum">Q'+(i+1)+'</div><div class="lq">'+c.q.replace(/<[^>]*>/g,'')+'</div>'+(st==='kn'?'<span class="ls skn">✅</span>':st==='rt'?'<span class="ls srt">❌</span>':'')+'<div style="color:rgba(255,255,255,.2);font-size:9.5px;white-space:nowrap;margin-left:3px">'+(c.pg||c.page||'')+'</div>';
-    d.onclick=()=>{cCards=[...sec.cards];cIdx=i;setMode('card');renderCard();};el.appendChild(d);
+    d.innerHTML='<div class="lnum">Q'+(i+1)+'</div><div class="lq">'+c.q.replace(/<[^>]*>/g,'')+'</div>'+(st==='kn'?'<span class="ls skn">✅</span>':st==='rt'?'<span class="ls srt">❌</span>':'')+'<div style="color:rgba(255,255,255,.2);font-size:15px;white-space:nowrap;margin-left:3px">'+(c.pg||c.page||'')+'</div>';
+    d.onclick=()=>{cIdx=i;setMode('card');renderCard();};el.appendChild(d);
   });
 }
 
@@ -1617,16 +1678,17 @@ function buildTbl(){
     rows.forEach(r=>{h+='<tr>';r.forEach((c,i)=>{let cl='';if(i===0)cl='trgd';else if(c.includes('미산입')||c.includes('제외')||c.includes('없음')||c.includes('불가'))cl='trd';else if(c.includes('산입')||c.includes('전액')||c.includes('인정')||c.includes('가능'))cl='trg';else if(c.includes('%'))cl='trbl';h+='<td class="'+cl+'">'+c+'</td>';});h+='</tr>';});
     h+='</tbody></table>';el.innerHTML=h;
   }else{
-    const sec=cCH.secs[cSEC];
+    const cards=(cSEC===-1)?cCards:cCH.secs[cSEC].cards;
     let h='<table><thead><tr><th>#</th><th>질문 요약</th><th>핵심 암기</th><th>페이지</th></tr></thead><tbody>';
-    sec.cards.forEach((c,i)=>{h+='<tr><td class="trgd">Q'+(i+1)+'</td><td>'+c.q.replace(/<[^>]*>/g,'')+'</td><td class="trg">'+(c.memo||'')+'</td><td style="color:rgba(255,255,255,.3)">'+(c.pg||c.page||'')+'</td></tr>';});
+    cards.forEach((c,i)=>{h+='<tr><td class="trgd">Q'+(i+1)+'</td><td>'+c.q.replace(/<[^>]*>/g,'')+'</td><td class="trg">'+(c.memo||'')+'</td><td style="color:rgba(255,255,255,.3)">'+(c.pg||c.page||'')+'</td></tr>';});
     h+='</tbody></table>';el.innerHTML=h;
   }
 }
 
 function updSt(){
   if(!cCH)return;
-  const sec=cCH.secs[cSEC].cards;
+  // cSEC=-1이면 현재 cCards(전체 모드), 아니면 해당 섹션
+  const sec=(cSEC===-1)?cCards:cCH.secs[cSEC].cards;
   const kn=sec.filter(c=>status[c.q]==='kn').length,rt=sec.filter(c=>status[c.q]==='rt').length;
   document.getElementById('stk').textContent=kn;document.getElementById('str').textContent=rt;document.getElementById('stu').textContent=sec.length-kn-rt;
 }
