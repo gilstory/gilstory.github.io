@@ -33,7 +33,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .tbchip{font-size:14.2px;font-weight:700;color:var(--cy2);letter-spacing:.1em;background:rgba(41,180,216,.1);border:1px solid rgba(41,180,216,.2);padding:3px 9px;border-radius:4px}
 .tbtitle{font-family:'Nanum Myeongjo',serif;font-size:22.5px;font-weight:700;color:var(--wh)}.tbright{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .tbpill{font-size:15.8px;color:var(--g3);background:var(--g1);border:1px solid var(--g2);padding:3px 9px;border-radius:10px}.tbpill strong{color:var(--gd2)}
-#stabs{display:flex;gap:3px;padding:9px 26px 0;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(255,255,255,.06)}#stabs::-webkit-scrollbar{display:none}
+#stabs{display:none!important}
 .stab{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-bottom:none;color:rgba(255,255,255,.4);padding:6px 12px;border-radius:6px 6px 0 0;font-size:16.5px;font-weight:500;cursor:pointer;white-space:nowrap;transition:all .15s;font-family:'Pretendard',sans-serif}
 .stab:hover{background:rgba(255,255,255,.09)}.stab.on{background:var(--cr);border-color:var(--gd);color:var(--nv);font-weight:700}
 #ca{flex:1;padding:18px 26px 40px;display:flex;flex-direction:column;align-items:center;gap:14px;max-width:840px;width:100%;margin-left:max(0px,calc(50% - 560px));margin-right:auto;transition:margin-left .3s ease}
@@ -109,7 +109,7 @@ body.sb-hidden #home{margin-left:auto;margin-right:auto}
 #sb{transition:transform .3s ease}
 #main{transition:margin-left .3s ease}
 /* ── 모바일 기본 처리 ── */
-@media(max-width:700px){#sb{transform:translateX(-100%)}#sb.open{transform:translateX(0)}#ov.show{display:block}#main{margin-left:0}#ca{padding:14px 12px 30px}#topbar{padding:9px 14px}#home{padding:14px}#stabs{padding:7px 12px 0}.qt{font-size:20.2px}.at{font-size:18.8px}}
+@media(max-width:700px){#sb{transform:translateX(-100%)}#sb.open{transform:translateX(0)}#ov.show{display:block}#main{margin-left:0}#ca{padding:14px 12px 30px}#topbar{padding:9px 14px}#home{padding:14px}.qt{font-size:20.2px}.at{font-size:18.8px}}
 @media(max-width:700px){body.sb-hidden #sb{transform:translateX(-100%)}}
 
 /* ── 챕터 토글 스타일 ── */
@@ -193,7 +193,6 @@ body.sb-hidden #home{margin-left:auto;margin-right:auto}
     </div>
     <div class="cgrid" id="hgrid"></div>
   </div>
-  <div id="stabs" style="display:none"></div>
   <div id="ca" style="display:none">
     <div class="mrow">
       <div class="mbtns">
@@ -1510,7 +1509,7 @@ function buildHSegs(){
 
 function goHome(){
   cCH=null;document.getElementById('home').classList.add('show');
-  document.getElementById('stabs').style.display='none';document.getElementById('ca').style.display='none';
+  document.getElementById('ca').style.display='none';
   updateGS();setTB('HOME','인사실무 매뉴얼 학습앱 v2');
   // 모든 챕터 헤더 on 제거, sb-home 활성화
   document.querySelectorAll('.sbch-hdr').forEach(e=>e.classList.remove('on'));
@@ -1522,7 +1521,7 @@ function goHome(){
 function loadCh(id){
   cCH=CHS.find(c=>c.id===id);cSEC=0;
   document.getElementById('home').classList.remove('show');
-  document.getElementById('stabs').style.display='flex';document.getElementById('ca').style.display='flex';
+  document.getElementById('ca').style.display='flex';
   buildTabs();loadSec(0);setTB('제'+cCH.id+'장',cCH.ttl);
   // 사이드바: 해당 챕터 헤더 on 처리 + 섹션 열기
   document.querySelectorAll('.sbch-hdr').forEach(e=>e.classList.remove('on'));
