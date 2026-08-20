@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2026학년도 2학기 5학년 과학 수업 운영표</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --ink:#101A24;
+  --ink-2:#3D4C59;
+  --muted:#7A8794;
+  --line:#E4E9ED;
+  --line-strong:#8FA0AD;
+  --line-2:#F1F4F6;
+  --paper:#FFFFFF;
+  --wash:#F7F9FA;
+
+  --u-tam:#78909C;
+  --u-weather:#0E7C86;
+  --u-heat:#C2410C;
+  --u-energy:#2F7D32;
+  --u-mix:#4C3FBF;
+
+  --blk-thu:#0E7C86;
+  --blk-fri:#4C3FBF;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Pretendard Variable',Pretendard,-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','맑은 고딕',sans-serif;
+  color:var(--ink);
+  background:var(--wash);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+  -webkit-print-color-adjust:exact;
+  print-color-adjust:exact;
+}
+.sheet{max-width:1080px;margin:0 auto;background:var(--paper);padding:44px 40px 52px;}
+
+/* ── 머리말 ─────────────────────────── */
+.eyebrow{font-size:11.5px;letter-spacing:.18em;font-weight:700;color:var(--muted);}
+h1{font-size:31px;font-weight:800;letter-spacing:-.02em;margin:8px 0 0;}
+h1 .sub{font-weight:500;color:var(--ink-2);}
+.meta{margin-top:6px;font-size:13.5px;color:var(--muted);}
+.rule{height:2px;background:var(--ink);margin:20px 0 0;}
+
+h2.sec{
+  font-size:12px;letter-spacing:.14em;font-weight:800;color:var(--muted);
+  margin:34px 0 13px;padding-bottom:0;
+}
+h2.sec span{color:var(--ink);letter-spacing:-.01em;font-size:15px;margin-left:9px;}
+
+/* ── 시간표 ─────────────────────────── */
+table.tt{width:100%;border-collapse:collapse;table-layout:fixed;}
+table.tt th,table.tt td{
+  border:1px solid var(--line);
+  padding:9px 6px;text-align:center;font-size:13.5px;
+}
+table.tt thead th{
+  background:var(--wash);font-weight:700;font-size:12px;
+  letter-spacing:.06em;color:var(--ink-2);
+  border-bottom:2px solid var(--line-strong);
+}
+table.tt th.corner{width:62px;}
+table.tt td.per{width:62px;font-weight:800;font-variant-numeric:tabular-nums;background:var(--wash);}
+table.tt td.time{width:132px;font-variant-numeric:tabular-nums;color:var(--ink-2);letter-spacing:-.01em;}
+table.tt td.cls{font-weight:800;letter-spacing:-.01em;font-size:15px;}
+table.tt td.blk{vertical-align:middle;}
+table.tt td.thu{background:rgba(14,124,134,.08);color:var(--blk-thu);}
+table.tt td.fri{background:rgba(76,63,191,.08);color:var(--blk-fri);}
+table.tt td.single{background:#fff;}
+table.tt td.place{background:var(--wash);font-weight:700;color:var(--ink-2);font-size:12.5px;letter-spacing:.02em;}
+table.tt td.placeval{font-weight:700;color:var(--ink-2);}
+table.tt td.placeval.thu{background:rgba(14,124,134,.06);color:var(--blk-thu);}
+table.tt td.placeval.fri{background:rgba(76,63,191,.06);color:var(--blk-fri);}
+.blknote{display:block;font-size:10.5px;font-weight:700;letter-spacing:.02em;opacity:.72;margin-top:2px;}
+
+/* ── 반별 배치 카드 ─────────────────── */
+.ttnote{
+  margin-top:10px;padding:9px 13px;border-left:3px solid var(--line-strong);
+  background:var(--wash);font-size:12.5px;color:var(--ink-2);
+}
+.ttnote b{color:var(--ink);font-weight:700;}
+.classes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px;}
+.card{border:1px solid var(--line);border-left:6px solid var(--rail);padding:11px 13px;}
+.card .cn{font-size:16px;font-weight:800;letter-spacing:-.02em;}
+.card .cd{font-size:12.5px;color:var(--ink-2);margin-top:3px;font-variant-numeric:tabular-nums;}
+.card .cd b{font-weight:700;color:var(--ink);}
+
+/* ── 요약 스트립 ────────────────────── */
+.stats{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:24px;}
+.stat{padding:14px 26px 15px 0;margin-right:26px;border-right:1px solid var(--line);}
+.stat:last-child{border-right:0;}
+.stat .k{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--muted);}
+.stat .v{font-size:21px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:1px;}
+.stat .v small{font-size:12.5px;font-weight:600;color:var(--ink-2);margin-left:2px;}
+
+/* ── 단원 시수 막대 ─────────────────── */
+.units{margin-bottom:26px;}
+.units-bar{display:flex;height:9px;border-radius:5px;overflow:hidden;}
+.units-key{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:11px;font-size:12.5px;color:var(--ink-2);}
+.units-key i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;}
+.units-key b{font-weight:700;font-variant-numeric:tabular-nums;}
+
+/* ── 진도표 ─────────────────────────── */
+.tablewrap{overflow-x:auto;}
+table.prog{width:100%;border-collapse:collapse;min-width:720px;}
+table.prog thead th{
+  font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--muted);
+  text-align:left;padding:0 10px 9px;border-bottom:2px solid var(--ink);white-space:nowrap;
+}
+table.prog th.c,table.prog td.c{text-align:center;}
+table.prog tbody td{padding:11px 10px;border-bottom:1px solid var(--line-2);vertical-align:top;font-size:13.5px;}
+table.prog tbody tr.month-start:not(:first-child) td{border-top:2px solid var(--line-strong);}
+
+td.month{width:64px;text-align:center;vertical-align:top;padding-top:14px;background:var(--wash);border-bottom:2px solid var(--line-strong);}
+table.prog tbody tr:last-child td.month{border-bottom:0;}
+td.month .m{font-size:19px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;}
+td.month .d{font-size:11px;color:var(--muted);font-weight:600;margin-top:2px;font-variant-numeric:tabular-nums;}
+
+td.wk{width:44px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink-2);}
+td.span{width:96px;font-variant-numeric:tabular-nums;color:var(--ink-2);white-space:nowrap;}
+td.days{width:58px;font-variant-numeric:tabular-nums;color:var(--muted);}
+td.hours{width:54px;font-weight:800;font-variant-numeric:tabular-nums;}
+
+td.body{padding:0 10px 0 0;}
+td.body .seg{border-left:6px solid var(--rail,var(--line));padding:0 0 0 15px;}
+td.body .seg:first-child{padding-top:11px;}
+td.body .seg:last-child{padding-bottom:11px;}
+
+.unit-badge{display:inline-block;font-size:12px;font-weight:800;letter-spacing:-.01em;color:var(--rail);padding:0 0 5px;}
+.unit-badge::before{content:"▸ ";opacity:.55;}
+
+ul.lessons{list-style:none;margin:0;padding:0;}
+ul.lessons li{display:flex;gap:9px;align-items:flex-start;padding:2.5px 0;}
+.day{
+  flex:none;margin-top:1px;font-size:10.5px;font-weight:800;letter-spacing:.02em;
+  padding:2px 7px;border-radius:4px;white-space:nowrap;
+  background:#EDF1F4;color:var(--ink-2);
+}
+.day.blk{background:rgba(14,124,134,.10);color:#0B6A72;}
+.lesson{color:var(--ink);}
+.lesson em{font-style:normal;color:var(--muted);font-size:12.5px;}
+.note{display:block;font-size:11.5px;color:var(--muted);margin-top:3px;}
+
+table.prog tfoot td{padding:13px 10px;border-top:2px solid var(--ink);font-size:13.5px;font-weight:800;font-variant-numeric:tabular-nums;}
+
+/* ── 각주 ───────────────────────────── */
+.footnotes{margin-top:26px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-2);line-height:1.65;}
+.footnotes h3{font-size:11.5px;letter-spacing:.14em;color:var(--muted);font-weight:700;margin:0 0 8px;}
+.footnotes p{margin:0 0 6px;}
+.footnotes p b{color:var(--ink);}
+
+.print{
+  position:fixed;right:22px;bottom:22px;border:0;border-radius:999px;padding:12px 20px;
+  background:var(--ink);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;
+  box-shadow:0 6px 20px rgba(16,26,36,.28);
+}
+.print:hover{background:#22323F;}
+.print:focus-visible{outline:3px solid #0E7C86;outline-offset:2px;}
+
+/* ── 인쇄 ───────────────────────────── */
+@page{size:A4 portrait;margin:12mm 10mm;}
+@media print{
+  body{background:#fff;font-size:9.5pt;}
+  .sheet{max-width:none;padding:0;}
+  .print{display:none;}
+  table.prog thead{display:table-header-group;}
+  tr{break-inside:avoid;}
+  table.prog tbody td{padding:6px 7px;font-size:9.5pt;}
+  h1{font-size:20pt;}
+  .stat .v{font-size:13pt;}
+  .pagebreak{break-before:page;}
+}
+@media (max-width:700px){
+  .sheet{padding:26px 16px 40px;}
+  h1{font-size:23px;}
+  .classes{grid-template-columns:repeat(2,1fr);}
+  .stat{padding-right:16px;margin-right:16px;}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <p class="eyebrow">2026학년도 2학기</p>
+  <h1>5학년 과학 수업 운영표 <span class="sub">시간표 · 진도표</span></h1>
+  <p class="meta">담당 5-1 · 5-2 · 5-3 · 5-4 &nbsp;|&nbsp; 반별 주 3차시 &nbsp;|&nbsp; 2026. 8. 20. ~ 2027. 1. 8.</p>
+  <div class="rule"></div>
+
+  <!-- ─── 1. 주간 시간표 ─── -->
+  <h2 class="sec">1<span>주간 수업 시간표</span></h2>
+
+  <table class="tt">
+    <colgroup><col><col><col><col><col></colgroup>
+    <thead>
+      <tr>
+        <th class="corner">교시</th>
+        <th>시간</th>
+        <th>화</th>
+        <th>목</th>
+        <th>금</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="per">1</td><td class="time">09:00 ~ 09:40</td>
+        <td class="cls single">5-3</td>
+        <td class="cls blk thu" rowspan="2">5-1<span class="blknote">1~2교시 연속</span></td>
+        <td class="cls blk fri" rowspan="2">5-4<span class="blknote">1~2교시 연속</span></td>
+      </tr>
+      <tr>
+        <td class="per">2</td><td class="time">09:50 ~ 10:30</td>
+        <td class="cls single">5-4</td>
+      </tr>
+      <tr>
+        <td class="per">3</td><td class="time">10:40 ~ 11:20</td>
+        <td class="cls single">5-1</td>
+        <td class="cls blk thu" rowspan="2">5-3<span class="blknote">3~4교시 연속</span></td>
+        <td class="cls blk fri" rowspan="2">5-2<span class="blknote">3~4교시 연속</span></td>
+      </tr>
+      <tr>
+        <td class="per">4</td><td class="time">11:30 ~ 12:10</td>
+        <td class="cls single">5-2</td>
+      </tr>
+      <tr>
+        <td class="place">장소</td><td class="time"></td>
+        <td class="placeval">AI교실</td>
+        <td class="placeval thu">과학실</td>
+        <td class="placeval fri">과학실</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="ttnote"><b>19 · 20주 조정</b> — 12.21~25 · 12.28~1.1 주간은 금요일이 공휴일이라 연속 블록을 운영하지 않고, 목요일을 <b>1교시 5-1 · 2교시 5-4 · 3교시 5-3 · 4교시 5-2</b>로 조정해 네 반이 각 1차시씩 이수합니다.</p>
+
+  <div class="classes">
+    <div class="card" style="--rail:var(--blk-thu)">
+      <div class="cn">5-1</div>
+      <div class="cd"><b>화</b> 3교시 &nbsp;·&nbsp; <b>목</b> 1~2교시</div>
+    </div>
+    <div class="card" style="--rail:var(--blk-thu)">
+      <div class="cn">5-3</div>
+      <div class="cd"><b>화</b> 1교시 &nbsp;·&nbsp; <b>목</b> 3~4교시</div>
+    </div>
+    <div class="card" style="--rail:var(--blk-fri)">
+      <div class="cn">5-2</div>
+      <div class="cd"><b>화</b> 4교시 &nbsp;·&nbsp; <b>금</b> 3~4교시</div>
+    </div>
+    <div class="card" style="--rail:var(--blk-fri)">
+      <div class="cn">5-4</div>
+      <div class="cd"><b>화</b> 2교시 &nbsp;·&nbsp; <b>금</b> 1~2교시</div>
+    </div>
+  </div>
+
+  <!-- ─── 2. 진도표 ─── -->
+  <h2 class="sec pagebreak">2<span>주간 진도 계획</span></h2>
+
+  <div class="stats">
+    <div class="stat"><div class="k">반별 총 차시</div><div class="v">53<small>차시</small></div></div>
+    <div class="stat"><div class="k">총 수업일수</div><div class="v">95<small>일</small></div></div>
+    <div class="stat"><div class="k">운영 주차</div><div class="v">21<small>주</small></div></div>
+    <div class="stat"><div class="k">주당 담당 차시</div><div class="v">12<small>차시 (4개 반)</small></div></div>
+  </div>
+
+  <div class="units">
+    <div class="units-bar">
+      <span style="background:var(--u-tam);width:1.89%"></span>
+      <span style="background:var(--u-weather);width:22.64%"></span>
+      <span style="background:var(--u-heat);width:26.42%"></span>
+      <span style="background:var(--u-energy);width:20.75%"></span>
+      <span style="background:var(--u-mix);width:28.30%"></span>
+    </div>
+    <div class="units-key">
+      <span><i style="background:var(--u-tam)"></i>안전하게 탐구하기 <b>1차시</b></span>
+      <span><i style="background:var(--u-weather)"></i>2. 날씨와 우리 생활 <b>12차시</b></span>
+      <span><i style="background:var(--u-heat)"></i>3. 열과 우리 생활 <b>14차시</b></span>
+      <span><i style="background:var(--u-energy)"></i>4. 자원과 에너지 <b>11차시</b></span>
+      <span><i style="background:var(--u-mix)"></i>1. 혼합물의 분리 <b>15차시</b></span>
+    </div>
+  </div>
+
+  <div class="tablewrap">
+  <table class="prog">
+    <thead>
+      <tr>
+        <th class="c">월</th>
+        <th class="c">주</th>
+        <th>기간</th>
+        <th class="c">수업일</th>
+        <th>단원 및 학습 내용 &nbsp;<span style="font-weight:500;letter-spacing:0">(화 = 1차시 · 목/금 = 연속 2차시)</span></th>
+        <th class="c">시수</th>
+      </tr>
+    </thead>
+    <tbody>
+
+    <!-- 8월 -->
+    <tr class="month-start">
+      <td class="month" rowspan="2"><div class="m">8</div><div class="d">7일</div></td>
+      <td class="wk c">1</td><td class="span">8.20 – 8.21</td><td class="days c">2</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-tam)">
+        <ul class="lessons">
+          <li><span class="day blk">금</span><span class="lesson">안전하게 탐구하기
+            <span class="note">8.21(금) 1교시 5-4 · 2교시 5-1 · 3교시 5-2 · 4교시 5-3 — 네 반 각 1차시</span></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">1</td>
+    </tr>
+    <tr>
+      <td class="wk c">2</td><td class="span">8.24 – 8.28</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-weather)">
+        <span class="unit-badge">2. 날씨와 우리 생활</span>
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">열려라 과학</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">1. 날마다 다른 날씨를 표현하는 기상 요소</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">2. 우리 생활에 영향을 주는 날씨</span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+
+    <!-- 9월 -->
+    <tr class="month-start">
+      <td class="month" rowspan="4"><div class="m">9</div><div class="d">18일</div></td>
+      <td class="wk c">3</td><td class="span">8.31 – 9.4</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-weather)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">4. 고기압과 저기압에서의 날씨가 궁금해!</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">3. 이슬, 안개, 구름을 비교해 보자! <em>(2차시)</em></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">4</td><td class="span">9.7 – 9.11</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-weather)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">5. 바람은 어느 방향으로 불까?</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">과학이 톡톡 · 단원 마무리</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">체험 더하기 · 단원평가</span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">5</td><td class="span">9.14 – 9.18</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-weather)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">심화 보충 <em>(수행평가)</em></span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">창의가 팡팡 — 날씨 애플리케이션 디지털 화면 만들기 <em>(2차시)</em></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">6</td><td class="span">9.21 – 9.25</td><td class="days c">3</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-heat)">
+        <span class="unit-badge">3. 열과 우리 생활</span>
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">열려라 과학
+            <span class="note">추석 연휴(9.24 목 · 9.25 금) — 전 반 연속 블록 2차시 결손</span></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">1</td>
+    </tr>
+
+    <!-- 10월 -->
+    <tr class="month-start">
+      <td class="month" rowspan="5"><div class="m">10</div><div class="d">22일</div></td>
+      <td class="wk c">7</td><td class="span">9.28 – 10.2</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-heat)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">1. 온도계로 물체의 온도를 측정하라!</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">2. 온도가 다른 두 물체가 만나면?</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">3. 고체에서는 열이 어떻게 이동할까?</span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">8</td><td class="span">10.5 – 10.9</td><td class="days c">2</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-heat)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">5. 빛에 의해 열이 이동할 수 있을까?
+            <span class="note">10.5 대체공휴일 · 10.9 한글날 · 재량휴업일 1일 — 전 반 블록 2차시 결손</span></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">1</td>
+    </tr>
+    <tr>
+      <td class="wk c">9</td><td class="span">10.12 – 10.16</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-heat)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">6. 여러 방식으로 이동하는 열</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">4. 액체와 기체에서는 열이 어떻게 이동할까? <em>(2차시)</em></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">10</td><td class="span">10.19 – 10.23</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-heat)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">7. 열의 이동을 어떻게 막을까?</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">과학이 톡톡 · 단원 마무리</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">심화 보충 <em>(단원평가)</em></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">11</td><td class="span">10.26 – 10.30</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-heat)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">심화 보충 <em>(수행평가 · 관련 영상 시청)</em></span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">창의가 팡팡 — 온도를 오랫동안 일정하게 유지하는 장치 만들기 <em>(2차시)</em></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+
+    <!-- 11월 -->
+    <tr class="month-start">
+      <td class="month" rowspan="4"><div class="m">11</div><div class="d">20일</div></td>
+      <td class="wk c">12</td><td class="span">11.2 – 11.6</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-energy)">
+        <span class="unit-badge">4. 자원과 에너지</span>
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">열려라 과학</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">2. 재생 에너지가 궁금해! <em>(2차시)</em></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">13</td><td class="span">11.9 – 11.13</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-energy)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">1. 자원을 계속 이용할 수 있을까?</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">4. 자원과 에너지의 효율적인 이용 방법은? <em>(2차시)</em></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">14</td><td class="span">11.16 – 11.20</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-energy)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">3. 에너지를 지속가능하게 이용하려면?</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">창의가 팡팡 — 자원과 에너지를 효율적으로 이용하는 영상 만들기 <em>(2차시)</em></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">15</td><td class="span">11.23 – 11.27</td><td class="days c">5</td>
+      <td class="body">
+        <div class="seg" style="--rail:var(--u-energy)">
+          <ul class="lessons">
+            <li><span class="day">화</span><span class="lesson">과학이 톡톡 · 단원 마무리</span></li>
+            <li><span class="day blk">목·금</span><span class="lesson">심화 보충 <em>(수행평가 · 단원평가)</em></span></li>
+          </ul>
+        </div>
+        <div class="seg" style="--rail:var(--u-mix)">
+          <span class="unit-badge" style="padding-top:9px">1. 혼합물의 분리</span>
+          <ul class="lessons">
+            <li><span class="day blk">목·금</span><span class="lesson">열려라 과학</span></li>
+          </ul>
+        </div>
+      </td>
+      <td class="hours c">3</td>
+    </tr>
+
+    <!-- 12월 -->
+    <tr class="month-start">
+      <td class="month" rowspan="5"><div class="m">12</div><div class="d">23일</div></td>
+      <td class="wk c">16</td><td class="span">11.30 – 12.4</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-mix)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">1. 혼합물을 왜 분리할까?</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">2. 알갱이의 크기가 다른 고체 혼합물을 분리해 볼까?</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">3. 섞이지 않는 액체 혼합물을 분리해 볼까?</span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">17</td><td class="span">12.7 – 12.11</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-mix)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">5. 혼합물의 분리를 이용한 장치를 찾아라!</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">4. 섞여 있는 소금과 모래를 분리해 볼까? <em>(2차시)</em></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">18</td><td class="span">12.14 – 12.18</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-mix)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">과학이 톡톡 · 단원 마무리</span></li>
+          <li><span class="day blk">목·금</span><span class="lesson">창의가 팡팡 — 혼합물의 분리를 이용한 장치 소개하기 <em>(2차시)</em></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">3</td>
+    </tr>
+    <tr>
+      <td class="wk c">19</td><td class="span">12.21 – 12.25</td><td class="days c">4</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-mix)">
+        <ul class="lessons">
+          <li><span class="day">화·목</span><span class="lesson">심화 보충 <em>(단원평가)</em>
+            <span class="note">12.25 성탄절 — 연속 블록 대신 목요일 1교시 5-1 · 2교시 5-4 · 3교시 5-3 · 4교시 5-2로 조정</span></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">2</td>
+    </tr>
+    <tr>
+      <td class="wk c">20</td><td class="span">12.28 – 1.1</td><td class="days c">4</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-mix)">
+        <ul class="lessons">
+          <li><span class="day">화·목</span><span class="lesson">심화 보충
+            <span class="note">1.1 신정 — 연속 블록 대신 목요일 1교시 5-1 · 2교시 5-4 · 3교시 5-3 · 4교시 5-2로 조정</span></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">2</td>
+    </tr>
+
+    <!-- 1월 -->
+    <tr class="month-start">
+      <td class="month"><div class="m">1</div><div class="d">5일</div></td>
+      <td class="wk c">21</td><td class="span">1.4 – 1.8</td><td class="days c">5</td>
+      <td class="body"><div class="seg" style="--rail:var(--u-mix)">
+        <ul class="lessons">
+          <li><span class="day">화</span><span class="lesson">심화 보충
+            <span class="note">학년말 교육과정 운영 — 연속 블록 미운영</span></span></li>
+        </ul>
+      </div></td>
+      <td class="hours c">1</td>
+    </tr>
+
+    </tbody>
+    <tfoot>
+      <tr>
+        <td class="c" colspan="3">2학기 계</td>
+        <td class="c">95일</td>
+        <td>21주 · 4단원 + 탐구 1차시</td>
+        <td class="c">53</td>
+      </tr>
+    </tfoot>
+  </table>
+  </div>
+
+  <div class="footnotes">
+    <h3>운영 안내</h3>
+    <p><b>요일 배치 원리</b> — 모든 반이 <b>화요일 1차시 + 목요일 또는 금요일 연속 2차시</b>로 주 3차시를 이수합니다. 진도표의 첫 차시는 화요일, 나머지 두 차시는 각 반의 연속 블록에서 이어집니다. 요일만 다를 뿐 주간 진도는 네 반이 동일하므로 진도표 한 장으로 관리할 수 있습니다.</p>
+    <p><b>연속 블록의 이점</b> — ‘(2차시)’로 묶인 실험·제작 차시가 자연히 한 블록에 들어가, 준비와 정리를 한 번에 끝낼 수 있습니다.</p>
+    <p><b>19 · 20주 조정 운영</b> — 금요일이 공휴일(12.25 성탄절 · 1.1 신정)이라 이 두 주만 연속 블록을 운영하지 않습니다. 대신 목요일을 <b>1교시 5-1 · 2교시 5-4 · 3교시 5-3 · 4교시 5-2</b>로 배치해, 네 반 모두 화 1차시 + 목 1차시로 주 2차시를 동일하게 이수합니다. 반별 진도 격차가 생기지 않습니다.</p>
+    <p><b>그 밖의 감축 주차</b> — <b>6주(추석 9.24~25)</b>와 <b>8주(10.5 대체공휴일 · 10.9 한글날 · 재량휴업일)</b>는 목·금이 모두 빠져 네 반이 화요일 1차시만 이수합니다.</p>
+    <p><b>1주 차 운영</b> — 8.20(목)은 개학일로 교과를 편성하지 않고, <b>8.21(금) 하루에 1교시 5-4 · 2교시 5-1 · 3교시 5-2 · 4교시 5-3</b>으로 네 반이 각 1차시씩 ‘안전하게 탐구하기’를 이수합니다. 연속 블록이 아닌 교시별 단일 차시 운영입니다.</p>
+    <p><b>수업 장소</b> — 화요일 단일 차시는 <b>AI교실</b>, 목·금요일 연속 블록은 <b>과학실</b>입니다. 실험·제작 차시가 과학실 블록에 모여 있어 준비물 배치와 정리를 한 번에 끝낼 수 있고, 화요일에는 개념 도입·영상·평가 차시를 배치하면 이동과 준비 부담이 줄어듭니다. 19 · 20주 조정 목요일 수업도 과학실에서 이루어집니다.</p>
+    <p><b>차시 순서</b> — 3주 차(4번 → 3번), 17주 차(5번 → 4번)는 교과서 순서와 다르나 의도한 재구성입니다.</p>
+    <p><b>수학 진도</b> — 원본 진도표의 수학 단원·시수 칸이 비어 있어 제외했습니다.</p>
+  </div>
+
+</div>
+
+<button class="print" onclick="window.print()">인쇄 · PDF 저장</button>
+</body>
+</html>
