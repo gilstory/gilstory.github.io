@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<script>window.STATIC_SITE = true;</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>하이닉스 시가 확률</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>SK하이닉스 내일 아침 시가 확률</h1>
+    <p class="sub">오늘 15:00~19:50 지표 흐름 → NXT 매수 후 내일 08:00 시가 매도</p>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-tab="live" class="on">실시간</button>
+    <button data-tab="stats">과거 통계</button>
+  </nav>
+  <div class="top-actions">
+    <select id="daySel" title="지난 날짜를 고르면 그날 저녁을 다시 봅니다"></select>
+    <label class="chk small"><input type="checkbox" id="auto" checked> 자동 갱신</label>
+    <button id="btnRefresh" class="btn">지금 갱신</button>
+    <span id="status" class="muted small"></span>
+  </div>
+</header>
+
+<main id="tab-live">
+  <div id="banner" class="notice"></div>
+
+  <section class="hero2">
+    <div class="card prob main">
+      <h2>지금 NXT 매수 → 내일 08:00 시가가 매수가보다 높을 확률</h2>
+      <div class="muted small" id="tWhen"></div>
+      <div class="rec-main"><div class="hero-num" id="tPct">–</div><div class="chip" id="tLabel">–</div></div>
+      <div class="meter" aria-hidden="true"><div class="meter-fill" id="tFill"></div><div class="meter-base" id="tBase" title="과거 기본 확률"></div></div>
+      <div class="meter-scale muted small"><span>0%</span><span>50%</span><span>100%</span></div>
+      <dl class="rec-grid" id="tGrid"></dl>
+      <div class="rel" id="tRel"></div>
+      <p class="muted tiny" id="tNote"></p>
+    </div>
+    <div class="card prob">
+      <h2>내일 08:00 시가가 KRX 종가(15:30)보다 높게 시작할 확률</h2>
+      <div class="muted small" id="gWhen"></div>
+      <div class="rec-main"><div class="hero-num" id="gPct">–</div><div class="chip" id="gLabel">–</div></div>
+      <div class="meter" aria-hidden="true"><div class="meter-fill" id="gFill"></div><div class="meter-base" id="gBase" title="과거 기본 확률"></div></div>
+      <div class="meter-scale muted small"><span>0%</span><span>50%</span><span>100%</span></div>
+      <dl class="rec-grid" id="gGrid"></dl>
+      <div class="rel" id="gRel"></div>
+      <p class="muted tiny" id="gNote"></p>
+    </div>
+  </section>
+
+  <section class="card outcome-card" id="outcomeCard" hidden></section>
+
+  <section class="grid2">
+    <div class="card">
+      <h2>시간대별 확률 변화</h2>
+      <div class="chart-box"><canvas id="tlChart"></canvas></div>
+      <p class="muted tiny">10분마다 새 봉이 완성될 때 그 시각까지의 흐름으로 다시 계산한 값입니다. 19:50 값이 최종 판단용입니다.</p>
+    </div>
+    <div class="card">
+      <div class="flow-head">
+        <h2>오늘 10분 단위 흐름</h2>
+        <div class="seg" id="viewSeg">
+          <button data-v="ref" class="on">전일 종가 대비</button>
+          <button data-v="15">15:00 대비</button>
+        </div>
+      </div>
+      <div class="chart-box"><canvas id="flowChart"></canvas></div>
+      <div id="flowLegend" class="legend-table"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>지표별 현재 흐름과 과거 통계 <span id="indSub" class="muted small"></span></h2>
+    <div class="tbl-wrap"><table class="tbl" id="indTbl"></table></div>
+    <p class="muted tiny">오른쪽 두 칸은 “과거에 이 지표가 지금과 같은 5분위 구간에 있었던 날, 다음 날 결과가 오른 비율(일수)”입니다. 매수 기준 칸은 15:00 이후 상대강도(하이닉스는 전일 종가 대비)의 구간, 갭 기준 칸은 전일 종가 대비 등락률의 구간을 봅니다. 빨강 = 과거 평균보다 8%p 이상 높음, 파랑 = 8%p 이상 낮음.</p>
+  </section>
+
+  <section class="card">
+    <h2>과거에 오늘과 흐름이 비슷했던 날 <span id="nnSub" class="muted small"></span></h2>
+    <div class="tbl-wrap"><table class="tbl" id="nnTbl"></table></div>
+  </section>
+</main>
+
+<main id="tab-stats" hidden>
+  <section class="card filters">
+    <div class="f-item">
+      <label>결과 기준</label>
+      <select id="sTarget">
+        <option value="trade">그 시각 NXT 매수 → 익일 08:00 시가 (매수가 대비)</option>
+        <option value="gapk">익일 08:00 시가 갭 (KRX 종가 대비)</option>
+      </select>
+    </div>
+    <div class="f-item">
+      <label>판단 시각</label>
+      <select id="sMark"></select>
+    </div>
+    <div class="f-item grow muted small" id="sInfo"></div>
+    <div class="f-item">
+      <label>&nbsp;</label>
+      <div class="presets"><div>
+        <button class="btn ghost sm" id="btnRebuild">데이터 수집 + 통계 다시 계산</button>
+        <button class="btn ghost sm" id="btnPublish" title="https://gilstory.github.io/hynix/">웹에 게시</button>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <h2>시각별 예측력 (AUC)</h2>
+      <div class="chart-box"><canvas id="aucChart"></canvas></div>
+      <p class="muted tiny">AUC 0.5 = 동전 던지기, 0.6 이상이면 의미 있는 신호. 과거 매일, 그날 이전 데이터만으로 학습해 예측한 결과(워크포워드)입니다.</p>
+    </div>
+    <div class="card">
+      <h2 id="evalTitle">예측 신뢰도</h2>
+      <div class="tiles" id="evalTiles"></div>
+      <h3>추천 % 구간별 실제 결과</h3>
+      <div class="tbl-wrap"><table class="tbl" id="calibTbl"></table></div>
+    </div>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <h2>모델에 쓰는 지표와 영향 방향</h2>
+      <p class="muted small" id="coefNote"></p>
+      <div class="chart-box" id="coefBox"><canvas id="coefChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="flow-head">
+        <h2>지표 구간별 다음 날 결과</h2>
+        <div class="flow-ctl">
+          <select id="bSeries"></select>
+          <select id="bKind">
+            <option value="rel">하이닉스 대비 상대강도</option>
+            <option value="lvl">전일 종가 대비</option>
+            <option value="flow">15:00 이후 흐름</option>
+            <option value="aft">당일 KRX 종가 대비(하이닉스)</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart-box short"><canvas id="binChart"></canvas></div>
+      <div class="tbl-wrap"><table class="tbl" id="binTbl"></table></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>지표별 영향 한눈에 <span class="muted small" id="corrSub"></span></h2>
+    <div class="tbl-wrap"><table class="tbl" id="corrTbl"></table></div>
+  </section>
+
+  <section class="card">
+    <h2>데이터 범위와 한계</h2>
+    <div class="tbl-wrap"><table class="tbl" id="covTbl"></table></div>
+    <ul class="notes small">
+      <li><b>기간·시간</b>: 매일 15:00~20:00의 10분 단위 가격을 씁니다. 한국투자증권 API는 분봉을 최근 1년만 보관하고, NXT 08:00·20:00 거래는 2025년 3월부터라 통계는 최근 1년(약 220일)입니다. 미국 주식은 프리장(여름 17:00, 겨울 18:00) 전까지 직전 애프터마켓 가격, 코스피200 선물은 주간(~15:45) → 야간(18:00~)이며 그 사이엔 주간 종가를 유지합니다. 앱을 켤 때마다 새 날짜가 쌓이고 통계도 다시 계산됩니다(평일 08:12~08:30에 켜져 있으면 자동).</li>
+      <li><b>매수 기준 확률</b>은 그 시각 가격에 사서 다음 날 08:00 시가에 판 결과입니다. 7가지 지표 조합을 비교해 시각 전체에서 가장 고르게 나온 <b>15:00 이후 상대강도</b>(SOXX·코스피200 선물·QQQ가 하이닉스보다 더 오른 정도) + 나스닥 선물 흐름 + 하이닉스 전일 대비로 계산합니다. 예측력은 19:30 이후에만 조금 생기고(AUC 약 0.58~0.60) 그 전에는 거의 없습니다. 여러 조합 중 고른 것이라 실제 효과는 더 약할 수 있습니다.</li>
+      <li><b>갭 기준 확률</b>은 6개 지표(하이닉스·나스닥 선물·QQQ·SOXX·마이크론·코스피200 선물)의 흐름·전일 대비 + 하이닉스 NXT 가격의 당일 KRX 종가 대비(15:30 이후)로 계산하며 예측력이 더 높지만(19시 이후 AUC 약 0.67~0.68), 20시 전에 사면 그 사이 오른 만큼은 이미 매수가에 들어 있습니다.</li>
+      <li><b>SOX</b>는 프리장이 없어 SOXX ETF, <b>나스닥100 선물</b>은 CME 시세 미신청으로 Yahoo(NQ=F, 약 10분 지연)를 씁니다. <b>QQQ</b>는 나스닥100 ETF 프리장 가격으로, 나스닥 선물과 정보가 겹쳐 넣어도 정확도 변화는 거의 없었습니다(AUC ±0.003). <b>SKHY</b>는 2026-07 상장이라 표시·구간 통계만 하고 모델에는 넣지 않습니다.</li>
+      <li><b>08:00 시가</b> = 08:00~08:10 중 100주 이상 체결된 첫 분봉 시가(1~11주 하한가 오체결 제외). 2025-12-11~12-26은 NXT 체결 기록이 없어 빠집니다.</li>
+      <li>수수료·세금(왕복 약 0.2%)은 반영하지 않았습니다. 통계는 과거 확률일 뿐 투자 권유가 아니며, 매매 판단과 책임은 본인에게 있습니다.</li>
+    </ul>
+    <p class="muted tiny" id="statsGen"></p>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
