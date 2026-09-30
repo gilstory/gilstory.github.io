@@ -70,7 +70,7 @@ function probLabel(p, t) {
 }
 function renderProb(pre, t, L) {
   const cur = L.current && L.current.targets[t];
-  const when = L.current ? `${dlabel(L.date)} ${L.current.mark} 기준${L.current.minute ? ' (1분 실시간)' : ''}` : `${dlabel(L.date)} — 15:05 이후 계산`;
+  const when = L.current ? `${dlabel(L.date)} ${L.current.mark} 기준${L.current.minute ? (STATIC ? ' (게시 시점 스냅샷)' : ' (1분 실시간)') : ''}` : `${dlabel(L.date)} — 15:05 이후 계산`;
   $(pre + 'When').textContent = t === 'trade' && L.hynix.now ? `${when} · 매수가(NXT) ${won(L.hynix.now)}` : t === 'gapk' && L.hynix.close ? `${when} · KRX 종가 ${won(L.hynix.close)}${isNum(L.hynix.aft) ? ` · 지금 NXT ${fmtP(L.hynix.aft)}` : ''}` : when;
   if (!cur || !isNum(cur.p)) {
     $(pre + 'Pct').textContent = '–'; $(pre + 'Pct').style.color = css('--muted');
