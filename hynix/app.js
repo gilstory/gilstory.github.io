@@ -1,11 +1,12 @@
 'use strict';
 /* SK하이닉스 내일 아침 시가 확률 — 실시간 화면 + 과거 통계 화면 */
 
-const ORDER = ['HYNIX', 'NQ', 'QQQ', 'SOXX', 'MU', 'SKHY', 'KNF'];
-const SHORT = { HYNIX: '하이닉스', NQ: '나스닥 선물', QQQ: 'QQQ', SOXX: 'SOXX', MU: '마이크론', SKHY: 'SKHY', KNF: '코스피200 선물' };
-const KIND = { flow: '15:00 이후 흐름', lvl: '전일 종가 대비', rel: '하이닉스 대비 상대강도(15:00 이후)', aft: '당일 KRX 종가 대비' };
+const ORDER = ['HYNIX', 'NQ', 'QQQ', 'SOXX', 'MU', 'SKHY', 'KNF', 'SEC', 'NVDA', 'INTC', 'SNDK', 'ZN', 'CL'];
+const DEFAULT_HIDDEN = ['NVDA', 'INTC', 'SNDK', 'ZN', 'CL']; // 흐름 그래프에서 처음엔 꺼 둠(범례를 누르면 켜짐)
+const SHORT = { HYNIX: '하이닉스', NQ: '나스닥 선물', QQQ: 'QQQ', SOXX: 'SOXX', MU: '마이크론', SKHY: 'SKHY', KNF: '코스피200 선물', SEC: '삼성전자', NVDA: '엔비디아', INTC: '인텔', SNDK: '샌디스크', ZN: '국채10년 선물', CL: 'WTI 유가' };
+const KIND = { flow: '15:00 이후 흐름', lvl: '전일 종가 대비', rel: '하이닉스 대비 상대강도(15:00 이후)', aft: '당일 KRX 종가 대비', vwap: '애프터 VWAP 대비' };
 const TNAME = { trade: '매수→08시 시가', gapk: 'KRX 종가 대비 갭' };
-const S = { live: null, stats: null, view: 'ref', day: '', hidden: new Set(), tab: 'live', sTarget: 'trade', sMark: 29, bSeries: 'SOXX', bKind: 'rel', nextAt: 0 };
+const S = { live: null, stats: null, view: 'ref', day: '', hidden: new Set(['NVDA', 'INTC', 'SNDK', 'ZN', 'CL']), tab: 'live', sTarget: 'trade', sMark: null, bSeries: 'SOXX', bKind: 'rel', nextAt: 0 };
 const charts = {};
 const STATIC = window.STATIC_SITE === true; // GitHub Pages 공개 웹판: 서버 없이 data/*.json만 읽음
 const $ = (id) => document.getElementById(id);
@@ -69,7 +70,7 @@ function probLabel(p, t) {
 }
 function renderProb(pre, t, L) {
   const cur = L.current && L.current.targets[t];
-  const when = L.current ? `${dlabel(L.date)} ${L.current.mark} 기준` : `${dlabel(L.date)} — 15:10 이후 계산`;
+  const when = L.current ? `${dlabel(L.date)} ${L.current.mark} 기준${L.current.minute ? ' (1분 실시간)' : ''}` : `${dlabel(L.date)} — 15:05 이후 계산`;
   $(pre + 'When').textContent = t === 'trade' && L.hynix.now ? `${when} · 매수가(NXT) ${won(L.hynix.now)}` : t === 'gapk' && L.hynix.close ? `${when} · KRX 종가 ${won(L.hynix.close)}${isNum(L.hynix.aft) ? ` · 지금 NXT ${fmtP(L.hynix.aft)}` : ''}` : when;
   if (!cur || !isNum(cur.p)) {
     $(pre + 'Pct').textContent = '–'; $(pre + 'Pct').style.color = css('--muted');
@@ -97,14 +98,75 @@ function renderProb(pre, t, L) {
   $(pre + 'Rel').innerHTML = `<span class="tag ${good ? 'good' : 'weak'}">${good ? '예측력 있음' : '예측력 약함'}</span>
     이 시각 모델의 과거 검증: AUC <b>${isNum(ev.auc) ? ev.auc.toFixed(2) : '–'}</b> · 방향 적중 <b>${pct0(ev.hit)}</b> (늘 ‘오른다’고 찍으면 ${pct0(ev.hit_base)})
     ${top && top.n ? ` · 65% 이상이던 ${top.n}일 중 <b>${pct0(top.up)}</b> ${what}` : ''}`;
+  if (t === 'trade') {
+    const line = (key, name) => {
+      const it = (L.indicators || []).find((i) => i.key === key);
+      const b = it && it.bin_trade;
+      if (!b || !isNum(it.rel)) return '';
+      const d = b.up - (cur.base ?? 0.5);
+      return `${name} 상대강도 <b class="${cls(it.rel)}">${fmtP(it.rel)}</b> → 과거 같은 구간(${b.label}) 다음 날 시가가 매수가보다 높았던 비율 <b class="${d >= 0.08 ? 'up' : d <= -0.08 ? 'down' : ''}">${pct0(b.up)}</b> <span class="muted">(${b.n}일)</span>`;
+    };
+    const lines = [line('SOXX', 'SOXX'), line('SNDK', '샌디스크')].filter(Boolean);
+    $('tKey').innerHTML = lines.length
+      ? `<b>가장 꾸준한 신호</b><br>${lines.join('<br>')}<br><span class="muted tiny">6월 전·후 두 기간 모두 유의했던 지표입니다(SOXX r≈0.20·0.26, 샌디스크 r≈0.17·0.32).</span>`
+      : '';
+  }
   const miss = cur.missing && cur.missing.length ? `데이터 없는 지표(${[...new Set(cur.missing)].map((k) => SHORT[k] || k).join(', ')})는 빼고 다시 계산했습니다. ` : '';
   const replay = L.state === 'replay' ? '지난 날짜의 큰 숫자는 그날 이전 데이터로만 학습한 확률이고, 위 세부값은 전체 기간 모델 기준(참고용)입니다. ' : '';
   $(pre + 'Note').textContent = `${replay}${miss}최종 % = (로지스틱 회귀 + 비슷한 날 비율) ÷ 2.`;
 }
 
+function renderRemain(L) {
+  const R = L.remain, box = $('remainCard');
+  if (!R) { box.hidden = true; return; }
+  box.hidden = false;
+  const c = R.check || {};
+  const good = R.remain >= 0.3, bad = R.remain <= -0.3;
+  $('remainWhen').textContent = `${dlabel(L.date)} ${R.mark} 기준 · KRX 종가 ${won(R.close)}`;
+  const reflected = R.gap_e >= 0.5 ? Math.max(0, Math.min(999, (R.aft / R.gap_e) * 100)) : null; // 예상 갭이 작으면 비율이 무의미
+  $('remainSummary').innerHTML = `
+    <dt>예상 익일 08:00 시가 <span class="muted tiny">(KRX 종가 대비, 갭 모델)</span></dt><dd class="${cls(R.gap_e)}">${fmtP(R.gap_e)} <span class="muted tiny">≈ ${won(R.open_est)}</span></dd>
+    <dt>이미 반영 <span class="muted tiny">(지금 NXT 가격)</span></dt><dd class="${cls(R.aft)}">${fmtP(R.aft)} <span class="muted tiny">${won(R.now)}</span></dd>
+    <dt><b>남은 여력</b> <span class="muted tiny">(지금 가격 → 예상 시가)</span></dt><dd class="${cls(R.remain)}"><b>${fmtP(R.remain)}</b></dd>
+    ${isNum(reflected) ? `<dt>반영률</dt><dd>${Math.round(reflected)}%</dd>` : ''}`;
+  // 가로 눈금: 0(KRX 종가) · 지금 NXT · 예상 시가
+  const vals = [0, R.aft, R.gap_e], lo = Math.min(...vals) - 0.5, hi = Math.max(...vals) + 0.5;
+  const x = (v) => ((v - lo) / (hi - lo)) * 100;
+  const a = Math.min(R.aft, R.gap_e), b = Math.max(R.aft, R.gap_e);
+  $('remainBar').innerHTML = `
+    <div class="rb-track"></div>
+    <div class="rb-seg ${R.gap_e >= R.aft ? 'up' : 'down'}" style="left:${x(a)}%;width:${x(b) - x(a)}%"></div>
+    <div class="rb-mk zero" style="left:${x(0)}%"><span>${Math.abs(x(0) - x(R.gap_e)) < 18 ? '' : 'KRX 종가 0%'}</span></div>
+    <div class="rb-mk now" style="left:${x(R.aft)}%"><span>지금 NXT ${fmtP(R.aft)}</span></div>
+    <div class="rb-mk exp" style="left:${x(R.gap_e)}%"><span>예상 시가 ${fmtP(R.gap_e)}</span></div>`;
+  const tip = good ? `아직 덜 반영됨 — 예상 시가가 지금 가격보다 ${fmtP(R.remain)} 높음` : bad ? `이미 넘어섬 — 지금 가격이 예상 시가보다 ${fmtP(-R.remain)} 높음` : '남은 여력 작음 — 지금 가격과 예상 시가 차이가 ±0.3%p 이내';
+  $('remainTip').innerHTML = `<b class="${good ? 'up' : bad ? 'down' : ''}">${tip}</b>` + (R.bin ? ` · 과거 남은 여력이 이 구간(${R.bin.label})이던 ${R.bin.n}일: 실제 다음 날 시가가 매수가보다 평균 <b class="${cls(R.bin.mean)}">${fmtP(R.bin.mean)}</b>, 상승 ${pct0(R.bin.up)}` : '');
+  // 시간대별 선 그래프
+  const pts = L.timeline.filter((t) => isNum(t.gap_e));
+  const o = baseOpts();
+  o.interaction = { mode: 'index', intersect: false };
+  o.scales.y.ticks.callback = (v) => v + '%';
+  o.plugins.legend = { display: true, position: 'top', align: 'end', labels: { color: css('--ink-2'), boxWidth: 14, boxHeight: 3, font: { size: 12 } } };
+  o.plugins.tooltip.callbacks = { label: (cx) => ` ${cx.dataset.label}: ${fmtP(cx.parsed.y)}`, afterBody: (items) => { const i = items[0].dataIndex; return `남은 여력: ${fmtP(pts[i].remain)}`; } };
+  o.plugins.hline = { lines: [{ y: 0, label: 'KRX 종가' }] };
+  const upFill = css('--up') + '26', downFill = css('--down') + '26';
+  mkChart('remainChart', { type: 'line', data: { labels: pts.map((t) => t.mark), datasets: [
+    { label: '지금 NXT 가격', data: pts.map((t) => +t.aft.toFixed(3)), borderColor: css('--s-HYNIX'), backgroundColor: css('--s-HYNIX'), borderWidth: 2.5, pointRadius: 0, pointHoverRadius: 4, tension: 0.15 },
+    { label: '예상 익일 시가', data: pts.map((t) => +t.gap_e.toFixed(3)), borderColor: css('--ink'), backgroundColor: css('--ink'), borderWidth: 2, pointRadius: 0, pointHoverRadius: 4, tension: 0.15,
+      fill: { target: 0, above: upFill, below: downFill } },
+  ] }, options: o, plugins: [hline] });
+  // 과거 검증
+  const labels = ['하위 20%', '20~40%', '중간', '60~80%', '상위 20%'];
+  $('remainCheck').innerHTML = c.bins ? `<tr><th>남은 여력 구간</th><th class="num">범위</th><th class="num">일수</th><th class="num">실제 평균(매수가 대비)</th><th class="num">상승 비율</th></tr>` +
+    c.bins.map((b, i) => `<tr${R.bin && R.bin.q === i ? ' class="on"' : ''}><td>${labels[i]}</td><td class="num">${fmtP(b.lo)} ~ ${fmtP(b.hi)}</td><td class="num">${b.n}</td><td class="num ${cls(b.mean)}">${fmtP(b.mean)}</td><td class="num">${pct0(b.up)}</td></tr>`).join('') : '';
+  $('remainNote').textContent = c.n ? `${L.state === 'replay' ? '지난 날짜의 예상 시가는 전체 기간 모델 기준(참고용)입니다. ' : ''}과거 ${c.n}일, 매일 그날 이전 데이터로만 계산해 검증: 예상 갭과 실제 갭의 상관 ${c.r_gap.toFixed(2)}, 남은 여력과 실제 수익의 상관 ${c.r_remain.toFixed(2)}(약함). 하루하루의 오차는 평균 ±${c.err_sd.toFixed(1)}%p로 커서, 남은 여력은 “방향 참고”로만 보세요.` : '';
+}
+
 function renderTimeline(L) {
-  const labels = L.model_marks;
-  const byMark = Object.fromEntries(L.timeline.map((t) => [t.mark, t]));
+  const labels = L.model_marks.slice();
+  const byIdx = Object.fromEntries(L.timeline.map((t) => [t.m, t]));
+  for (const t of L.timeline) if (t.now) labels[t.m - 1] = t.mark + ' 현재';
+  const byMark = Object.fromEntries(labels.map((lb, i) => [lb, byIdx[i + 1]]).filter(([, v]) => v));
   const ds = [
     { label: '매수→08시 시가', data: labels.map((m) => (byMark[m] && isNum(byMark[m].trade) ? +(byMark[m].trade * 100).toFixed(1) : null)), borderColor: css('--s-trade'), backgroundColor: css('--s-trade'), borderWidth: 2.5, pointRadius: 3.5, pointBorderColor: css('--surface'), pointBorderWidth: 1.5 },
     { label: 'KRX 종가 대비 갭', data: labels.map((m) => (byMark[m] && isNum(byMark[m].gapk) ? +(byMark[m].gapk * 100).toFixed(1) : null)), borderColor: css('--s-gap'), backgroundColor: css('--s-gap'), borderWidth: 2, pointRadius: 3, pointBorderColor: css('--surface'), pointBorderWidth: 1.5 },
@@ -201,6 +263,7 @@ function renderLive() {
   renderProb('t', 'trade', L);
   renderProb('g', 'gapk', L);
   renderOutcome(L);
+  renderRemain(L);
   renderTimeline(L);
   renderFlow(L);
   renderIndicators(L);
@@ -216,9 +279,10 @@ function renderLive() {
 function renderStats() {
   const st = S.stats;
   if (!st || st.empty) return;
+  if (S.sMark == null) S.sMark = st.decide;
   const t = S.sTarget, m = String(S.sMark);
   if (!$('sMark').options.length) {
-    $('sMark').innerHTML = st.marks.slice(1, 30).map((mk, i) => `<option value="${i + 1}">${mk}</option>`).join('');
+    $('sMark').innerHTML = st.marks.slice(1, st.decide + 1).map((mk, i) => `<option value="${i + 1}">${mk}</option>`).join('');
     $('bSeries').innerHTML = ORDER.map((k) => `<option value="${k}">${SHORT[k]}</option>`).join('');
   }
   $('sMark').value = m; $('sTarget').value = t; $('bSeries').value = S.bSeries; $('bKind').value = S.bKind;
@@ -227,7 +291,7 @@ function renderStats() {
   $('statsGen').textContent = `통계 계산 시각 ${st.generated.replace('T', ' ')} · 데이터 ${st.data_update ? st.data_update.replace('T', ' ').slice(0, 16) : '–'} · 가장 최근 결과 ${st.last_outcome || '–'} 아침`;
 
   // AUC 추이
-  const labels = st.marks.slice(1, 30);
+  const labels = st.marks.slice(1, st.decide + 1);
   const o = baseOpts();
   o.scales.y.min = 0.3; o.scales.y.max = 0.8;
   o.interaction = { mode: 'index', intersect: false };
@@ -267,6 +331,7 @@ function renderStats() {
   mkChart('coefChart', { type: 'bar', data: { labels: feats.map(featLabel), datasets: [{ data: w, backgroundColor: w.map((v) => css(v >= 0 ? '--up' : '--down')), borderRadius: 4, barPercentage: 0.6 }] }, options: oc });
 
   renderBins();
+  renderResearch();
 
   // 상관 표
   const cr = st.corr[t][m], cd = st.cond[t][m];
@@ -346,6 +411,42 @@ async function loadLive(refresh) {
     scheduleNext();
   }
 }
+async function loadResearch() {
+  try {
+    const r = await (await fetch(STATIC ? 'data/research.json' : '/api/research')).json();
+    if (!r.empty) S.research = r;
+  } catch { /* 연구 결과 없음 */ }
+}
+function renderResearch() {
+  const R = S.research, box = $('researchBody');
+  if (!R) { box.innerHTML = '<p class="muted">연구 결과 파일이 없습니다(python research.py).</p>'; return; }
+  const t = S.sTarget, r = R[t];
+  const tn = t === 'trade' ? '19:50 매수 → 익일 08:00 시가' : '익일 08:00 시가의 KRX 종가 대비 갭';
+  const f2 = (x) => (isNum(x) ? x.toFixed(3) : '–');
+  const verdict = (u) => {
+    const a = isNum(u.p) && u.p < 0.05, b = isNum(u.p_hold) && u.p_hold < 0.05, same = Math.sign(u.r || 0) === Math.sign(u.r_hold || 0);
+    if (a && b && same) return '<span class="tag good">두 기간 모두 유의</span>';
+    if ((a || b) && !same) return '<span class="tag weak">방향 뒤집힘</span>';
+    if (a || b) return '<span class="tag weak">한 기간만</span>';
+    return '<span class="muted">없음</span>';
+  };
+  const uni = r.univariate.slice().sort((x, y) => Math.abs(y.r) - Math.abs(x.r));
+  const h = r.holdout, dc = r.dev_compare;
+  let html = `<p class="small">대상: <b>${tn}</b> · 6월 전 ${r.n_dev}일로 고르고, 6월 후 ${r.n_hold}일로 한 번만 시험(${R.generated ? R.generated.slice(0, 10) : ''}).</p>`;
+  html += `<h3>최종 시험 결과(6월 이후, 학습·선택에 쓰지 않은 기간)</h3><div class="tbl-wrap"><table class="tbl"><tr><th>방식</th><th class="num">AUC (90% 범위)</th><th class="num">방향 적중</th><th class="num">추천 60%↑ 날</th><th class="num">매일</th></tr>` +
+    Object.entries(h).map(([k, v]) => `<tr><td>${esc(k)}${k === r.chosen ? ' <span class="tag weak">개발 구간 1위</span>' : ''}</td><td class="num">${f2(v.auc)} (${v.auc_90ci ? v.auc_90ci.map((x) => x.toFixed(2)).join('~') : '–'})</td><td class="num">${pct0(v.hit)} <span class="muted tiny">기본 ${pct0(v.base_up)}</span></td><td class="num">${v.sig60.n}회 · ${pct0(v.sig60.win)} ${isNum(v.sig60.mean) ? fmtP(v.sig60.mean) : ''}</td><td class="num">${pct0(v.base_up)} ${fmtP(v.mean_all)}</td></tr>`).join('') + '</table></div>';
+  html += `<h3>모델 비교(6월 전 개발 구간 워크포워드)</h3><div class="tbl-wrap"><table class="tbl"><tr><th>방식</th><th class="num">지표 수</th><th class="num">AUC</th><th class="num">방향 적중</th><th class="num">추천 60%↑ 날</th></tr>` +
+    Object.entries(dc).map(([k, v]) => `<tr><td>${esc(k)}</td><td class="num">${v.features.length}</td><td class="num">${f2(v.auc)}</td><td class="num">${pct0(v.hit)}</td><td class="num">${v.sig60.n}회 · ${pct0(v.sig60.win)}</td></tr>`).join('') + '</table></div>';
+  html += `<h3>지표 ${uni.length}개 하나씩 — 6월 전과 6월 후에 같은 방향으로 유의했는가</h3><div class="tbl-wrap"><table class="tbl"><tr><th>지표</th><th>묶음</th><th class="num">6월 전 r (p)</th><th class="num">6월 후 r (p)</th><th>판정</th></tr>` +
+    uni.map((u) => `<tr><td>${esc(u.label)}</td><td class="muted">${esc(u.group)}</td><td class="num ${cls(u.r)}">${f2(u.r)} <span class="muted tiny">(${isNum(u.p) ? u.p.toFixed(2) : '–'})</span></td><td class="num ${cls(u.r_hold)}">${f2(u.r_hold)} <span class="muted tiny">(${isNum(u.p_hold) ? u.p_hold.toFixed(2) : '–'})</span></td><td>${verdict(u)}</td></tr>`).join('') + '</table></div>';
+  if (R.trade.timing) {
+    const tt = (rows) => rows.map((x) => `<tr><td>${esc(x.label)}</td>` + ['all', 'dev', 'hold'].map((k) => `<td class="num ${cls(x[k].mean)}">${fmtP(x[k].mean)} <span class="muted tiny">· ${pct0(x[k].win)}</span></td>`).join('') + '</tr>').join('');
+    const head = '<tr><th></th><th class="num">전체 (평균 · 상승 비율)</th><th class="num">6월 전</th><th class="num">6월 후</th></tr>';
+    html += `<h3>매수 시각별 → 익일 08:00 시가 매도</h3><div class="tbl-wrap"><table class="tbl">${head}${tt(R.trade.timing.buy)}</table></div>`;
+    html += `<h3>19:50 매수 → 매도 시각별</h3><div class="tbl-wrap"><table class="tbl">${head}${tt(R.trade.timing.sell)}</table></div>`;
+  }
+  box.innerHTML = html;
+}
 async function loadStats() {
   try {
     S.stats = await (await fetch(STATIC ? 'data/stats.json' : '/api/stats')).json();
@@ -359,7 +460,14 @@ async function pollJob() {
   try {
     const s = await (await fetch('/api/status')).json();
     if (s.running) {
-      $('status').textContent = '수집·통계 계산 중… ' + (s.log[s.log.length - 1] || '').replace(/^\[.*?\]\s*/, '');
+      const last = (s.log[s.log.length - 1] || '').replace(/^\[.*?\]\s*/, '');
+      $('status').textContent = '수집·통계 계산 중… ' + last;
+      if (!STATIC) {
+        const prev = S.live && S.live.data_update ? S.live.data_update.replace('T', ' ').slice(0, 16) : '–';
+        $('banner').dataset.state = 'live';
+        $('banner').textContent = `밀린 데이터를 받아 통계를 갱신하는 중입니다(마지막 수집 ${prev}). 끝나면 자동으로 새 통계로 바뀝니다.
+진행: ${last}`;
+      }
       jobTimer = setTimeout(pollJob, 3000);
     } else {
       if (s.error) $('banner').textContent = '수집 오류: ' + s.error;
@@ -431,10 +539,12 @@ function wire() {
     for (const id of ['btnRefresh', 'btnRebuild', 'btnPublish']) { const el = $(id); if (el) el.hidden = true; }
     $('auto').closest('label').hidden = true;
     S.index = await (await fetch('data/index.json')).json();
+    await loadResearch();
     await loadStats();
     await loadLive();
     return;
   }
+  await loadResearch();
   await loadStats();
   await loadLive();
   try {

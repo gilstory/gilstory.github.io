@@ -20,6 +20,12 @@
   --s-SKHY: #e87ba4;
   --s-KNF: #008300;
   --s-QQQ: #4a3aa7;
+  --s-SEC: #898781;
+  --s-NVDA: #e34948;
+  --s-INTC: #5598e7;
+  --s-SNDK: #1c5cab;
+  --s-ZN: #52514e;
+  --s-CL: #c98500;
   --s-trade: #0b0b0b;
   --s-gap: #898781;
 }
@@ -45,6 +51,12 @@
     --s-SKHY: #d55181;
     --s-KNF: #008300;
     --s-QQQ: #9085e9;
+    --s-SEC: #898781;
+    --s-NVDA: #e66767;
+    --s-INTC: #6da7ec;
+    --s-SNDK: #86b6ef;
+    --s-ZN: #c3c2b7;
+    --s-CL: #eda100;
     --s-trade: #ffffff;
     --s-gap: #898781;
   }
@@ -55,7 +67,7 @@
   --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10); --wash: rgba(255,255,255,0.05);
   --accent: #3987e5; --up: #e66767; --down: #3987e5;
   --s-HYNIX: #3987e5; --s-NQ: #d95926; --s-SOXX: #199e70; --s-MU: #c98500; --s-SKHY: #d55181; --s-KNF: #008300;
-  --s-QQQ: #9085e9; --s-trade: #ffffff; --s-gap: #898781;
+  --s-QQQ: #9085e9; --s-SEC: #898781; --s-NVDA: #e66767; --s-INTC: #6da7ec; --s-SNDK: #86b6ef; --s-ZN: #c3c2b7; --s-CL: #eda100; --s-trade: #ffffff; --s-gap: #898781;
 }
 
 * { box-sizing: border-box; }
@@ -199,3 +211,19 @@ input[type=number] { width: 80px; }
 #banner[data-state="live"], #banner[data-state="decide"] { border-left-color: var(--up); }
 #banner[data-state="replay"] { border-left-color: var(--ink-2); }
 #banner:empty { display: none; }
+.key-sig { margin-top: 12px; padding: 8px 10px; border-radius: 8px; background: var(--wash); font-size: 12.5px; line-height: 1.6; }
+.key-sig:empty { display: none; }
+
+/* 애프터장 반영도 눈금 */
+.rb { position: relative; height: 64px; margin: 18px 6px 4px; }
+.rb-track { position: absolute; left: 0; right: 0; top: 28px; height: 6px; border-radius: 3px; background: var(--grid); }
+.rb-seg { position: absolute; top: 28px; height: 6px; border-radius: 3px; }
+.rb-seg.up { background: var(--up); }
+.rb-seg.down { background: var(--down); }
+.rb-mk { position: absolute; top: 20px; width: 2px; height: 22px; background: var(--ink-2); transform: translateX(-1px); }
+.rb-mk span { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 11px; color: var(--ink-2); }
+.rb-mk.zero span { top: 26px; color: var(--muted); }
+.rb-mk.now { background: var(--s-HYNIX); height: 22px; }
+.rb-mk.now span { top: -18px; color: var(--s-HYNIX); font-weight: 600; }
+.rb-mk.exp { background: var(--ink); }
+.rb-mk.exp span { top: 26px; color: var(--ink); font-weight: 600; }

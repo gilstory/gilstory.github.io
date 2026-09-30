@@ -37,6 +37,7 @@
       <div class="meter" aria-hidden="true"><div class="meter-fill" id="tFill"></div><div class="meter-base" id="tBase" title="과거 기본 확률"></div></div>
       <div class="meter-scale muted small"><span>0%</span><span>50%</span><span>100%</span></div>
       <dl class="rec-grid" id="tGrid"></dl>
+      <div class="key-sig" id="tKey"></div>
       <div class="rel" id="tRel"></div>
       <p class="muted tiny" id="tNote"></p>
     </div>
@@ -53,6 +54,27 @@
   </section>
 
   <section class="card outcome-card" id="outcomeCard" hidden></section>
+
+  <section class="card" id="remainCard" hidden>
+    <div class="flow-head">
+      <h2>애프터장 반영도 — 내일 예상 시가 중 얼마나 이미 올랐나</h2>
+      <span class="muted small" id="remainWhen"></span>
+    </div>
+    <div class="grid2 inner">
+      <div>
+        <dl class="rec-grid" id="remainSummary"></dl>
+        <div class="rb" id="remainBar"></div>
+        <p class="small" id="remainTip"></p>
+      </div>
+      <div>
+        <div class="chart-box"><canvas id="remainChart"></canvas></div>
+        <p class="muted tiny">두 선 사이 색칠 = 남은 여력(빨강: 예상 시가가 더 높음, 파랑: 이미 넘어섬). 예상 시가는 “KRX 종가 대비 갭” 모델(과거 검증 AUC 약 0.68)의 예상값입니다.</p>
+      </div>
+    </div>
+    <h3>과거 검증 — 남은 여력 구간별 실제 결과(그 시각 매수 → 다음 날 08:00 시가)</h3>
+    <div class="tbl-wrap"><table class="tbl alt" id="remainCheck"></table></div>
+    <p class="muted tiny" id="remainNote"></p>
+  </section>
 
   <section class="grid2">
     <div class="card">
@@ -137,13 +159,19 @@
             <option value="rel">하이닉스 대비 상대강도</option>
             <option value="lvl">전일 종가 대비</option>
             <option value="flow">15:00 이후 흐름</option>
-            <option value="aft">당일 KRX 종가 대비(하이닉스)</option>
+            <option value="aft">당일 KRX 종가 대비(하이닉스·삼성전자)</option>
+            <option value="vwap">애프터 VWAP 대비(하이닉스)</option>
           </select>
         </div>
       </div>
       <div class="chart-box short"><canvas id="binChart"></canvas></div>
       <div class="tbl-wrap"><table class="tbl" id="binTbl"></table></div>
     </div>
+  </section>
+
+  <section class="card">
+    <h2>추가 지표 검증 결과(후보 33개) <span class="muted small">— 수급·정규장 모양·추세·애프터마켓 내부·삼성전자·환율·엔비디아·TSMC·VIX·달력</span></h2>
+    <div id="researchBody"></div>
   </section>
 
   <section class="card">
@@ -156,7 +184,7 @@
     <div class="tbl-wrap"><table class="tbl" id="covTbl"></table></div>
     <ul class="notes small">
       <li><b>기간·시간</b>: 매일 15:00~20:00의 10분 단위 가격을 씁니다. 한국투자증권 API는 분봉을 최근 1년만 보관하고, NXT 08:00·20:00 거래는 2025년 3월부터라 통계는 최근 1년(약 220일)입니다. 미국 주식은 프리장(여름 17:00, 겨울 18:00) 전까지 직전 애프터마켓 가격, 코스피200 선물은 주간(~15:45) → 야간(18:00~)이며 그 사이엔 주간 종가를 유지합니다. 앱을 켤 때마다 새 날짜가 쌓이고 통계도 다시 계산됩니다(평일 08:12~08:30에 켜져 있으면 자동).</li>
-      <li><b>매수 기준 확률</b>은 그 시각 가격에 사서 다음 날 08:00 시가에 판 결과입니다. 7가지 지표 조합을 비교해 시각 전체에서 가장 고르게 나온 <b>15:00 이후 상대강도</b>(SOXX·코스피200 선물·QQQ가 하이닉스보다 더 오른 정도) + 나스닥 선물 흐름 + 하이닉스 전일 대비로 계산합니다. 예측력은 19:30 이후에만 조금 생기고(AUC 약 0.58~0.60) 그 전에는 거의 없습니다. 여러 조합 중 고른 것이라 실제 효과는 더 약할 수 있습니다.</li>
+      <li><b>매수 기준 확률</b>은 그 시각 가격에 사서 다음 날 08:00 시가에 판 결과입니다. 7가지 지표 조합을 비교해 시각 전체에서 가장 고르게 나온 <b>15:00 이후 상대강도</b>(SOXX·코스피200 선물·QQQ가 하이닉스보다 더 오른 정도) + QQQ 15:00 이후 흐름(실시간) + 하이닉스 전일 대비로 계산합니다. 예측력은 19:30 이후에만 조금 생기고(AUC 약 0.58~0.60) 그 전에는 거의 없습니다. 여러 조합 중 고른 것이라 실제 효과는 더 약할 수 있습니다.</li>
       <li><b>갭 기준 확률</b>은 6개 지표(하이닉스·나스닥 선물·QQQ·SOXX·마이크론·코스피200 선물)의 흐름·전일 대비 + 하이닉스 NXT 가격의 당일 KRX 종가 대비(15:30 이후)로 계산하며 예측력이 더 높지만(19시 이후 AUC 약 0.67~0.68), 20시 전에 사면 그 사이 오른 만큼은 이미 매수가에 들어 있습니다.</li>
       <li><b>SOX</b>는 프리장이 없어 SOXX ETF, <b>나스닥100 선물</b>은 CME 시세 미신청으로 Yahoo(NQ=F, 약 10분 지연)를 씁니다. <b>QQQ</b>는 나스닥100 ETF 프리장 가격으로, 나스닥 선물과 정보가 겹쳐 넣어도 정확도 변화는 거의 없었습니다(AUC ±0.003). <b>SKHY</b>는 2026-07 상장이라 표시·구간 통계만 하고 모델에는 넣지 않습니다.</li>
       <li><b>08:00 시가</b> = 08:00~08:10 중 100주 이상 체결된 첫 분봉 시가(1~11주 하한가 오체결 제외). 2025-12-11~12-26은 NXT 체결 기록이 없어 빠집니다.</li>
