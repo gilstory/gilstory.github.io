@@ -227,3 +227,11 @@ input[type=number] { width: 80px; }
 .rb-mk.now span { top: -18px; color: var(--s-HYNIX); font-weight: 600; }
 .rb-mk.exp { background: var(--ink); }
 .rb-mk.exp span { top: 26px; color: var(--ink); font-weight: 600; }
+
+/* 과거 최고·최저 확률 */
+.ext-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 6px; }
+.ext-box { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+.ext-box .k { font-size: 12px; color: var(--ink-2); }
+.ext-box .v { font-size: 30px; font-weight: 700; margin: 2px 0; }
+.ext-box .v.small-v { font-size: 14px; font-weight: 600; padding: 8px 0; }
+.ext-box .d { font-size: 12px; color: var(--ink-2); }

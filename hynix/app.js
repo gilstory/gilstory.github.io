@@ -276,6 +276,27 @@ function renderLive() {
 }
 
 /* ───────── 과거 통계 ───────── */
+function renderExtremes() {
+  const st = S.stats, t = S.sTarget, m = String(S.sMark);
+  const ex = st.extremes && st.extremes[t] && st.extremes[t][m];
+  if (!ex || !ex.top.length) { $('extHero').innerHTML = '<p class="muted">통계를 다시 계산하면 표시됩니다.</p>'; $('extTop').innerHTML = ''; $('extBottom').innerHTML = ''; return; }
+  const what = t === 'trade' ? `${st.marks[+m]} 매수 → 다음 날 08:00 시가` : '다음 날 08:00 시가의 KRX 종가 대비 갭';
+  const res = (y) => `<b class="${cls(y)}">${fmtP(y)}</b> ${y > 0 ? '<span class="up">상승</span>' : y < 0 ? '<span class="down">하락</span>' : '<span class="muted">보합</span>'}`;
+  $('extTitle').textContent = `과거 최고·최저 확률 — ${TNAME[t]}, ${st.marks[+m]} 모델 (${ex.n}일 중)`;
+  const hi = ex.top[0], lo = ex.bottom[0];
+  $('extHero').innerHTML = `
+    <div class="ext-box"><div class="k">가장 높았던 확률</div><div class="v up">${pct0(hi.p)}</div><div class="d">${hi.d} (${WD[new Date(hi.d + 'T00:00:00').getDay()]}) · 실제 결과 ${res(hi.y)}</div></div>
+    <div class="ext-box"><div class="k">가장 낮았던 확률</div><div class="v down">${pct0(lo.p)}</div><div class="d">${lo.d} (${WD[new Date(lo.d + 'T00:00:00').getDay()]}) · 실제 결과 ${res(lo.y)}</div></div>
+    <div class="ext-box"><div class="k">결과 기준</div><div class="v small-v">${esc(what)}</div><div class="d">상위 5일 ${ex.top.filter((o) => o.y > 0).length}일 상승 · 하위 5일 ${ex.bottom.filter((o) => o.y > 0).length}일 상승</div></div>`;
+  const rows = (list) => `<tr><th>날짜</th><th class="num">확률</th><th class="num">실제 결과</th></tr>` +
+    list.map((o) => `<tr class="click" data-d="${o.d}"><td>${o.d} (${WD[new Date(o.d + 'T00:00:00').getDay()]})</td><td class="num"><b>${pct0(o.p)}</b></td><td class="num">${res(o.y)}</td></tr>`).join('');
+  $('extTop').innerHTML = rows(ex.top);
+  $('extBottom').innerHTML = rows(ex.bottom);
+  document.querySelectorAll('#extTop tr.click, #extBottom tr.click').forEach((tr) => tr.addEventListener('click', () => {
+    S.day = tr.dataset.d; $('daySel').value = S.day;
+    document.querySelector('[data-tab="live"]').click(); loadLive(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  }));
+}
 function renderStats() {
   const st = S.stats;
   if (!st || st.empty) return;
@@ -332,6 +353,7 @@ function renderStats() {
 
   renderBins();
   renderResearch();
+  renderExtremes();
 
   // 상관 표
   const cr = st.corr[t][m], cd = st.cond[t][m];
