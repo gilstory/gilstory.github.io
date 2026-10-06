@@ -157,8 +157,8 @@ footer{color:var(--muted);font-size:12px;margin:24px 0 8px}
 <section class="tab" id="t-trades">
   <div class="kpis" id="tradeKpis"></div>
   <div class="card">
-    <h2>실제 체결 내역 (HTS)</h2>
-    <p class="desc">평균가는 HTS가 원 단위로 반올림한 값. 손익은 HTS 계산값(수수료·세금 차감, 증권사 평균단가 기준).</p>
+    <h2>실제 체결 내역 (키움 5531 계좌)</h2>
+    <p class="desc">9/8 이후 매수는 주문 단위 체결가, 손익·수수료는 키움 실현손익 API(매수·매도 수수료 차감, 이동평균 단가). 2026-10-06 계좌 조회로 확인.</p>
     <div class="tscroll"><table id="tradeTbl"></table></div>
   </div>
   <div class="card">
@@ -170,7 +170,7 @@ footer{color:var(--muted);font-size:12px;margin:24px 0 8px}
       <label>매도평균가<input type="number" id="tSp"></label>
       <label>매도수량<input type="number" id="tSq"></label>
       <label>수수료+세금<input type="number" id="tFee"></label>
-      <label>HTS 손익<input type="number" id="tPl"></label>
+      <label>실현손익<input type="number" id="tPl"></label>
       <label>비고<input type="text" id="tMemo" class="wide"></label>
       <button class="btn primary" id="tAdd">추가</button>
     </div>
@@ -182,7 +182,7 @@ footer{color:var(--muted);font-size:12px;margin:24px 0 8px}
   <div class="kpis" id="pnlKpis"></div>
   <div class="card">
     <h2>9/14 이후 매도 손익 — 매직스플릿 표시 vs 실제</h2>
-    <p class="desc">그리드 기준 실제손익 = (매도가 − 실제 매입단가) × 수량 − 수수료. HTS 손익은 증권사 평균단가 기준이라 차수별로는 다르지만 합계는 같아집니다.</p>
+    <p class="desc">그리드 기준 실제손익 = (매도가 − 실제 매입단가) × 수량 − 수수료. 키움 실현손익은 이동평균 단가 기준이라 10/1 매도처럼 차수별로는 다를 수 있지만 총손익은 같습니다.</p>
     <div class="tscroll"><table id="pnlTbl"></table></div>
   </div>
 </section>
@@ -205,15 +205,15 @@ footer{color:var(--muted);font-size:12px;margin:24px 0 8px}
   </div>
 </section>
 
-<footer>백테스트·투자 자문이 아닌 개인 기록용 계산표입니다. 기준 데이터: 2026-10-06 HTS 체결내역·매직스플릿 화면.</footer>
+<footer>백테스트·투자 자문이 아닌 개인 기록용 계산표입니다. 기준 데이터: 2026-10-06 키움 5531 계좌 조회(잔고·체결·실현손익)와 매직스플릿 화면.</footer>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
 'use strict';
-const KEY='grid-0193T0-v1';
+const KEY='grid-0193T0-v2';
 const DEFAULTS={
-  version:1,
+  version:2,
   asOf:'2026-10-06',
   price:10700,
   cfg:{anchorTier:15,anchorPrice:9406,step:0.05,margin:0.10,tiers:32,amount:3200000,unit:1,
@@ -228,40 +228,46 @@ const DEFAULTS={
     11:{qty:279,ms:11430,real:11430,date:'2026-09-28'},12:{qty:294,ms:10880,real:10880,date:'2026-09-28'}
   },
   trades:[
-    ['2026-08-25',8916,5630,9834,5630,15820,5152590,'그리드 이전 당일 단타 (매직스플릿 기록 없음)'],
-    ['2026-08-26',10314,3215,null,null,4970,null,'1~13차 일괄 매수'],
-    ['2026-08-28',9820,325,null,null,470,null,'14차 매수'],
-    ['2026-08-31',8905,359,null,null,470,null,'15차 매수'],
-    ['2026-09-01',null,null,9835,359,520,-111092,'15차 매도 (8/31분)'],
-    ['2026-09-02',9325,342,null,null,470,null,'15차 매수'],
-    ['2026-09-03',8875,360,null,null,470,null,'16차 매수'],
-    ['2026-09-04',null,null,9785,360,520,-67120,'16차 매도 (9/3분)'],
-    ['2026-09-07',null,null,10679,667,1060,471670,'15차 342주(10,535) + 14차 325주(10,830) 매도'],
-    ['2026-09-08',11160,271,11391,3215,5940,4239670,'1~13차 3,215주 일괄 매도 / 271주 재매수'],
-    ['2026-09-11',10890,293,null,null,470,null,'재매수'],
-    ['2026-09-14',10216,2379,null,null,3630,null,'상위 차수 일괄 매수 → 9/15 매직스플릿에 1~15차를 가상가로 수동 등록'],
-    ['2026-09-16',null,null,10370,332,510,-510,'15차 매도 (MS 가상가 9,406)'],
-    ['2026-09-17',null,null,10890,315,510,163290,'14차 매도 (MS 9,876)'],
-    ['2026-09-18',null,null,11435,300,510,318990,'13차 매도 (MS 10,370)'],
-    ['2026-09-21',null,null,12017,556,1000,914905,'12차 285주(12,010) + 11차 271주(12,025) 매도'],
-    ['2026-09-28',11148,573,null,null,950,null,'11차 279주(11,430) + 12차 294주(10,880) 실제 매수'],
-    ['2026-09-29',10360,308,null,null,470,null,'13차 308주 실제 매수'],
-    ['2026-10-01',null,null,11425,308,520,265592,'13차 매도']
+    ['2026-08-25',8916,5630,9834,5630,15800,5152610,'그리드 이전 당일 매매 (매직스플릿 기록 없음)'],
+    ['2026-08-26',10314,3215,null,null,null,null,'1~13차 일괄 매수 (HTS 평균가)'],
+    ['2026-08-28',9820,325,null,null,null,null,'14차 매수'],
+    ['2026-08-31',8905,359,null,null,null,null,'15차 매수'],
+    ['2026-09-01',null,null,9835,359,1060,-111693.97,'15차 매도'],
+    ['2026-09-02',9325,342,null,null,null,null,'15차 매수'],
+    ['2026-09-03',8875,360,null,null,null,null,'16차 매수'],
+    ['2026-09-04',null,null,9785,360,1050,-67500.72,'16차 매도'],
+    ['2026-09-07',null,null,10679,667,2050,470956.57,'15차 342주(10,535) + 14차 325주(10,830) 매도'],
+    ['2026-09-08',null,null,11391,3215,10140,4559293.10,'1~13차 3,215주 일괄 매도'],
+    ['2026-09-08',11160,271,null,null,null,null,'수동 · 16:20 시간외단일가 재매수'],
+    ['2026-09-11',10890,293,null,null,null,null,'봇 · 09:00 재매수'],
+    ['2026-09-14',10190,314,null,null,null,null,'봇 · 09:00 지정가'],
+    ['2026-09-14',10400,1369,null,null,null,null,'수동 · 11:05 상위 차수 일괄 매수'],
+    ['2026-09-14',9865,324,null,null,null,null,'봇 · 15:02 지정가'],
+    ['2026-09-14',9865,372,null,null,null,null,'수동 · 15:15 → 9/15 매직스플릿에 1~15차를 가상가로 등록'],
+    ['2026-09-16',null,null,10370,332,1020,-965.85,'15차 매도 (MS 가상가 9,406)'],
+    ['2026-09-17',null,null,10890,315,990,162861.38,'14차 매도 (MS 9,876)'],
+    ['2026-09-18',null,null,11435,300,970,318578.93,'13차 매도 (MS 10,370)'],
+    ['2026-09-21',null,null,12010,285,950,466496.48,'12차 매도 (MS 10,889)'],
+    ['2026-09-21',null,null,12025,271,900,447649.20,'11차 매도 (MS 10,370)'],
+    ['2026-09-28',11430,279,null,null,null,null,'봇 · 11차 실제 매수'],
+    ['2026-09-28',10880,294,null,null,null,null,'봇 · 12차 실제 매수'],
+    ['2026-09-29',10360,308,null,null,null,null,'봇 · 13차 실제 매수'],
+    ['2026-10-01',null,null,11425,308,980,265257.52,'13차 매도 (키움은 평균단가 10,560.59로 계산)']
   ],
   cycleStart:'2026-09-14',
   // 9/14 이후 매도: [date, tier, qty, sell, msBuy, msPL, realCost('pool'|num), fee, htsPL]
   sells:[
-    ['2026-09-16',15,332,10370,9406,312193,'pool',510,-510],
-    ['2026-09-17',14,315,10890,9876,311580,'pool',510,163290],
-    ['2026-09-18',13,300,11435,10370,311669,'pool',510,318990],
-    ['2026-09-21',12,285,12010,10889,311670,'pool',null,null],
-    ['2026-09-21',11,271,12025,10370,441088,'pool',1000,914905],
-    ['2026-10-01',13,308,11425,10360,319993,10360,520,265592]
+    ['2026-09-16',15,332,10370,9406,312193,'pool',1020,-965.85],
+    ['2026-09-17',14,315,10890,9876,311580,'pool',990,162861.38],
+    ['2026-09-18',13,300,11435,10370,311669,'pool',970,318578.93],
+    ['2026-09-21',12,285,12010,10889,311670,'pool',950,466496.48],
+    ['2026-09-21',11,271,12025,10370,441088,'pool',900,447649.20],
+    ['2026-10-01',13,308,11425,10360,319993,10360,980,265257.52]
   ]
 };
 const clone=o=>JSON.parse(JSON.stringify(o));
 let S;
-function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(o&&o.version===1)return o;}}catch(e){}return clone(DEFAULTS);}
+function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(o&&o.version===2)return o;}}catch(e){}return clone(DEFAULTS);}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
 S=load();
 
@@ -388,17 +394,17 @@ function renderGrid(){
 function renderTrades(){
   const T=[...S.trades].sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:0);
   let run=0,sum=0,sumC=0,fees=0;
-  let t=`<thead><tr><th class="c">거래일</th><th>매수평균가</th><th>매수수량</th><th>매수금액</th><th>매도평균가</th><th>매도수량</th><th>매도금액</th><th>수수료+세금</th><th>HTS 손익</th><th>보유수량</th><th class="l">매직스플릿 대응·비고</th><th></th></tr></thead><tbody>`;
+  let t=`<thead><tr><th class="c">거래일</th><th>매수평균가</th><th>매수수량</th><th>매수금액</th><th>매도평균가</th><th>매도수량</th><th>매도금액</th><th>수수료+세금</th><th>실현손익(키움)</th><th>보유수량</th><th class="l">매직스플릿 대응·비고</th><th></th></tr></thead><tbody>`;
   T.forEach((r)=>{const [d,bp,bq,sp,sq,fee,pl,memo]=r;run+=(bq||0)-(sq||0);sum+=pl||0;fees+=fee||0;if(d>=S.cycleStart)sumC+=pl||0;
     const idx=S.trades.indexOf(r);
     t+=`<tr><td class="c">${d}</td><td>${f0(bp)}</td><td>${f0(bq)}</td><td>${bq?f0(bp*bq):''}</td><td>${f0(sp)}</td><td>${f0(sq)}</td><td>${sq?f0(sp*sq):''}</td><td>${f0(fee)}</td><td class="${sgn(pl)}">${pl!==null&&pl!==undefined?f0(pl):''}</td><td>${f0(run)}</td><td class="l">${memo||''}</td><td><button class="btn sm" data-del="${idx}" title="삭제">×</button></td></tr>`;});
   t+=`<tr class="tot"><td class="c">합계</td><td></td><td></td><td></td><td></td><td></td><td></td><td>${f0(fees)}</td><td class="${sgn(sum)}">${f0(sum)}</td><td>${f0(run)}</td><td class="l">${run===S.cfg.acctQty?'최종 보유수량 = 계좌와 일치':'계좌 수량과 다름 — 확인 필요'}</td><td></td></tr></tbody>`;
   $('tradeTbl').innerHTML=t;
   $('tradeTbl').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(confirm('이 체결을 지울까요?')){S.trades.splice(+b.dataset.del,1);save();renderAll();}});
-  $('tradeKpis').innerHTML=kpi('실현손익 합계 (HTS)',sf0(sum)+'원','전체 기간',sgn(sum))+kpi(`${md(S.cycleStart)} 이전 사이클`,sf0(sum-sumC)+'원','',sgn(sum-sumC))+kpi(`${md(S.cycleStart)} 이후 사이클`,sf0(sumC)+'원','',sgn(sumC))+kpi('수수료+세금 합계',f0(fees)+'원');
+  $('tradeKpis').innerHTML=kpi('실현손익 합계 (키움)',sf0(sum)+'원','전체 기간',sgn(sum))+kpi(`${md(S.cycleStart)} 이전 사이클`,sf0(sum-sumC)+'원','',sgn(sum-sumC))+kpi(`${md(S.cycleStart)} 이후 사이클`,sf0(sumC)+'원','',sgn(sumC))+kpi('수수료+세금 합계',f0(fees)+'원');
 }
 function renderPnl(){
-  let t=`<thead><tr><th class="c">매도일</th><th class="c">차수</th><th>수량</th><th>매도가</th><th>MS 매수가</th><th>MS 표시 손익</th><th>실제 매입단가</th><th>실제손익(세전)</th><th>수수료</th><th>실제손익(순)</th><th>HTS 손익</th><th>MS − 실제</th></tr></thead><tbody>`;
+  let t=`<thead><tr><th class="c">매도일</th><th class="c">차수</th><th>수량</th><th>매도가</th><th>MS 매수가</th><th>MS 표시 손익</th><th>실제 매입단가</th><th>실제손익(세전)</th><th>수수료</th><th>실제손익(순)</th><th>키움 실현손익</th><th>MS − 실제</th></tr></thead><tbody>`;
   let a={q:0,ms:0,g:0,fee:0,net:0,hts:0};
   S.sells.forEach((r,i)=>{const [d,n,q,sp,mb,mpl0,rc,fee,hts]=r;const mpl=(mpl0===null||mpl0===undefined)?(sp-mb)*q:mpl0;
     const nx=S.sells[i+1];const htsTxt=hts===null||hts===undefined?((nx&&nx[0]===d)?'(합산↓)':'입력 대기'):f0(hts);const real=rc==='pool'?poolPrice():Number(rc);const g=(sp-real)*q,net=g-(fee||0);
@@ -408,7 +414,7 @@ function renderPnl(){
   $('pnlTbl').innerHTML=t;
   const s=summary(),c=S.cfg;const unreal=s.qty===c.acctQty?s.mkt-c.acctCost:s.evReal;
   const tot=a.hts+unreal;
-  $('pnlKpis').innerHTML=kpi('실현손익 (HTS)',sf0(a.hts)+'원','증권사 평균단가 기준',sgn(a.hts))+
+  $('pnlKpis').innerHTML=kpi('실현손익 (키움)',sf0(a.hts)+'원','키움 실현손익 API',sgn(a.hts))+
     kpi('평가손익 (계좌 기준)',sf0(unreal)+'원','현재가 '+f0(S.price)+'원',sgn(unreal))+
     kpi('이번 사이클 실제 총손익',sf0(tot)+'원','검증(그리드 기준): '+sf0(a.net+s.evReal)+'원',sgn(tot))+
     kpi('매직스플릿 표시 실현손익',sf0(a.ms)+'원','실제보다 '+f0(a.ms-a.hts)+'원 많게 표시');
@@ -423,7 +429,7 @@ const SET_ROWS=[
   ['unit','매매수량단위(좌)',1,'11월부터 20좌로 바뀌면 20 입력'],
   ['poolCost','9/14 기준 실제 총매입금액',1,'9/8·9/11·9/14 매수분 합계 (증권사 정밀값)'],
   ['poolQty','9/14 기준 실제 보유수량',1,'→ 가상가 차수의 실제 매입단가 = 위 금액 ÷ 이 수량'],
-  ['acctCost','계좌 현재 매입금액',1,'HTS 잔고·매직스플릿 상단 (증권사 이동평균)'],
+  ['acctCost','계좌 현재 매입금액',1,'키움 5531 계좌 잔고 (이동평균) — 10/6 API 조회'],
   ['acctQty','계좌 현재 보유수량',1,'보유 합계와 같으면 평가손익을 계좌 기준으로 계산']
 ];
 function renderSettings(){
@@ -469,7 +475,7 @@ $('fApply').onclick=()=>{
     const h=S.hold[n];if(!h)return toast('보유하지 않은 차수입니다');
     const sq=Math.min(q,h.qty);
     S.sells.push([d,n,sq,p,h.ms,null,h.real,null,null]);
-    S.trades.push([d,null,null,p,sq,null,null,`${n}차 매도 (앱 기록 · HTS 손익은 나중에 입력)`]);
+    S.trades.push([d,null,null,p,sq,null,null,`${n}차 매도 (앱 기록 · 실현손익은 나중에 입력)`]);
     h.qty-=sq;if(h.qty<=0)delete S.hold[n];
     if(S.cfg.acctQty>0){S.cfg.acctCost=Math.round(S.cfg.acctCost-S.cfg.acctCost/S.cfg.acctQty*sq);} /* 증권사 이동평균 방식 */
     S.cfg.acctQty=Math.max(0,S.cfg.acctQty-sq);
@@ -483,7 +489,7 @@ $('tAdd').onclick=()=>{const g=id=>{const v=$(id).value;return v===''?null:Numbe
   S.trades.push([d,g('tBp'),g('tBq'),g('tSp'),g('tSq'),g('tFee'),g('tPl'),$('tMemo').value]);save();renderAll();toast('추가했습니다');
   ['tBp','tBq','tSp','tSq','tFee','tPl','tMemo'].forEach(id=>$(id).value='');};
 $('btnExport').onclick=()=>{const b=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`grid-0193T0-${S.asOf}.json`;a.click();URL.revokeObjectURL(a.href);};
-$('fileImport').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(o.version!==1||!o.cfg)throw 0;S=o;save();renderAll();toast('가져왔습니다');}catch(x){toast('파일 형식이 맞지 않습니다');}};r.readAsText(f);};
+$('fileImport').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(o.version!==2||!o.cfg)throw 0;S=o;save();renderAll();toast('가져왔습니다');}catch(x){toast('파일 형식이 맞지 않습니다');}};r.readAsText(f);};
 $('btnReset').onclick=()=>{if(confirm('이 브라우저에 저장한 변경을 지우고 10/6 기준값으로 되돌릴까요?')){S=clone(DEFAULTS);save();renderAll();toast('초기화했습니다');}};
 $('themeBtn').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark';try{localStorage.setItem(KEY+'-theme',r.dataset.theme);}catch(e){}renderAll();};
 try{const th=localStorage.getItem(KEY+'-theme');if(th)document.documentElement.dataset.theme=th;}catch(e){}
