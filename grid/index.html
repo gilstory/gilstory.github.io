@@ -85,6 +85,7 @@ td input[type=date]{width:130px;padding:3px 6px}
 .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--page);padding:8px 14px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:.92}
 .callout{border-left:3px solid var(--virt);background:var(--virt-wash);padding:10px 12px;border-radius:6px;font-size:13px;margin-bottom:16px}
+.updated{font-size:12px;color:var(--ink-2);background:var(--wash);border-radius:8px;padding:6px 10px;margin:4px 0 0}
 footer{color:var(--muted);font-size:12px;margin:24px 0 8px}
 </style>
 </head>
@@ -93,21 +94,21 @@ footer{color:var(--muted);font-size:12px;margin:24px 0 8px}
 <header class="top">
   <div>
     <h1>하이닉스 레버리지 그리드 현황</h1>
-    <p class="sub">KODEX SK하이닉스단일종목레버리지(0193T0) · 매직스플릿 가상가와 실제 매입가 대조</p>
+    <p class="sub">KODEX SK하이닉스단일종목레버리지(0193T0) · 키움 계좌 체결을 Claude가 기록 · 매직스플릿 가상가와 실제 매입가 대조</p>
   </div>
   <div class="price-box">
-    <label>기준일 <input type="date" id="asOf"></label>
-    <label>현재가 <input type="number" id="curPrice" step="5"></label>
+    <button class="btn primary" id="btnLoad">현황 보기</button>
     <button class="btn" id="themeBtn" title="밝게/어둡게">테마</button>
   </div>
 </header>
+<div class="updated" id="updated"></div>
 
 <nav class="tabs" id="tabs">
   <button data-t="status" class="on">현황</button>
+  <button data-t="journal">매매 일지</button>
   <button data-t="ladder">차수표</button>
-  <button data-t="trades">실제 매매내역</button>
   <button data-t="pnl">손익 대조</button>
-  <button data-t="settings">설정</button>
+  <button data-t="info">설정·관리 기록</button>
 </nav>
 
 <!-- 현황 -->
@@ -117,30 +118,31 @@ footer{color:var(--muted);font-size:12px;margin:24px 0 8px}
   <div class="grid2">
     <div class="card ladder">
       <h2>가격 사다리</h2>
-      <p class="desc">초록 = 보유 차수 · 점선 = 현재가 · 막대 길이 = 차수별 금액(실제)</p>
+      <p class="desc">초록 = 보유 차수 · 빨간 점선 = 현재가 · 막대 길이 = 차수별 금액</p>
       <div class="tscroll"><div id="ladderSvg" style="min-width:420px"></div></div>
     </div>
     <div class="card">
-      <h2>체결 기록하기</h2>
-      <p class="desc">매직스플릿에서 체결이 나면 여기서 입력하세요. 아래 표가 바로 바뀝니다.</p>
-      <div class="form-row">
-        <label>차수<select id="fTier"></select></label>
-        <label>구분<select id="fSide"><option value="buy">매수</option><option value="sell">매도</option></select></label>
-        <label>체결가<input type="number" id="fPrice" step="5"></label>
-        <label>수량<input type="number" id="fQty"></label>
-        <label>날짜<input type="date" id="fDate"></label>
-      </div>
-      <div class="form-row">
-        <button class="btn primary" id="fApply">기록</button>
-        <span class="note" id="fHint"></span>
-      </div>
-      <p class="note">매수: 해당 차수에 수량·체결가가 들어가고 실제 매입단가 = 체결가가 됩니다(매직스플릿 매수가도 체결가로).<br>매도: 해당 차수를 비우고, 실제 매매내역·손익 대조에 한 줄이 추가됩니다.</p>
+      <h2>최근 체결</h2>
+      <p class="desc">최근 10건 · 전체는 '매매 일지' 탭</p>
+      <div class="tscroll"><table id="recentTbl"></table></div>
+      <h2 style="margin-top:14px">계좌 대조</h2>
+      <div class="tscroll"><table id="checkTbl"></table></div>
     </div>
   </div>
   <div class="card">
     <h2>차수별 보유 현황</h2>
-    <p class="desc">노란 칸은 직접 고칠 수 있습니다. 매도목표가는 매직스플릿이 쓰는 값(MS 매수가 × (1+마진))입니다.</p>
+    <p class="desc">매도목표가는 매직스플릿이 쓰는 값(MS 매수가 × (1+마진)). 실제 매입단가 기준 수익은 따로 계산합니다.</p>
     <div class="tscroll"><table id="holdTbl"></table></div>
+  </div>
+</section>
+
+<!-- 매매 일지 -->
+<section class="tab" id="t-journal">
+  <div class="kpis" id="tradeKpis"></div>
+  <div class="card">
+    <h2>전체 체결 내역</h2>
+    <p class="desc">9/8 이후는 키움 주문 단위 체결가, 실현손익·수수료는 키움 실현손익 API(이동평균 단가, 매수·매도 수수료 차감). 8/25~9/7 매수는 HTS 평균가.</p>
+    <div class="tscroll"><table id="tradeTbl"></table></div>
   </div>
 </section>
 
@@ -153,348 +155,172 @@ footer{color:var(--muted);font-size:12px;margin:24px 0 8px}
   </div>
 </section>
 
-<!-- 매매내역 -->
-<section class="tab" id="t-trades">
-  <div class="kpis" id="tradeKpis"></div>
-  <div class="card">
-    <h2>실제 체결 내역 (키움 5531 계좌)</h2>
-    <p class="desc">9/8 이후 매수는 주문 단위 체결가, 손익·수수료는 키움 실현손익 API(매수·매도 수수료 차감, 이동평균 단가). 2026-10-06 계좌 조회로 확인.</p>
-    <div class="tscroll"><table id="tradeTbl"></table></div>
-  </div>
-  <div class="card">
-    <h2>체결 직접 추가</h2>
-    <div class="form-row">
-      <label>날짜<input type="date" id="tDate"></label>
-      <label>매수평균가<input type="number" id="tBp"></label>
-      <label>매수수량<input type="number" id="tBq"></label>
-      <label>매도평균가<input type="number" id="tSp"></label>
-      <label>매도수량<input type="number" id="tSq"></label>
-      <label>수수료+세금<input type="number" id="tFee"></label>
-      <label>실현손익<input type="number" id="tPl"></label>
-      <label>비고<input type="text" id="tMemo" class="wide"></label>
-      <button class="btn primary" id="tAdd">추가</button>
-    </div>
-  </div>
-</section>
-
 <!-- 손익 대조 -->
 <section class="tab" id="t-pnl">
   <div class="kpis" id="pnlKpis"></div>
   <div class="card">
-    <h2>9/14 이후 매도 손익 — 매직스플릿 표시 vs 실제</h2>
-    <p class="desc">그리드 기준 실제손익 = (매도가 − 실제 매입단가) × 수량 − 수수료. 키움 실현손익은 이동평균 단가 기준이라 10/1 매도처럼 차수별로는 다를 수 있지만 총손익은 같습니다.</p>
+    <h2>사이클 매도 손익 — 매직스플릿 표시 vs 실제</h2>
+    <p class="desc">그리드 기준 실제손익 = (매도가 − 실제 매입단가) × 수량 − 수수료. 키움 실현손익은 이동평균 단가 기준이라 차수별로는 다를 수 있지만 총손익은 같습니다.</p>
     <div class="tscroll"><table id="pnlTbl"></table></div>
   </div>
 </section>
 
-<!-- 설정 -->
-<section class="tab" id="t-settings">
+<!-- 설정·관리 -->
+<section class="tab" id="t-info">
   <div class="card">
     <h2>설정값</h2>
-    <p class="desc">바꾸면 차수표·현황이 바로 다시 계산되고 이 브라우저에 저장됩니다.</p>
+    <p class="desc">이 값은 Claude가 관리합니다. 바꾸고 싶으시면 대화로 말씀해 주세요.</p>
     <div class="tscroll"><table class="set-table" id="setTbl"></table></div>
   </div>
   <div class="card">
-    <h2>데이터 관리</h2>
-    <p class="desc">입력한 내용은 이 기기의 브라우저에만 저장됩니다. 다른 기기로 옮기려면 내보내기 → 가져오기를 쓰세요.</p>
-    <div class="form-row">
-      <button class="btn" id="btnExport">JSON 내보내기</button>
-      <label class="btn" style="flex-direction:row">JSON 가져오기<input type="file" id="fileImport" accept=".json" hidden></label>
-      <button class="btn" id="btnReset">10/6 기준값으로 초기화</button>
-    </div>
+    <h2>관리 기록</h2>
+    <div class="tscroll"><table id="logTbl"></table></div>
   </div>
 </section>
 
-<footer>백테스트·투자 자문이 아닌 개인 기록용 계산표입니다. 기준 데이터: 2026-10-06 키움 5531 계좌 조회(잔고·체결·실현손익)와 매직스플릿 화면.</footer>
+<footer>개인 기록용 계산표이며 투자 자문이 아닙니다. 데이터: data.json (Claude가 키움 그리드 계좌를 조회해 갱신).</footer>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
 'use strict';
-const KEY='grid-0193T0-v2';
-const DEFAULTS={
-  version:2,
-  asOf:'2026-10-06',
-  price:10700,
-  cfg:{anchorTier:15,anchorPrice:9406,step:0.05,margin:0.10,tiers:32,amount:3200000,unit:1,
-       poolCost:30518430,poolQty:2943,acctCost:21258477,acctQty:2013},
-  // 보유: tier -> {qty, ms, real ('pool' = 9/14 평균단가), date}
-  hold:{
-    1:{qty:10,ms:18623,real:'pool',date:'2026-09-15'},2:{qty:10,ms:17736,real:'pool',date:'2026-09-15'},
-    3:{qty:10,ms:16892,real:'pool',date:'2026-09-15'},4:{qty:38,ms:16087,real:'pool',date:'2026-09-15'},
-    5:{qty:200,ms:15321,real:'pool',date:'2026-09-15'},6:{qty:211,ms:14592,real:'pool',date:'2026-09-15'},
-    7:{qty:222,ms:13897,real:'pool',date:'2026-09-15'},8:{qty:233,ms:13235,real:'pool',date:'2026-09-15'},
-    9:{qty:248,ms:12605,real:'pool',date:'2026-09-15'},10:{qty:258,ms:12005,real:'pool',date:'2026-09-15'},
-    11:{qty:279,ms:11430,real:11430,date:'2026-09-28'},12:{qty:294,ms:10880,real:10880,date:'2026-09-28'}
-  },
-  trades:[
-    ['2026-08-25',8916,5630,9834,5630,15800,5152610,'그리드 이전 당일 매매 (매직스플릿 기록 없음)'],
-    ['2026-08-26',10314,3215,null,null,null,null,'1~13차 일괄 매수 (HTS 평균가)'],
-    ['2026-08-28',9820,325,null,null,null,null,'14차 매수'],
-    ['2026-08-31',8905,359,null,null,null,null,'15차 매수'],
-    ['2026-09-01',null,null,9835,359,1060,-111693.97,'15차 매도'],
-    ['2026-09-02',9325,342,null,null,null,null,'15차 매수'],
-    ['2026-09-03',8875,360,null,null,null,null,'16차 매수'],
-    ['2026-09-04',null,null,9785,360,1050,-67500.72,'16차 매도'],
-    ['2026-09-07',null,null,10679,667,2050,470956.57,'15차 342주(10,535) + 14차 325주(10,830) 매도'],
-    ['2026-09-08',null,null,11391,3215,10140,4559293.10,'1~13차 3,215주 일괄 매도'],
-    ['2026-09-08',11160,271,null,null,null,null,'수동 · 16:20 시간외단일가 재매수'],
-    ['2026-09-11',10890,293,null,null,null,null,'봇 · 09:00 재매수'],
-    ['2026-09-14',10190,314,null,null,null,null,'봇 · 09:00 지정가'],
-    ['2026-09-14',10400,1369,null,null,null,null,'수동 · 11:05 상위 차수 일괄 매수'],
-    ['2026-09-14',9865,324,null,null,null,null,'봇 · 15:02 지정가'],
-    ['2026-09-14',9865,372,null,null,null,null,'수동 · 15:15 → 9/15 매직스플릿에 1~15차를 가상가로 등록'],
-    ['2026-09-16',null,null,10370,332,1020,-965.85,'15차 매도 (MS 가상가 9,406)'],
-    ['2026-09-17',null,null,10890,315,990,162861.38,'14차 매도 (MS 9,876)'],
-    ['2026-09-18',null,null,11435,300,970,318578.93,'13차 매도 (MS 10,370)'],
-    ['2026-09-21',null,null,12010,285,950,466496.48,'12차 매도 (MS 10,889)'],
-    ['2026-09-21',null,null,12025,271,900,447649.20,'11차 매도 (MS 10,370)'],
-    ['2026-09-28',11430,279,null,null,null,null,'봇 · 11차 실제 매수'],
-    ['2026-09-28',10880,294,null,null,null,null,'봇 · 12차 실제 매수'],
-    ['2026-09-29',10360,308,null,null,null,null,'봇 · 13차 실제 매수'],
-    ['2026-10-01',null,null,11425,308,980,265257.52,'13차 매도 (키움은 평균단가 10,560.59로 계산)']
-  ],
-  cycleStart:'2026-09-14',
-  // 9/14 이후 매도: [date, tier, qty, sell, msBuy, msPL, realCost('pool'|num), fee, htsPL]
-  sells:[
-    ['2026-09-16',15,332,10370,9406,312193,'pool',1020,-965.85],
-    ['2026-09-17',14,315,10890,9876,311580,'pool',990,162861.38],
-    ['2026-09-18',13,300,11435,10370,311669,'pool',970,318578.93],
-    ['2026-09-21',12,285,12010,10889,311670,'pool',950,466496.48],
-    ['2026-09-21',11,271,12025,10370,441088,'pool',900,447649.20],
-    ['2026-10-01',13,308,11425,10360,319993,10360,980,265257.52]
-  ]
-};
-const clone=o=>JSON.parse(JSON.stringify(o));
-let S;
-function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);if(o&&o.version===2)return o;}}catch(e){}return clone(DEFAULTS);}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
-S=load();
-
+const KEY='grid-0193T0-ui';
+let S=null;
 const $=id=>document.getElementById(id);
 const f0=x=>(x===null||x===undefined||x===''||isNaN(x))?'':Math.round(x).toLocaleString('ko-KR');
 const f2=x=>(x===null||x===undefined||isNaN(x))?'':x.toLocaleString('ko-KR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const pct=x=>(x===null||x===undefined||isNaN(x)||!isFinite(x))?'':(x*100).toFixed(2)+'%';
 const sgn=x=>x>0?'pos':(x<0?'neg':'');
-const md=d=>{const[,m,dd]=d.split('-');return (+m)+'/'+(+dd);};
 const sf0=x=>(x>0?'+':'')+f0(x);
-function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('on'),1600);}
+const md=d=>{const[,m,dd]=d.split('-');return (+m)+'/'+(+dd);};
+const tierTxt=t=>!t?'-':(t.length===2&&t[1]-t[0]>1?`${t[0]}~${t[1]}차`:t.map(x=>x+'차').join('·'));
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('on'),1800);}
 
 /* ---------- 계산 ---------- */
 const poolPrice=()=>S.cfg.poolCost/S.cfg.poolQty;
 const realOf=h=>h.real==='pool'?poolPrice():Number(h.real);
 function tierPrice(n){const c=S.cfg;return Math.round(c.anchorPrice*Math.pow(1+c.step,c.anchorTier-n));}
 function tierQty(p){const c=S.cfg;return Math.floor(c.amount/p/c.unit)*c.unit;}
-function grid(){
-  const out=[];let cq=0,ca=0;
-  for(let n=1;n<=S.cfg.tiers;n++){const b=tierPrice(n),s=Math.round(b*(1+S.cfg.margin)),q=tierQty(b);cq+=q;ca+=b*q;
-    out.push({n,b,s,q,amt:b*q,cq,ca,prof:(s-b)*q,vs:b/S.price-1});}
-  return out;
-}
-function holdings(){
-  const g=grid();
-  return g.map(r=>{const h=S.hold[r.n];
-    if(h&&h.qty>0){const real=realOf(h),tgt=Math.round(h.ms*(1+S.cfg.margin));
-      return {n:r.n,st:'보유',h,qty:h.qty,ms:h.ms,real,virt:Math.abs(h.ms-real)>=1,
-        msAmt:h.qty*h.ms,realAmt:h.qty*real,tgt,tgtProfit:(tgt-real)*h.qty,tgtRate:tgt/real-1,
-        evReal:(S.price-real)*h.qty,evMs:(S.price-h.ms)*h.qty,date:h.date};}
-    return {n:r.n,st:r.b>=S.price?'미보유(현재가 위)':'매수대기',waitP:r.b,waitQ:r.q,qty:0};
-  });
-}
-function summary(){
-  const H=holdings();const held=H.filter(x=>x.qty>0);
-  const qty=held.reduce((a,x)=>a+x.qty,0),ms=held.reduce((a,x)=>a+x.msAmt,0),real=held.reduce((a,x)=>a+x.realAmt,0);
-  const evReal=held.reduce((a,x)=>a+x.evReal,0);
-  const nb=H.find(x=>x.st==='매수대기');
+function grid(){const out=[];let cq=0,ca=0;
+  for(let n=1;n<=S.cfg.tiers;n++){const b=tierPrice(n),s=Math.round(b*(1+S.cfg.margin)),q=tierQty(b);cq+=q;ca+=b*q;out.push({n,b,s,q,amt:b*q,cq,ca,prof:(s-b)*q,vs:b/S.price-1});}
+  return out;}
+function holdings(){return grid().map(r=>{const h=S.hold[r.n];
+  if(h&&h.qty>0){const real=realOf(h),tgt=Math.round(h.ms*(1+S.cfg.margin));
+    return {n:r.n,h,qty:h.qty,ms:h.ms,real,virt:Math.abs(h.ms-real)>=1,msAmt:h.qty*h.ms,realAmt:h.qty*real,tgt,tgtProfit:(tgt-real)*h.qty,tgtRate:tgt/real-1,evReal:(S.price-real)*h.qty,evMs:(S.price-h.ms)*h.qty,date:h.date};}
+  return {n:r.n,st:r.b>=S.price?'미보유(현재가 위)':'매수대기',waitP:r.b,waitQ:r.q,qty:0};});}
+function summary(){const H=holdings(),held=H.filter(x=>x.qty>0);
+  const sum=k=>held.reduce((a,x)=>a+x[k],0);
   let ns=null;held.forEach(x=>{if(!ns||x.tgt<ns.tgt)ns=x;});
-  return {H,held,qty,ms,real,evReal,nb,ns,mkt:qty*S.price};
-}
+  return {H,held,qty:sum('qty'),ms:sum('msAmt'),real:sum('realAmt'),evReal:sum('evReal'),nb:H.find(x=>x.st==='매수대기'),ns,mkt:sum('qty')*S.price};}
 
 /* ---------- 렌더 ---------- */
-function kpi(k,v,n,cls){return `<div class="kpi"><div class="k">${k}</div><div class="v ${cls||''}">${v}</div>${n?`<div class="n">${n}</div>`:''}</div>`;}
+const kpi=(k,v,n,cls)=>`<div class="kpi"><div class="k">${k}</div><div class="v ${cls||''}">${v}</div>${n?`<div class="n">${n}</div>`:''}</div>`;
+function tradeRow(t,run){
+  const tag=t.side==='buy'?'<span class="tag held">매수</span>':'<span class="tag wait">매도</span>';
+  return `<td class="c">${md(t.date)}${t.time?' '+t.time:''}</td><td class="c">${tag}</td><td class="c">${tierTxt(t.tier)}</td><td>${f0(t.price)}</td><td>${f0(t.qty)}</td><td>${f0(t.price*t.qty)}</td>`+
+    (run===undefined?'':`<td>${f0(t.fee)}</td><td class="${sgn(t.pl)}">${t.pl===null||t.pl===undefined?'':f0(t.pl)}</td><td class="c">${t.route||''}</td><td>${f0(run)}</td>`)+`<td class="l">${t.note||''}</td>`;
+}
 function renderStatus(){
-  const s=summary(),c=S.cfg;
-  const sameAcct=s.qty===c.acctQty;
-  const acctPL=sameAcct?s.mkt-c.acctCost:null;
+  const s=summary(),a=S.account||{};
+  const pl=a.cost?s.mkt-a.cost:s.evReal;
   $('kpis').innerHTML=
-    kpi('총 보유수량',f0(s.qty)+'주',sameAcct?'계좌와 일치':'계좌 '+f0(c.acctQty)+'주와 다름 — 설정 확인')+
+    kpi('총 보유수량',f0(s.qty)+'주',a.qty===s.qty?'키움 계좌와 일치':'계좌 '+f0(a.qty)+'주 — 확인 필요')+
     kpi('실제 매입금액(그리드 기준)',f0(s.real)+'원','평균 '+f0(s.qty?s.real/s.qty:0)+'원')+
     kpi('매직스플릿 표시 매입금액',f0(s.ms)+'원','가상 부풀림 '+f0(s.ms-s.real)+'원')+
-    kpi('평가손익(실제)',sf0(sameAcct?acctPL:s.evReal)+'원',sameAcct?'계좌 매입금액 '+f0(c.acctCost)+'원 기준':'그리드 기준',sgn(sameAcct?acctPL:s.evReal))+
+    kpi('평가손익(실제)',sf0(pl)+'원','현재가 '+f0(S.price)+'원 · 수수료 전',sgn(pl))+
     kpi('다음 매수',s.nb?`${s.nb.n}차 · ${f0(s.nb.waitP)}원`:'-',s.nb?`${f0(s.nb.waitQ)}주 · 현재가 대비 ${pct(s.nb.waitP/S.price-1)}`:'')+
     kpi('다음 매도',s.ns?`${s.ns.n}차 · ${f0(s.ns.tgt)}원`:'-',s.ns?`실제수익 ${sf0(s.ns.tgtProfit)}원 · 현재가 대비 ${pct(s.ns.tgt/S.price-1)}`:'');
   const v=s.held.filter(x=>x.virt);
-  if(v.length){const vq=v.reduce((a,x)=>a+x.qty,0);const lo=Math.min(...v.map(x=>x.tgtRate)),hi=Math.max(...v.map(x=>x.tgtRate));
+  if(v.length){const vq=v.reduce((a,x)=>a+x.qty,0),lo=Math.min(...v.map(x=>x.tgtRate)),hi=Math.max(...v.map(x=>x.tgtRate));
     $('callout').style.display='';
-    $('callout').innerHTML=`<b>가상가 차수 ${v.map(x=>x.n).join('·')}차 (${f0(vq)}주)</b> — 매직스플릿 매수가가 실제(${f2(poolPrice())}원)보다 높게 잡혀 있어, 매도목표가에 닿으면 실제 수익률은 ${(c.margin*100).toFixed(0)}%가 아니라 <b>${pct(lo)} ~ ${pct(hi)}</b>입니다. 그만큼 매도까지 오래 걸리는 물량입니다.`;
+    $('callout').innerHTML=`<b>가상가 차수 ${v.map(x=>x.n).join('·')}차 (${f0(vq)}주)</b> — 매직스플릿 매수가가 실제(${f2(poolPrice())}원)보다 높게 잡혀 있어, 매도목표가에 닿으면 실제 수익률은 ${(S.cfg.margin*100).toFixed(0)}%가 아니라 <b>${pct(lo)} ~ ${pct(hi)}</b>입니다.`;
   } else $('callout').style.display='none';
-
+  // 최근 체결
+  const rec=S.trades.slice(-10).reverse();
+  $('recentTbl').innerHTML=`<thead><tr><th class="c">일시</th><th class="c">구분</th><th class="c">차수</th><th>체결가</th><th>수량</th><th>금액</th><th class="l">비고</th></tr></thead><tbody>`+rec.map(t=>`<tr>${tradeRow(t)}</tr>`).join('')+'</tbody>';
+  // 계좌 대조
+  const chk=[['보유수량',a.qty,s.qty,'주'],['매입금액',a.cost,null,'원'],['평균단가',a.avg,null,'원'],['주문가능 현금',a.cash,null,'원'],['미체결 주문',a.openOrders,null,'건']];
+  $('checkTbl').innerHTML='<tbody>'+chk.map(([k,av,mv,u])=>`<tr><td class="l">${k}</td><td>${u==='원'&&k==='평균단가'?f2(av):f0(av)}${u}</td><td class="c">${mv===null?'':(av===mv?'<span class="tag real">일치</span>':'<span class="tag miss">불일치</span>')}</td></tr>`).join('')+'</tbody>';
+  // 보유 표
   let t=`<thead><tr><th class="c">차수</th><th class="c">상태</th><th class="c">매수일</th><th>보유수량</th><th>MS 매수가</th><th>실제 매입단가</th><th class="c">단가</th><th>MS 매입금액</th><th>실제 매입금액</th><th>가상−실제</th><th>매도목표가</th><th>목표 시 실제수익</th><th>실제수익률</th><th>평가손익(실제)</th><th>평가손익(MS)</th><th>대기 매수가</th><th>대기 수량</th></tr></thead><tbody>`;
-  let curDone=false;
-  s.H.forEach(x=>{
-    const g=tierPrice(x.n);let cls=x.qty>0?'held':'';
-    if(!curDone&&g<S.price){cls+=' cur';curDone=true;}
-    if(x.qty>0){
-      t+=`<tr class="${cls}"><td class="c"><b>${x.n}</b></td><td class="c"><span class="tag held">보유</span></td>
-      <td class="c"><input type="date" data-k="date" data-n="${x.n}" value="${x.date||''}"></td>
-      <td><input type="number" data-k="qty" data-n="${x.n}" value="${x.qty}"></td>
-      <td><input type="number" data-k="ms" data-n="${x.n}" value="${x.ms}"></td>
-      <td><input type="number" data-k="real" data-n="${x.n}" step="0.01" value="${x.h.real==='pool'?'':x.h.real}" placeholder="${f2(poolPrice())}" title="비워 두면 9/14 계좌 평균단가"></td>
-      <td class="c"><span class="tag ${x.virt?'virt':'real'}">${x.virt?'가상':'실제'}</span></td>
-      <td>${f0(x.msAmt)}</td><td>${f0(x.realAmt)}</td><td>${f0(x.msAmt-x.realAmt)}</td>
-      <td><b>${f0(x.tgt)}</b></td><td class="${sgn(x.tgtProfit)}">${f0(x.tgtProfit)}</td><td>${pct(x.tgtRate)}</td>
-      <td class="${sgn(x.evReal)}">${f0(x.evReal)}</td><td class="${sgn(x.evMs)}">${f0(x.evMs)}</td><td></td><td></td></tr>`;
-    } else {
-      const tg=x.st==='매수대기'?'wait':'miss';
-      t+=`<tr class="${cls}"><td class="c"><b>${x.n}</b></td><td class="c"><span class="tag ${tg}">${x.st}</span></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>${f0(x.waitP)}</td><td>${f0(x.waitQ)}</td></tr>`;
-    }
-  });
-  const pl=s.held.reduce((a,x)=>a+x.tgtProfit,0),em=s.held.reduce((a,x)=>a+x.evMs,0);
-  t+=`<tr class="tot"><td class="c">합계</td><td></td><td></td><td>${f0(s.qty)}</td><td></td><td></td><td></td><td>${f0(s.ms)}</td><td>${f0(s.real)}</td><td>${f0(s.ms-s.real)}</td><td></td><td>${f0(pl)}</td><td></td><td class="${sgn(s.evReal)}">${f0(s.evReal)}</td><td class="${sgn(em)}">${f0(em)}</td><td></td><td></td></tr></tbody>`;
+  let cur=false;
+  s.H.forEach(x=>{let cls=x.qty>0?'held':'';if(!cur&&tierPrice(x.n)<S.price){cls+=' cur';cur=true;}
+    if(x.qty>0)t+=`<tr class="${cls}"><td class="c"><b>${x.n}</b></td><td class="c"><span class="tag held">보유</span></td><td class="c">${x.date?md(x.date):''}</td><td>${f0(x.qty)}</td><td>${f0(x.ms)}</td><td>${f2(x.real)}</td><td class="c"><span class="tag ${x.virt?'virt':'real'}">${x.virt?'가상':'실제'}</span></td><td>${f0(x.msAmt)}</td><td>${f0(x.realAmt)}</td><td>${f0(x.msAmt-x.realAmt)}</td><td><b>${f0(x.tgt)}</b></td><td class="${sgn(x.tgtProfit)}">${f0(x.tgtProfit)}</td><td>${pct(x.tgtRate)}</td><td class="${sgn(x.evReal)}">${f0(x.evReal)}</td><td class="${sgn(x.evMs)}">${f0(x.evMs)}</td><td></td><td></td></tr>`;
+    else t+=`<tr class="${cls}"><td class="c"><b>${x.n}</b></td><td class="c"><span class="tag ${x.st==='매수대기'?'wait':'miss'}">${x.st}</span></td>${'<td></td>'.repeat(13)}<td>${f0(x.waitP)}</td><td>${f0(x.waitQ)}</td></tr>`;});
+  const tp=s.held.reduce((a,x)=>a+x.tgtProfit,0),em=s.held.reduce((a,x)=>a+x.evMs,0);
+  t+=`<tr class="tot"><td class="c">합계</td><td></td><td></td><td>${f0(s.qty)}</td><td></td><td></td><td></td><td>${f0(s.ms)}</td><td>${f0(s.real)}</td><td>${f0(s.ms-s.real)}</td><td></td><td>${f0(tp)}</td><td></td><td class="${sgn(s.evReal)}">${f0(s.evReal)}</td><td class="${sgn(em)}">${f0(em)}</td><td></td><td></td></tr></tbody>`;
   $('holdTbl').innerHTML=t;
-  $('holdTbl').querySelectorAll('input').forEach(el=>el.addEventListener('change',e=>{
-    const n=+e.target.dataset.n,k=e.target.dataset.k,h=S.hold[n];if(!h)return;
-    if(k==='date')h.date=e.target.value;
-    else if(k==='real')h.real=e.target.value===''?'pool':Number(e.target.value);
-    else h[k]=Number(e.target.value)||0;
-    if(h.qty<=0)delete S.hold[n];
-    save();renderAll();toast('저장했습니다');
-  }));
   renderLadder(s);
 }
 function renderLadder(s){
   const g=grid(),W=520,rowH=16,top=10,H=top*2+g.length*rowH,L=74,R=W-10;
   const maxAmt=Math.max(...g.map(r=>r.amt),...s.held.map(x=>x.realAmt));
   const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="차수별 가격 사다리">`;
-  let curY=null;
-  g.forEach((r,i)=>{
-    const y=top+i*rowH;const hx=s.H[i];const held=hx.qty>0;
-    const amt=held?hx.realAmt:r.amt;const w=(R-L-150)*amt/maxAmt;
-    svg+=`<text x="4" y="${y+rowH*0.72}" font-size="10" fill="${css('--ink-2')}">${r.n}차</text>`;
-    svg+=`<text x="${L-6}" y="${y+rowH*0.72}" font-size="10" text-anchor="end" fill="${css('--ink')}">${f0(r.b)}</text>`;
-    svg+=`<rect x="${L}" y="${y+2}" width="${Math.max(w,1)}" height="${rowH-4}" rx="2" fill="${held?css('--held'):css('--line')}" ${held?'':'opacity=".9"'}/>`;
-    if(held)svg+=`<text x="${L+w+4}" y="${y+rowH*0.72}" font-size="10" fill="${css('--ink-2')}">${f0(hx.qty)}주</text>`;
-    if(curY===null&&r.b<S.price)curY=y;
-  });
-  if(curY!==null){const lab=`현재가 ${f0(S.price)}`;svg+=`<line x1="0" x2="${W}" y1="${curY}" y2="${curY}" stroke="${css('--up')}" stroke-dasharray="4 3"/><rect x="${R-92}" y="${curY-8}" width="92" height="16" rx="8" fill="${css('--surface')}" stroke="${css('--up')}"/><text x="${R-46}" y="${curY+4}" font-size="10" text-anchor="middle" fill="${css('--up')}">${lab}</text>`;}
-  svg+='</svg>';$('ladderSvg').innerHTML=svg;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="차수별 가격 사다리">`,curY=null;
+  g.forEach((r,i)=>{const y=top+i*rowH,hx=s.H[i],held=hx.qty>0,amt=held?hx.realAmt:r.amt,w=(R-L-150)*amt/maxAmt;
+    svg+=`<text x="4" y="${y+rowH*.72}" font-size="10" fill="${css('--ink-2')}">${r.n}차</text><text x="${L-6}" y="${y+rowH*.72}" font-size="10" text-anchor="end" fill="${css('--ink')}">${f0(r.b)}</text><rect x="${L}" y="${y+2}" width="${Math.max(w,1)}" height="${rowH-4}" rx="2" fill="${held?css('--held'):css('--line')}"/>`;
+    if(held)svg+=`<text x="${L+w+4}" y="${y+rowH*.72}" font-size="10" fill="${css('--ink-2')}">${f0(hx.qty)}주</text>`;
+    if(curY===null&&r.b<S.price)curY=y;});
+  if(curY!==null)svg+=`<line x1="0" x2="${W}" y1="${curY}" y2="${curY}" stroke="${css('--up')}" stroke-dasharray="4 3"/><rect x="${R-92}" y="${curY-8}" width="92" height="16" rx="8" fill="${css('--surface')}" stroke="${css('--up')}"/><text x="${R-46}" y="${curY+4}" font-size="10" text-anchor="middle" fill="${css('--up')}">현재가 ${f0(S.price)}</text>`;
+  $('ladderSvg').innerHTML=svg+'</svg>';
+}
+function renderJournal(){
+  let run=0,sum=0,sumC=0,fees=0,nb=0,ns=0;
+  const rows=S.trades.map(t=>{run+=t.side==='buy'?t.qty:-t.qty;if(t.side==='buy')nb++;else ns++;sum+=t.pl||0;fees+=t.fee||0;if(t.date>=S.cycleStart)sumC+=t.pl||0;return `<tr>${tradeRow(t,run)}</tr>`;});
+  $('tradeTbl').innerHTML=`<thead><tr><th class="c">일시</th><th class="c">구분</th><th class="c">차수</th><th>체결가</th><th>수량</th><th>금액</th><th>수수료</th><th>실현손익(키움)</th><th class="c">경로</th><th>보유수량</th><th class="l">비고</th></tr></thead><tbody>`+rows.reverse().join('')+
+    `<tr class="tot"><td class="c">합계</td><td class="c">${nb}매수·${ns}매도</td><td></td><td></td><td></td><td></td><td>${f0(fees)}</td><td class="${sgn(sum)}">${f0(sum)}</td><td></td><td>${f0(run)}</td><td class="l">${run===(S.account||{}).qty?'최종 보유수량 = 키움 계좌와 일치':'계좌 수량과 다름 — 확인 필요'}</td></tr></tbody>`;
+  $('tradeKpis').innerHTML=kpi('실현손익 합계 (키움)',sf0(sum)+'원','전체 기간',sgn(sum))+kpi(`${md(S.cycleStart)} 이전`,sf0(sum-sumC)+'원','',sgn(sum-sumC))+kpi(`${md(S.cycleStart)} 이후 (현재 사이클)`,sf0(sumC)+'원','',sgn(sumC))+kpi('수수료 합계',f0(fees)+'원');
 }
 function renderGrid(){
   const g=grid(),c=S.cfg;
   $('ladderDesc').textContent=`매수가 = ${f0(c.anchorPrice)} × (1+${(c.step*100).toFixed(2)}%)^(${c.anchorTier}−차수) · 설계수량 = ${f0(c.amount)}원 ÷ 매수가 (${c.unit}좌 단위 내림) · 매도목표 = 매수가 × ${(1+c.margin).toFixed(2)}`;
-  let t=`<thead><tr><th class="c">차수</th><th>매수가</th><th>매도목표가</th><th>설계수량</th><th>설계금액</th><th>누적수량</th><th>누적금액</th><th>1회전 수익</th><th>현재가 대비</th><th class="c">위치</th></tr></thead><tbody>`;
-  let curDone=false;
-  g.forEach(r=>{let cls=S.hold[r.n]?'held':'';if(!curDone&&r.b<S.price){cls+=' cur';curDone=true;}
-    t+=`<tr class="${cls}"><td class="c"><b>${r.n}</b></td><td>${f0(r.b)}</td><td>${f0(r.s)}</td><td>${f0(r.q)}</td><td>${f0(r.amt)}</td><td>${f0(r.cq)}</td><td>${f0(r.ca)}</td><td>${f0(r.prof)}</td><td class="${sgn(r.vs)}">${pct(r.vs)}</td><td class="c">${r.b>=S.price?'현재가 위':'대기'}</td></tr>`;});
-  const last=g[g.length-1];
-  t+=`<tr class="tot"><td class="c">합계</td><td></td><td></td><td>${f0(last.cq)}</td><td>${f0(last.ca)}</td><td></td><td></td><td>${f0(g.reduce((a,r)=>a+r.prof,0))}</td><td></td><td></td></tr></tbody>`;
-  $('gridTbl').innerHTML=t;
-}
-function renderTrades(){
-  const T=[...S.trades].sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:0);
-  let run=0,sum=0,sumC=0,fees=0;
-  let t=`<thead><tr><th class="c">거래일</th><th>매수평균가</th><th>매수수량</th><th>매수금액</th><th>매도평균가</th><th>매도수량</th><th>매도금액</th><th>수수료+세금</th><th>실현손익(키움)</th><th>보유수량</th><th class="l">매직스플릿 대응·비고</th><th></th></tr></thead><tbody>`;
-  T.forEach((r)=>{const [d,bp,bq,sp,sq,fee,pl,memo]=r;run+=(bq||0)-(sq||0);sum+=pl||0;fees+=fee||0;if(d>=S.cycleStart)sumC+=pl||0;
-    const idx=S.trades.indexOf(r);
-    t+=`<tr><td class="c">${d}</td><td>${f0(bp)}</td><td>${f0(bq)}</td><td>${bq?f0(bp*bq):''}</td><td>${f0(sp)}</td><td>${f0(sq)}</td><td>${sq?f0(sp*sq):''}</td><td>${f0(fee)}</td><td class="${sgn(pl)}">${pl!==null&&pl!==undefined?f0(pl):''}</td><td>${f0(run)}</td><td class="l">${memo||''}</td><td><button class="btn sm" data-del="${idx}" title="삭제">×</button></td></tr>`;});
-  t+=`<tr class="tot"><td class="c">합계</td><td></td><td></td><td></td><td></td><td></td><td></td><td>${f0(fees)}</td><td class="${sgn(sum)}">${f0(sum)}</td><td>${f0(run)}</td><td class="l">${run===S.cfg.acctQty?'최종 보유수량 = 계좌와 일치':'계좌 수량과 다름 — 확인 필요'}</td><td></td></tr></tbody>`;
-  $('tradeTbl').innerHTML=t;
-  $('tradeTbl').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{if(confirm('이 체결을 지울까요?')){S.trades.splice(+b.dataset.del,1);save();renderAll();}});
-  $('tradeKpis').innerHTML=kpi('실현손익 합계 (키움)',sf0(sum)+'원','전체 기간',sgn(sum))+kpi(`${md(S.cycleStart)} 이전 사이클`,sf0(sum-sumC)+'원','',sgn(sum-sumC))+kpi(`${md(S.cycleStart)} 이후 사이클`,sf0(sumC)+'원','',sgn(sumC))+kpi('수수료+세금 합계',f0(fees)+'원');
+  let t=`<thead><tr><th class="c">차수</th><th>매수가</th><th>매도목표가</th><th>설계수량</th><th>설계금액</th><th>누적수량</th><th>누적금액</th><th>1회전 수익</th><th>현재가 대비</th><th class="c">보유</th></tr></thead><tbody>`,cur=false;
+  g.forEach(r=>{const h=S.hold[r.n];let cls=h?'held':'';if(!cur&&r.b<S.price){cls+=' cur';cur=true;}
+    t+=`<tr class="${cls}"><td class="c"><b>${r.n}</b></td><td>${f0(r.b)}</td><td>${f0(r.s)}</td><td>${f0(r.q)}</td><td>${f0(r.amt)}</td><td>${f0(r.cq)}</td><td>${f0(r.ca)}</td><td>${f0(r.prof)}</td><td class="${sgn(r.vs)}">${pct(r.vs)}</td><td class="c">${h?f0(h.qty)+'주'+(h.qty<r.q?' (부족 '+f0(r.q-h.qty)+')':''):''}</td></tr>`;});
+  const L=g[g.length-1];
+  $('gridTbl').innerHTML=t+`<tr class="tot"><td class="c">합계</td><td></td><td></td><td>${f0(L.cq)}</td><td>${f0(L.ca)}</td><td></td><td></td><td>${f0(g.reduce((a,r)=>a+r.prof,0))}</td><td></td><td></td></tr></tbody>`;
 }
 function renderPnl(){
   let t=`<thead><tr><th class="c">매도일</th><th class="c">차수</th><th>수량</th><th>매도가</th><th>MS 매수가</th><th>MS 표시 손익</th><th>실제 매입단가</th><th>실제손익(세전)</th><th>수수료</th><th>실제손익(순)</th><th>키움 실현손익</th><th>MS − 실제</th></tr></thead><tbody>`;
-  let a={q:0,ms:0,g:0,fee:0,net:0,hts:0};
-  S.sells.forEach((r,i)=>{const [d,n,q,sp,mb,mpl0,rc,fee,hts]=r;const mpl=(mpl0===null||mpl0===undefined)?(sp-mb)*q:mpl0;
-    const nx=S.sells[i+1];const htsTxt=hts===null||hts===undefined?((nx&&nx[0]===d)?'(합산↓)':'입력 대기'):f0(hts);const real=rc==='pool'?poolPrice():Number(rc);const g=(sp-real)*q,net=g-(fee||0);
-    a.q+=q;a.ms+=mpl||0;a.g+=g;a.fee+=fee||0;a.net+=net;a.hts+=hts||0;
-    t+=`<tr><td class="c">${d}</td><td class="c">${n}차</td><td>${f0(q)}</td><td>${f0(sp)}</td><td>${f0(mb)}</td><td>${f0(mpl)}</td><td>${f2(real)}</td><td class="${sgn(g)}">${f0(g)}</td><td>${f0(fee)}</td><td class="${sgn(net)}">${f0(net)}</td><td class="${sgn(hts)}">${htsTxt}</td><td>${f0((mpl||0)-net)}</td></tr>`;});
-  t+=`<tr class="tot"><td class="c">합계</td><td></td><td>${f0(a.q)}</td><td></td><td></td><td>${f0(a.ms)}</td><td></td><td>${f0(a.g)}</td><td>${f0(a.fee)}</td><td>${f0(a.net)}</td><td>${f0(a.hts)}</td><td>${f0(a.ms-a.net)}</td></tr></tbody>`;
-  $('pnlTbl').innerHTML=t;
-  const s=summary(),c=S.cfg;const unreal=s.qty===c.acctQty?s.mkt-c.acctCost:s.evReal;
-  const tot=a.hts+unreal;
-  $('pnlKpis').innerHTML=kpi('실현손익 (키움)',sf0(a.hts)+'원','키움 실현손익 API',sgn(a.hts))+
-    kpi('평가손익 (계좌 기준)',sf0(unreal)+'원','현재가 '+f0(S.price)+'원',sgn(unreal))+
-    kpi('이번 사이클 실제 총손익',sf0(tot)+'원','검증(그리드 기준): '+sf0(a.net+s.evReal)+'원',sgn(tot))+
-    kpi('매직스플릿 표시 실현손익',sf0(a.ms)+'원','실제보다 '+f0(a.ms-a.hts)+'원 많게 표시');
+  const a={q:0,ms:0,g:0,fee:0,net:0,k:0};
+  S.sells.forEach(r=>{const [d,n,q,sp,mb,mpl0,rc,fee,k]=r,mpl=mpl0==null?(sp-mb)*q:mpl0,real=rc==='pool'?poolPrice():Number(rc),g=(sp-real)*q,net=g-(fee||0);
+    a.q+=q;a.ms+=mpl;a.g+=g;a.fee+=fee||0;a.net+=net;a.k+=k||0;
+    t+=`<tr><td class="c">${md(d)}</td><td class="c">${n}차</td><td>${f0(q)}</td><td>${f0(sp)}</td><td>${f0(mb)}</td><td>${f0(mpl)}</td><td>${f2(real)}</td><td class="${sgn(g)}">${f0(g)}</td><td>${f0(fee)}</td><td class="${sgn(net)}">${f0(net)}</td><td class="${sgn(k)}">${k==null?'':f0(k)}</td><td>${f0(mpl-net)}</td></tr>`;});
+  $('pnlTbl').innerHTML=t+`<tr class="tot"><td class="c">합계</td><td></td><td>${f0(a.q)}</td><td></td><td></td><td>${f0(a.ms)}</td><td></td><td>${f0(a.g)}</td><td>${f0(a.fee)}</td><td>${f0(a.net)}</td><td>${f0(a.k)}</td><td>${f0(a.ms-a.net)}</td></tr></tbody>`;
+  const s=summary(),ac=S.account||{},un=ac.cost?s.mkt-ac.cost:s.evReal,tot=a.k+un;
+  $('pnlKpis').innerHTML=kpi('실현손익 (키움)',sf0(a.k)+'원','현재 사이클',sgn(a.k))+kpi('평가손익 (계좌 기준)',sf0(un)+'원','현재가 '+f0(S.price)+'원',sgn(un))+
+    kpi('사이클 실제 총손익',sf0(tot)+'원','검증(그리드 기준): '+sf0(a.net+s.evReal)+'원',sgn(tot))+kpi('매직스플릿 표시 실현손익',sf0(a.ms)+'원','실제보다 '+f0(a.ms-a.k)+'원 많게 표시');
 }
-const SET_ROWS=[
-  ['anchorTier','기준 차수 번호',1,'매직스플릿 차수 가격의 기준점'],
-  ['anchorPrice','기준 차수 매수가',1,'매직스플릿 15차 매수가 9,406원 → 1차 18,623원 · 32차 4,104원'],
-  ['step','슬롯 간격(%)',100,'매직스플릿 실제 설정 5%'],
-  ['margin','익절 마진(%)',100,'매도목표가 = 매수가 × (1+마진)'],
-  ['tiers','총 차수',1,''],
-  ['amount','차수당 매수금액(원)',1,'9/28·9/29 매수 수량(279·294·308주)에서 역산한 값'],
-  ['unit','매매수량단위(좌)',1,'11월부터 20좌로 바뀌면 20 입력'],
-  ['poolCost','9/14 기준 실제 총매입금액',1,'9/8·9/11·9/14 매수분 합계 (증권사 정밀값)'],
-  ['poolQty','9/14 기준 실제 보유수량',1,'→ 가상가 차수의 실제 매입단가 = 위 금액 ÷ 이 수량'],
-  ['acctCost','계좌 현재 매입금액',1,'키움 5531 계좌 잔고 (이동평균) — 10/6 API 조회'],
-  ['acctQty','계좌 현재 보유수량',1,'보유 합계와 같으면 평가손익을 계좌 기준으로 계산']
-];
-function renderSettings(){
-  let t='<tbody>';
-  SET_ROWS.forEach(([k,lab,m,note])=>{const v=S.cfg[k]*m;t+=`<tr><td>${lab}</td><td><input type="number" data-s="${k}" data-m="${m}" value="${+v.toFixed(4)}" step="any"></td><td>${note}</td></tr>`;});
-  t+=`<tr><td>가상가 차수 실제 매입단가</td><td>${f2(poolPrice())}</td><td>자동 계산</td></tr></tbody>`;
-  $('setTbl').innerHTML=t;
-  $('setTbl').querySelectorAll('input').forEach(el=>el.onchange=e=>{const k=e.target.dataset.s,m=+e.target.dataset.m;const v=Number(e.target.value);if(!isFinite(v)||v<=0&&k!=='margin')return toast('값을 확인해 주세요');S.cfg[k]=v/m;save();renderAll();toast('저장했습니다');});
-}
-function renderForm(){
-  const sel=$('fTier'),cur=sel.value;sel.innerHTML='';
-  for(let n=1;n<=S.cfg.tiers;n++){const o=document.createElement('option');o.value=n;o.textContent=n+'차'+(S.hold[n]?' (보유)':'');sel.appendChild(o);}
-  if(cur)sel.value=cur;else{const s=summary();sel.value=s.nb?s.nb.n:1;}
-  syncForm();
-}
-function syncForm(){
-  const n=+$('fTier').value,side=$('fSide').value,h=S.hold[n];
-  if(side==='buy'){const p=tierPrice(n);$('fPrice').value=p;$('fQty').value=tierQty(p);$('fHint').textContent=h?'이미 보유 중인 차수 — 기록하면 덮어씁니다':`설계가 ${f0(p)}원 · ${f0(tierQty(p))}주`;}
-  else{$('fPrice').value=h?Math.round(h.ms*(1+S.cfg.margin)):'';$('fQty').value=h?h.qty:'';$('fHint').textContent=h?`목표가 ${f0(Math.round(h.ms*(1+S.cfg.margin)))}원 · 실제 매입단가 ${f2(realOf(h))}원`:'보유하지 않은 차수입니다';}
+function renderInfo(){
+  const c=S.cfg,rows=[['기준 차수 / 매수가',`${c.anchorTier}차 · ${f0(c.anchorPrice)}원`],['슬롯 간격',pct(c.step)],['익절 마진',pct(c.margin)],['총 차수',c.tiers+'차'],['차수당 매수금액',f0(c.amount)+'원'],['매매수량단위',c.unit+'좌'],['9/14 매입 풀',`${f0(c.poolCost)}원 / ${f0(c.poolQty)}주 = ${f2(poolPrice())}원`]];
+  $('setTbl').innerHTML='<tbody>'+rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')+'</tbody>';
+  $('logTbl').innerHTML='<thead><tr><th class="c">시각</th><th class="l">내용</th></tr></thead><tbody>'+[...(S.log||[])].reverse().map(l=>`<tr><td class="c">${l.at}</td><td class="l" style="white-space:normal">${l.text}</td></tr>`).join('')+'</tbody>';
 }
 function renderAll(){
-  $('asOf').value=S.asOf;$('curPrice').value=S.price;
-  renderStatus();renderGrid();renderTrades();renderPnl();renderSettings();renderForm();
+  $('updated').innerHTML=`<b>마지막 기록</b> ${S.updatedAt} · ${S.source} · 기준일 ${S.asOf} · 현재가 ${f0(S.price)}원`;
+  renderStatus();renderJournal();renderGrid();renderPnl();renderInfo();
 }
 
-/* ---------- 이벤트 ---------- */
+/* ---------- 데이터 불러오기 ---------- */
+async function loadData(manual){
+  const btn=$('btnLoad');btn.disabled=true;btn.textContent='불러오는 중…';
+  try{
+    const r=await fetch('data.json?t='+Date.now(),{cache:'no-store'});
+    if(!r.ok)throw new Error(r.status);
+    S=await r.json();renderAll();
+    if(manual){toast(`최신 기록을 불러왔습니다 (${S.updatedAt})`);document.querySelector('#tabs button[data-t="status"]').click();}
+  }catch(e){
+    if(!S){$('updated').innerHTML='<b>기록을 불러오지 못했습니다.</b> 잠시 후 \'현황 보기\'를 다시 눌러 주세요.';}
+    toast('불러오기 실패 — 네트워크를 확인해 주세요');
+  }finally{btn.disabled=false;btn.textContent='현황 보기';}
+}
+$('btnLoad').onclick=()=>loadData(true);
 $('tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
   document.querySelectorAll('#tabs button').forEach(x=>x.classList.toggle('on',x===b));
-  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+b.dataset.t));
-  try{localStorage.setItem(KEY+'-tab',b.dataset.t);}catch(e){}});
-$('curPrice').onchange=e=>{const v=Number(e.target.value);if(v>0){S.price=v;save();renderAll();toast('현재가를 바꿨습니다');}};
-$('asOf').onchange=e=>{S.asOf=e.target.value;save();};
-$('fTier').onchange=syncForm;$('fSide').onchange=syncForm;
-$('fDate').value=new Date(Date.now()+9*3600e3).toISOString().slice(0,10);
-$('fApply').onclick=()=>{
-  const n=+$('fTier').value,side=$('fSide').value,p=Number($('fPrice').value),q=Number($('fQty').value),d=$('fDate').value;
-  if(!(p>0&&q>0&&d))return toast('체결가·수량·날짜를 넣어 주세요');
-  if(side==='buy'){
-    S.hold[n]={qty:q,ms:p,real:p,date:d};
-    S.trades.push([d,p,q,null,null,null,null,`${n}차 매수 (앱 기록)`]);
-    toast(`${n}차 매수를 기록했습니다`);
-  } else {
-    const h=S.hold[n];if(!h)return toast('보유하지 않은 차수입니다');
-    const sq=Math.min(q,h.qty);
-    S.sells.push([d,n,sq,p,h.ms,null,h.real,null,null]);
-    S.trades.push([d,null,null,p,sq,null,null,`${n}차 매도 (앱 기록 · 실현손익은 나중에 입력)`]);
-    h.qty-=sq;if(h.qty<=0)delete S.hold[n];
-    if(S.cfg.acctQty>0){S.cfg.acctCost=Math.round(S.cfg.acctCost-S.cfg.acctCost/S.cfg.acctQty*sq);} /* 증권사 이동평균 방식 */
-    S.cfg.acctQty=Math.max(0,S.cfg.acctQty-sq);
-    toast(`${n}차 매도를 기록했습니다`);
-  }
-  if(side==='buy'){S.cfg.acctQty+=q;S.cfg.acctCost+=p*q;}
-  save();renderAll();
-};
-$('tAdd').onclick=()=>{const g=id=>{const v=$(id).value;return v===''?null:Number(v);};const d=$('tDate').value;
-  if(!d)return toast('날짜를 넣어 주세요');
-  S.trades.push([d,g('tBp'),g('tBq'),g('tSp'),g('tSq'),g('tFee'),g('tPl'),$('tMemo').value]);save();renderAll();toast('추가했습니다');
-  ['tBp','tBq','tSp','tSq','tFee','tPl','tMemo'].forEach(id=>$(id).value='');};
-$('btnExport').onclick=()=>{const b=new Blob([JSON.stringify(S,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`grid-0193T0-${S.asOf}.json`;a.click();URL.revokeObjectURL(a.href);};
-$('fileImport').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);if(o.version!==2||!o.cfg)throw 0;S=o;save();renderAll();toast('가져왔습니다');}catch(x){toast('파일 형식이 맞지 않습니다');}};r.readAsText(f);};
-$('btnReset').onclick=()=>{if(confirm('이 브라우저에 저장한 변경을 지우고 10/6 기준값으로 되돌릴까요?')){S=clone(DEFAULTS);save();renderAll();toast('초기화했습니다');}};
-$('themeBtn').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark';try{localStorage.setItem(KEY+'-theme',r.dataset.theme);}catch(e){}renderAll();};
+  document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.id==='t-'+b.dataset.t));});
+$('themeBtn').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches;r.dataset.theme=dark?'light':'dark';try{localStorage.setItem(KEY+'-theme',r.dataset.theme);}catch(e){}if(S)renderAll();};
 try{const th=localStorage.getItem(KEY+'-theme');if(th)document.documentElement.dataset.theme=th;}catch(e){}
-renderAll();
-try{const tb=localStorage.getItem(KEY+'-tab');if(tb){const b=document.querySelector(`#tabs button[data-t="${tb}"]`);if(b)b.click();}}catch(e){}
+loadData(false);
 </script>
 </body>
 </html>
