@@ -32,7 +32,7 @@
 *{box-sizing:border-box}
 html,body{margin:0}
 body{background:var(--page);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;}
-.wrap{max-width:1640px;margin:0 auto;padding:16px}
+.wrap{max-width:none;margin:0 auto;padding:16px}
 header.top{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:flex-end;justify-content:space-between;margin-bottom:12px}
 h1{font-size:20px;margin:0}
 .sub{color:var(--ink-2);margin:2px 0 0;font-size:13px}
@@ -60,7 +60,7 @@ nav.tabs button.on{color:var(--ink);border-bottom-color:var(--accent);font-weigh
 .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:13px}
 th,td{padding:6px 7px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
-th{font-size:12px;color:var(--ink-2);font-weight:600;background:var(--wash);position:sticky;top:0}
+th{white-space:normal;word-break:keep-all;font-size:12px;color:var(--ink-2);font-weight:600;background:var(--wash);position:sticky;top:0}
 td.c,th.c{text-align:center}td.l,th.l{text-align:left}
 tr.tot td{font-weight:700;background:var(--wash)}
 tr.held td:first-child{box-shadow:inset 3px 0 0 var(--held)}
@@ -86,7 +86,7 @@ td input[type=date]{width:130px;padding:3px 6px}
 .toast.on{opacity:.92}
 .callout{border-left:3px solid var(--virt);background:var(--virt-wash);padding:10px 12px;border-radius:6px;font-size:13px;margin-bottom:16px}
 .updated{font-size:12px;color:var(--ink-2);background:var(--wash);border-radius:8px;padding:6px 10px;margin:4px 0 0}
-#recentTbl td.l{white-space:normal;min-width:140px}
+td.l{white-space:normal;min-width:150px}
 footer{color:var(--muted);font-size:12px;margin:24px 0 8px}
 </style>
 </head>
@@ -265,13 +265,13 @@ function renderStatus(){
   const chk=[['보유수량',a.qty,s.qty,'주'],['매입금액',a.cost,null,'원'],['평균단가',a.avg,null,'원'],['주문가능 현금',a.cash,null,'원'],['미체결 주문',a.openOrders,null,'건']];
   $('checkTbl').innerHTML='<tbody>'+chk.map(([k,av,mv,u])=>`<tr><td class="l">${k}</td><td>${u==='원'&&k==='평균단가'?f2(av):f0(av)}${u}</td><td class="c">${mv===null?'':(av===mv?'<span class="tag real">일치</span>':'<span class="tag miss">불일치</span>')}</td></tr>`).join('')+'</tbody>';
   // 보유 표
-  let t=`<thead><tr><th class="c">차수</th><th class="c">상태</th><th class="c">매수일</th><th>보유수량</th><th>MS 매수가</th><th>실제 매입단가</th><th class="c">단가</th><th>MS 매입금액</th><th>실제 매입금액</th><th>가상−실제</th><th>매도목표가</th><th>목표 시 실제수익</th><th>실제수익률</th><th>평가손익(실제)</th><th>평가손익(MS)</th><th>대기 매수가</th><th>대기 수량</th></tr></thead><tbody>`;
+  let t=`<thead><tr><th class="c">차수</th><th class="c">상태</th><th class="c">매수일</th><th>보유수량</th><th>MS 매수가</th><th>실제 매입단가</th><th class="c">단가</th><th>MS 매입금액</th><th>실제 매입금액</th><th>매도목표가</th><th>목표 시 실제수익</th><th>실제수익률</th><th>평가손익(실제)</th><th>평가손익(MS)</th><th>대기 매수가</th><th>대기 수량</th></tr></thead><tbody>`;
   let cur=false;
   s.H.forEach(x=>{let cls=x.qty>0?'held':'';if(!cur&&tierPrice(x.n)<S.price){cls+=' cur';cur=true;}
-    if(x.qty>0)t+=`<tr class="${cls}"><td class="c"><b>${x.n}</b></td><td class="c"><span class="tag held">보유</span></td><td class="c">${x.date?md(x.date):''}</td><td>${f0(x.qty)}</td><td>${f0(x.ms)}</td><td>${f2(x.real)}</td><td class="c"><span class="tag ${x.virt?'virt':'real'}">${x.virt?'가상':'실제'}</span></td><td>${f0(x.msAmt)}</td><td>${f0(x.realAmt)}</td><td>${f0(x.msAmt-x.realAmt)}</td><td><b>${f0(x.tgt)}</b></td><td class="${sgn(x.tgtProfit)}">${f0(x.tgtProfit)}</td><td>${pct(x.tgtRate)}</td><td class="${sgn(x.evReal)}">${f0(x.evReal)}</td><td class="${sgn(x.evMs)}">${f0(x.evMs)}</td><td></td><td></td></tr>`;
-    else t+=`<tr class="${cls}"><td class="c"><b>${x.n}</b></td><td class="c"><span class="tag ${x.st==='매수대기'?'wait':'miss'}">${x.st}</span></td>${'<td></td>'.repeat(13)}<td>${f0(x.waitP)}</td><td>${f0(x.waitQ)}</td></tr>`;});
+    if(x.qty>0)t+=`<tr class="${cls}"><td class="c"><b>${x.n}</b></td><td class="c"><span class="tag held">보유</span></td><td class="c">${x.date?md(x.date):''}</td><td>${f0(x.qty)}</td><td>${f0(x.ms)}</td><td>${f2(x.real)}</td><td class="c"><span class="tag ${x.virt?'virt':'real'}">${x.virt?'가상':'실제'}</span></td><td>${f0(x.msAmt)}</td><td>${f0(x.realAmt)}</td><td><b>${f0(x.tgt)}</b></td><td class="${sgn(x.tgtProfit)}">${f0(x.tgtProfit)}</td><td>${pct(x.tgtRate)}</td><td class="${sgn(x.evReal)}">${f0(x.evReal)}</td><td class="${sgn(x.evMs)}">${f0(x.evMs)}</td><td></td><td></td></tr>`;
+    else t+=`<tr class="${cls}"><td class="c"><b>${x.n}</b></td><td class="c"><span class="tag ${x.st==='매수대기'?'wait':'miss'}">${x.st}</span></td>${'<td></td>'.repeat(12)}<td>${f0(x.waitP)}</td><td>${f0(x.waitQ)}</td></tr>`;});
   const tp=s.held.reduce((a,x)=>a+x.tgtProfit,0),em=s.held.reduce((a,x)=>a+x.evMs,0);
-  t+=`<tr class="tot"><td class="c">합계</td><td></td><td></td><td>${f0(s.qty)}</td><td></td><td></td><td></td><td>${f0(s.ms)}</td><td>${f0(s.real)}</td><td>${f0(s.ms-s.real)}</td><td></td><td>${f0(tp)}</td><td></td><td class="${sgn(s.evReal)}">${f0(s.evReal)}</td><td class="${sgn(em)}">${f0(em)}</td><td></td><td></td></tr></tbody>`;
+  t+=`<tr class="tot"><td class="c">합계</td><td></td><td></td><td>${f0(s.qty)}</td><td></td><td></td><td></td><td>${f0(s.ms)}</td><td>${f0(s.real)}</td><td></td><td>${f0(tp)}</td><td></td><td class="${sgn(s.evReal)}">${f0(s.evReal)}</td><td class="${sgn(em)}">${f0(em)}</td><td></td><td></td></tr></tbody>`;
   $('holdTbl').innerHTML=t;
   renderLadder(s);
 }
