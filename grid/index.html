@@ -247,7 +247,7 @@ function renderStatus(){
   const s=summary(),a=S.account||{};
   const pl=a.cost?s.mkt-a.cost:s.evReal;
   $('kpis').innerHTML=
-    kpi('총 보유수량',f0(s.qty)+'주',a.qty===s.qty?'키움 계좌와 일치':'계좌 '+f0(a.qty)+'주 — 확인 필요')+
+    kpi('총 보유수량',f0(s.qty)+'주',a.estimated?'체결 보고 기준 · 키움 대조 대기':(a.qty===s.qty?'키움 계좌와 일치':'계좌 '+f0(a.qty)+'주 — 확인 필요'))+
     kpi('실제 매입금액(그리드 기준)',f0(s.real)+'원','평균 '+f0(s.qty?s.real/s.qty:0)+'원')+
     kpi('매직스플릿 표시 매입금액',f0(s.ms)+'원','가상 부풀림 '+f0(s.ms-s.real)+'원')+
     kpi('평가손익(실제)',sf0(pl)+'원','현재가 '+f0(S.price)+'원 · 수수료 전',sgn(pl))+
@@ -256,14 +256,14 @@ function renderStatus(){
   const v=s.held.filter(x=>x.virt);
   if(v.length){const vq=v.reduce((a,x)=>a+x.qty,0),lo=Math.min(...v.map(x=>x.tgtRate)),hi=Math.max(...v.map(x=>x.tgtRate));
     $('callout').style.display='';
-    $('callout').innerHTML=`<b>가상가 차수 ${v.map(x=>x.n).join('·')}차 (${f0(vq)}주)</b> — 매직스플릿 매수가가 실제(${f2(poolPrice())}원)보다 높게 잡혀 있어, 매도목표가에 닿으면 실제 수익률은 ${(S.cfg.margin*100).toFixed(0)}%가 아니라 <b>${pct(lo)} ~ ${pct(hi)}</b>입니다.`;
+    $('callout').innerHTML=`<b>가상가 차수 ${v.map(x=>x.n).join('·')}차 (${f0(vq)}주)</b> — 매직스플릿 매수가가 실제(평균 ${f0(v.reduce((a,x)=>a+x.realAmt,0)/vq)}원)보다 높게 잡혀 있어, 매도목표가에 닿으면 실제 수익률은 ${(S.cfg.margin*100).toFixed(0)}%가 아니라 <b>${pct(lo)} ~ ${pct(hi)}</b>입니다.`;
   } else $('callout').style.display='none';
   // 최근 체결
   const rec=S.trades.slice(-10).reverse();
   $('recentTbl').innerHTML=`<thead><tr><th class="c">일시</th><th class="c">구분</th><th class="c">차수</th><th>체결가</th><th>수량</th><th>금액</th><th class="l">비고</th></tr></thead><tbody>`+rec.map(t=>`<tr>${tradeRow(t)}</tr>`).join('')+'</tbody>';
   // 계좌 대조
   const chk=[['보유수량',a.qty,s.qty,'주'],['매입금액',a.cost,null,'원'],['평균단가',a.avg,null,'원'],['주문가능 현금',a.cash,null,'원'],['미체결 주문',a.openOrders,null,'건']];
-  $('checkTbl').innerHTML='<tbody>'+chk.map(([k,av,mv,u])=>`<tr><td class="l">${k}</td><td>${u==='원'&&k==='평균단가'?f2(av):f0(av)}${u}</td><td class="c">${mv===null?'':(av===mv?'<span class="tag real">일치</span>':'<span class="tag miss">불일치</span>')}</td></tr>`).join('')+'</tbody>';
+  $('checkTbl').innerHTML='<tbody>'+chk.map(([k,av,mv,u])=>`<tr><td class="l">${k}</td><td>${u==='원'&&k==='평균단가'?f2(av):f0(av)}${u}</td><td class="c">${a.estimated?'<span class="tag wait">추정</span>':(mv===null?'':(av===mv?'<span class="tag real">일치</span>':'<span class="tag miss">불일치</span>'))}</td></tr>`).join('')+'</tbody>';
   // 보유 표
   let t=`<thead><tr><th class="c">차수</th><th class="c">상태</th><th class="c">매수일</th><th>보유수량</th><th>MS 매수가</th><th>실제 매입단가</th><th class="c">단가</th><th>MS 매입금액</th><th>실제 매입금액</th><th>매도목표가</th><th>목표 시 실제수익</th><th>실제수익률</th><th>평가손익(실제)</th><th>평가손익(MS)</th><th>대기 매수가</th><th>대기 수량</th></tr></thead><tbody>`;
   let cur=false;
@@ -291,7 +291,7 @@ function renderJournal(){
   let run=0,sum=0,sumC=0,fees=0,nb=0,ns=0;
   const rows=S.trades.map(t=>{run+=t.side==='buy'?t.qty:-t.qty;if(t.side==='buy')nb++;else ns++;sum+=t.pl||0;fees+=t.fee||0;if(t.date>=S.cycleStart)sumC+=t.pl||0;return `<tr>${tradeRow(t,run)}</tr>`;});
   $('tradeTbl').innerHTML=`<thead><tr><th class="c">일시</th><th class="c">구분</th><th class="c">차수</th><th>체결가</th><th>수량</th><th>금액</th><th>수수료</th><th>실현손익(키움)</th><th class="c">경로</th><th>보유수량</th><th class="l">비고</th></tr></thead><tbody>`+rows.reverse().join('')+
-    `<tr class="tot"><td class="c">합계</td><td class="c">${nb}매수·${ns}매도</td><td></td><td></td><td></td><td></td><td>${f0(fees)}</td><td class="${sgn(sum)}">${f0(sum)}</td><td></td><td>${f0(run)}</td><td class="l">${run===(S.account||{}).qty?'최종 보유수량 = 키움 계좌와 일치':'계좌 수량과 다름 — 확인 필요'}</td></tr></tbody>`;
+    `<tr class="tot"><td class="c">합계</td><td class="c">${nb}매수·${ns}매도</td><td></td><td></td><td></td><td></td><td>${f0(fees)}</td><td class="${sgn(sum)}">${f0(sum)}</td><td></td><td>${f0(run)}</td><td class="l">${run!==(S.account||{}).qty?'계좌 수량과 다름 — 확인 필요':((S.account||{}).estimated?'최종 보유수량 (체결 보고 기준, 키움 대조 대기)':'최종 보유수량 = 키움 계좌와 일치')}</td></tr></tbody>`;
   $('tradeKpis').innerHTML=kpi('실현손익 합계 (키움)',sf0(sum)+'원','전체 기간',sgn(sum))+kpi(`${md(S.cycleStart)} 이전`,sf0(sum-sumC)+'원','',sgn(sum-sumC))+kpi(`${md(S.cycleStart)} 이후 (현재 사이클)`,sf0(sumC)+'원','',sgn(sumC))+kpi('수수료 합계',f0(fees)+'원');
 }
 function profitAgg(){
