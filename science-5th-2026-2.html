@@ -136,9 +136,23 @@ ul.lessons{list-style:none;margin:0;padding:0;}
 ul.lessons li{display:flex;gap:9px;align-items:flex-start;padding:2.5px 0;}
 .day{
   flex:none;margin-top:1px;font-size:10.5px;font-weight:800;letter-spacing:.02em;
-  padding:2px 7px;border-radius:4px;white-space:nowrap;
+  padding:2px 8px;border-radius:4px;white-space:nowrap;
   background:#EDF1F4;color:var(--ink-2);
-  min-width:112px;text-align:center;font-variant-numeric:tabular-nums;
+  min-width:124px;text-align:center;font-variant-numeric:tabular-nums;
+}
+/* 목·금 연차시 블록: 네모 하나로 묶고 안쪽에 차시를 나눠 표기 */
+ul.lessons li.merged{align-items:stretch;}
+ul.lessons li.merged > .day{
+  display:flex;align-items:center;justify-content:center;
+  margin:1px 0 0;
+}
+.sub{flex:1;min-width:0;}
+.subrow{display:flex;gap:0;align-items:flex-start;}
+.subrow + .subrow{margin-top:5px;}
+.nth{
+  flex:none;display:inline-block;min-width:52px;margin-top:2px;
+  font-size:10.5px;font-weight:700;color:var(--muted);
+  font-variant-numeric:tabular-nums;letter-spacing:.01em;
 }
 .day.blk{background:rgba(14,124,134,.10);color:#0B6A72;}
 .lesson{color:var(--ink);}
@@ -302,10 +316,8 @@ table.prog tfoot td{padding:13px 10px;border-top:2px solid var(--ink);font-size:
       <td class="month" rowspan="2"><div class="m">8</div><div class="d">7일</div></td>
       <td class="wk c">1</td><td class="span">8.20 – 8.21</td><td class="days c">2</td>
       <td class="body"><div class="seg" style="--rail:var(--u-tam)">
-        <ul class="lessons">
-          <li><span class="day blk">21일(금)</span><span class="lesson">안전하게 탐구하기
-            <span class="note">8.21(금) 1교시 5-4 · 2교시 5-1 · 3교시 5-2 · 4교시 5-3 — 네 반 각 1차시</span></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day blk">21일 (금)</span><span class="nth">1차시</span><span class="lesson">안전하게 탐구하기
+            <span class="note">8.21(금) 1교시 5-4 · 2교시 5-1 · 3교시 5-2 · 4교시 5-3 — 네 반 각 1차시</span></span></li></ul>
       </div></td>
       <td class="hours c">1</td>
     </tr>
@@ -313,11 +325,7 @@ table.prog tfoot td{padding:13px 10px;border-top:2px solid var(--ink);font-size:
       <td class="wk c">2</td><td class="span">8.24 – 8.28</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-weather)">
         <span class="unit-badge">2. 날씨와 우리 생활</span>
-        <ul class="lessons">
-          <li><span class="day">25일(화)</span><span class="lesson">열려라 과학</span></li>
-          <li><span class="day blk">27일(목)·28일(금)</span><span class="lesson">1. 날마다 다른 날씨를 표현하는 기상 요소</span></li>
-          <li><span class="day blk">27일(목)·28일(금)</span><span class="lesson">2. 우리 생활에 영향을 주는 날씨</span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">25일 (화)</span><span class="nth"></span><span class="lesson">열려라 과학</span></li><li class="merged"><span class="day blk">27일 (목)·28일 (금)</span><div class="sub"><div class="subrow"><span class="nth">1차시</span><span class="lesson">1. 날마다 다른 날씨를 표현하는 기상 요소</span></div><div class="subrow"><span class="nth">2차시</span><span class="lesson">2. 우리 생활에 영향을 주는 날씨</span></div></div></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
@@ -327,31 +335,21 @@ table.prog tfoot td{padding:13px 10px;border-top:2px solid var(--ink);font-size:
       <td class="month" rowspan="4"><div class="m">9</div><div class="d">18일</div></td>
       <td class="wk c">3</td><td class="span">8.31 – 9.4</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-weather)">
-        <ul class="lessons">
-          <li><span class="day">1일(화)</span><span class="lesson">4. 고기압과 저기압에서의 날씨가 궁금해!</span></li>
-          <li><span class="day blk">3일(목)·4일(금)</span><span class="lesson">3. 이슬, 안개, 구름을 비교해 보자! <em>(2차시)</em></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">1일 (화)</span><span class="nth"></span><span class="lesson">4. 고기압과 저기압에서의 날씨가 궁금해!</span></li><li><span class="day blk">3일 (목)·4일 (금)</span><span class="nth">1~2차시</span><span class="lesson">3. 이슬, 안개, 구름을 비교해 보자!</span></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
     <tr>
       <td class="wk c">4</td><td class="span">9.7 – 9.11</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-weather)">
-        <ul class="lessons">
-          <li><span class="day">8일(화)</span><span class="lesson">5. 바람은 어느 방향으로 불까?</span></li>
-          <li><span class="day blk">10일(목)·11일(금)</span><span class="lesson">과학이 톡톡 · 단원 마무리</span></li>
-          <li><span class="day blk">10일(목)·11일(금)</span><span class="lesson">체험 더하기 · 단원평가</span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">8일 (화)</span><span class="nth"></span><span class="lesson">5. 바람은 어느 방향으로 불까?</span></li><li class="merged"><span class="day blk">10일 (목)·11일 (금)</span><div class="sub"><div class="subrow"><span class="nth">1차시</span><span class="lesson">과학이 톡톡 · 단원 마무리</span></div><div class="subrow"><span class="nth">2차시</span><span class="lesson">체험 더하기 · 단원평가</span></div></div></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
     <tr>
       <td class="wk c">5</td><td class="span">9.14 – 9.18</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-weather)">
-        <ul class="lessons">
-          <li><span class="day">15일(화)</span><span class="lesson">심화 보충 <em>(수행평가)</em></span></li>
-          <li><span class="day blk">17일(목)·18일(금)</span><span class="lesson">창의가 팡팡 — 날씨 애플리케이션 디지털 화면 만들기 <em>(2차시)</em></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">15일 (화)</span><span class="nth"></span><span class="lesson">심화 보충 <em>(수행평가)</em></span></li><li><span class="day blk">17일 (목)·18일 (금)</span><span class="nth">1~2차시</span><span class="lesson">창의가 팡팡 — 날씨 애플리케이션 디지털 화면 만들기</span></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
@@ -359,10 +357,8 @@ table.prog tfoot td{padding:13px 10px;border-top:2px solid var(--ink);font-size:
       <td class="wk c">6</td><td class="span">9.21 – 9.25</td><td class="days c">3</td>
       <td class="body"><div class="seg" style="--rail:var(--u-heat)">
         <span class="unit-badge">3. 열과 우리 생활</span>
-        <ul class="lessons">
-          <li><span class="day">22일(화)</span><span class="lesson">열려라 과학
-            <span class="note">추석 연휴(9.24 목 · 9.25 금) — 전 반 연속 블록 2차시 결손</span></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">22일 (화)</span><span class="nth"></span><span class="lesson">열려라 과학
+            <span class="note">추석 연휴(9.24 목 · 9.25 금) — 전 반 연속 블록 2차시 결손</span></span></li></ul>
       </div></td>
       <td class="hours c">1</td>
     </tr>
@@ -372,54 +368,37 @@ table.prog tfoot td{padding:13px 10px;border-top:2px solid var(--ink);font-size:
       <td class="month" rowspan="5"><div class="m">10</div><div class="d">22일</div></td>
       <td class="wk c">7</td><td class="span">9.28 – 10.2</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-heat)">
-        <ul class="lessons">
-          <li><span class="day">29일(화)</span><span class="lesson">1. 온도계로 물체의 온도를 측정하라!</span></li>
-          <li><span class="day blk">1일(목)·2일(금)</span><span class="lesson">2. 온도가 다른 두 물체가 만나면?</span></li>
-          <li><span class="day blk">1일(목)·2일(금)</span><span class="lesson">3. 고체에서는 열이 어떻게 이동할까?</span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">29일 (화)</span><span class="nth"></span><span class="lesson">1. 온도계로 물체의 온도를 측정하라!</span></li><li class="merged"><span class="day blk">1일 (목)·2일 (금)</span><div class="sub"><div class="subrow"><span class="nth">1차시</span><span class="lesson">2. 온도가 다른 두 물체가 만나면?</span></div><div class="subrow"><span class="nth">2차시</span><span class="lesson">3. 고체에서는 열이 어떻게 이동할까?</span></div></div></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
     <tr>
       <td class="wk c">8</td><td class="span">10.5 – 10.9</td><td class="days c">2</td>
       <td class="body"><div class="seg" style="--rail:var(--u-heat)">
-        <ul class="lessons">
-          <li><span class="day">6일(화)</span><span class="lesson">5. 빛에 의해 열이 이동할 수 있을까?
-            <span class="note">10.5 대체공휴일 · 10.9 한글날 · 재량휴업일 1일 — 전 반 블록 2차시 결손</span></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">6일 (화)</span><span class="nth"></span><span class="lesson">5. 빛에 의해 열이 이동할 수 있을까?
+            <span class="note">10.5 대체공휴일 · 10.9 한글날 · 재량휴업일 1일 — 전 반 블록 2차시 결손</span></span></li></ul>
       </div></td>
       <td class="hours c">1</td>
     </tr>
     <tr>
       <td class="wk c">9</td><td class="span">10.12 – 10.16</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-heat)">
-        <ul class="lessons">
-          <li><span class="day">13일(화)</span><span class="lesson">체험 더하기</span></li>
-          <li><span class="day blk">15일(목)·16일(금)</span><span class="lesson">4. 액체와 기체에서는 열이 어떻게 이동할까?</span></li>
-          <li><span class="day blk">15일(목)·16일(금)</span><span class="lesson">6. 여러 방식으로 이동하는 열
-            <span class="note">10.12 변경 — 6번 차시를 4번 차시에 이어 연차시 블록에서 운영</span></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">13일 (화)</span><span class="nth"></span><span class="lesson">체험 더하기</span></li><li class="merged"><span class="day blk">15일 (목)·16일 (금)</span><div class="sub"><div class="subrow"><span class="nth">1차시</span><span class="lesson">4. 액체와 기체에서는 열이 어떻게 이동할까?</span></div><div class="subrow"><span class="nth">2차시</span><span class="lesson">6. 여러 방식으로 이동하는 열
+            <span class="note">10.12 변경 — 6번 차시를 4번 차시에 이어 연차시 블록에서 운영</span></span></div></div></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
     <tr>
       <td class="wk c">10</td><td class="span">10.19 – 10.23</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-heat)">
-        <ul class="lessons">
-          <li><span class="day">20일(화)</span><span class="lesson">7. 열의 이동을 어떻게 막을까?</span></li>
-          <li><span class="day blk">22일(목)·23일(금)</span><span class="lesson">과학이 톡톡 · 단원 마무리</span></li>
-          <li><span class="day blk">22일(목)·23일(금)</span><span class="lesson">심화 보충 <em>(단원평가)</em></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">20일 (화)</span><span class="nth"></span><span class="lesson">7. 열의 이동을 어떻게 막을까?</span></li><li class="merged"><span class="day blk">22일 (목)·23일 (금)</span><div class="sub"><div class="subrow"><span class="nth">1차시</span><span class="lesson">과학이 톡톡 · 단원 마무리</span></div><div class="subrow"><span class="nth">2차시</span><span class="lesson">심화 보충 <em>(단원평가)</em></span></div></div></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
     <tr>
       <td class="wk c">11</td><td class="span">10.26 – 10.30</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-heat)">
-        <ul class="lessons">
-          <li><span class="day">27일(화)</span><span class="lesson">심화 보충 <em>(수행평가 · 관련 영상 시청)</em></span></li>
-          <li><span class="day blk">29일(목)·30일(금)</span><span class="lesson">창의가 팡팡 — 온도를 오랫동안 일정하게 유지하는 장치 만들기 <em>(2차시)</em></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">27일 (화)</span><span class="nth"></span><span class="lesson">심화 보충 <em>(수행평가 · 관련 영상 시청)</em></span></li><li><span class="day blk">29일 (목)·30일 (금)</span><span class="nth">1~2차시</span><span class="lesson">창의가 팡팡 — 온도를 오랫동안 일정하게 유지하는 장치 만들기</span></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
@@ -430,30 +409,21 @@ table.prog tfoot td{padding:13px 10px;border-top:2px solid var(--ink);font-size:
       <td class="wk c">12</td><td class="span">11.2 – 11.6</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-energy)">
         <span class="unit-badge">4. 자원과 에너지</span>
-        <ul class="lessons">
-          <li><span class="day">3일(화)</span><span class="lesson">열려라 과학</span></li>
-          <li><span class="day blk">5일(목)·6일(금)</span><span class="lesson">2. 재생 에너지가 궁금해! <em>(2차시)</em></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">3일 (화)</span><span class="nth"></span><span class="lesson">열려라 과학</span></li><li><span class="day blk">5일 (목)·6일 (금)</span><span class="nth">1~2차시</span><span class="lesson">2. 재생 에너지가 궁금해!</span></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
     <tr>
       <td class="wk c">13</td><td class="span">11.9 – 11.13</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-energy)">
-        <ul class="lessons">
-          <li><span class="day">10일(화)</span><span class="lesson">1. 자원을 계속 이용할 수 있을까?</span></li>
-          <li><span class="day blk">12일(목)·13일(금)</span><span class="lesson">4. 자원과 에너지의 효율적인 이용 방법은? <em>(2차시)</em></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">10일 (화)</span><span class="nth"></span><span class="lesson">1. 자원을 계속 이용할 수 있을까?</span></li><li><span class="day blk">12일 (목)·13일 (금)</span><span class="nth">1~2차시</span><span class="lesson">4. 자원과 에너지의 효율적인 이용 방법은?</span></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
     <tr>
       <td class="wk c">14</td><td class="span">11.16 – 11.20</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-energy)">
-        <ul class="lessons">
-          <li><span class="day">17일(화)</span><span class="lesson">3. 에너지를 지속가능하게 이용하려면?</span></li>
-          <li><span class="day blk">19일(목)·20일(금)</span><span class="lesson">창의가 팡팡 — 자원과 에너지를 효율적으로 이용하는 영상 만들기 <em>(2차시)</em></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">17일 (화)</span><span class="nth"></span><span class="lesson">3. 에너지를 지속가능하게 이용하려면?</span></li><li><span class="day blk">19일 (목)·20일 (금)</span><span class="nth">1~2차시</span><span class="lesson">창의가 팡팡 — 자원과 에너지를 효율적으로 이용하는 영상 만들기</span></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
@@ -461,16 +431,11 @@ table.prog tfoot td{padding:13px 10px;border-top:2px solid var(--ink);font-size:
       <td class="wk c">15</td><td class="span">11.23 – 11.27</td><td class="days c">5</td>
       <td class="body">
         <div class="seg" style="--rail:var(--u-energy)">
-          <ul class="lessons">
-            <li><span class="day">24일(화)</span><span class="lesson">과학이 톡톡 · 단원 마무리</span></li>
-            <li><span class="day blk">26일(목)·27일(금)</span><span class="lesson">심화 보충 <em>(수행평가 · 단원평가)</em></span></li>
-          </ul>
+          <ul class="lessons"><li><span class="day">24일 (화)</span><span class="nth"></span><span class="lesson">과학이 톡톡 · 단원 마무리</span></li><li><span class="day blk">26일 (목)·27일 (금)</span><span class="nth">1차시</span><span class="lesson">심화 보충 <em>(수행평가 · 단원평가)</em></span></li></ul>
         </div>
         <div class="seg" style="--rail:var(--u-mix)">
           <span class="unit-badge" style="padding-top:9px">1. 혼합물의 분리</span>
-          <ul class="lessons">
-            <li><span class="day blk">26일(목)·27일(금)</span><span class="lesson">열려라 과학</span></li>
-          </ul>
+          <ul class="lessons"><li><span class="day blk">26일 (목)·27일 (금)</span><span class="nth">2차시</span><span class="lesson">열려라 과학</span></li></ul>
         </div>
       </td>
       <td class="hours c">3</td>
@@ -481,51 +446,37 @@ table.prog tfoot td{padding:13px 10px;border-top:2px solid var(--ink);font-size:
       <td class="month" rowspan="5"><div class="m">12</div><div class="d">23일</div></td>
       <td class="wk c">16</td><td class="span">11.30 – 12.4</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-mix)">
-        <ul class="lessons">
-          <li><span class="day">1일(화)</span><span class="lesson">1. 혼합물을 왜 분리할까?</span></li>
-          <li><span class="day blk">3일(목)·4일(금)</span><span class="lesson">2. 알갱이의 크기가 다른 고체 혼합물을 분리해 볼까?</span></li>
-          <li><span class="day blk">3일(목)·4일(금)</span><span class="lesson">3. 섞이지 않는 액체 혼합물을 분리해 볼까?</span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">1일 (화)</span><span class="nth"></span><span class="lesson">1. 혼합물을 왜 분리할까?</span></li><li class="merged"><span class="day blk">3일 (목)·4일 (금)</span><div class="sub"><div class="subrow"><span class="nth">1차시</span><span class="lesson">2. 알갱이의 크기가 다른 고체 혼합물을 분리해 볼까?</span></div><div class="subrow"><span class="nth">2차시</span><span class="lesson">3. 섞이지 않는 액체 혼합물을 분리해 볼까?</span></div></div></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
     <tr>
       <td class="wk c">17</td><td class="span">12.7 – 12.11</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-mix)">
-        <ul class="lessons">
-          <li><span class="day">8일(화)</span><span class="lesson">5. 혼합물의 분리를 이용한 장치를 찾아라!</span></li>
-          <li><span class="day blk">10일(목)·11일(금)</span><span class="lesson">4. 섞여 있는 소금과 모래를 분리해 볼까? <em>(2차시)</em></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">8일 (화)</span><span class="nth"></span><span class="lesson">5. 혼합물의 분리를 이용한 장치를 찾아라!</span></li><li><span class="day blk">10일 (목)·11일 (금)</span><span class="nth">1~2차시</span><span class="lesson">4. 섞여 있는 소금과 모래를 분리해 볼까?</span></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
     <tr>
       <td class="wk c">18</td><td class="span">12.14 – 12.18</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-mix)">
-        <ul class="lessons">
-          <li><span class="day">15일(화)</span><span class="lesson">과학이 톡톡 · 단원 마무리</span></li>
-          <li><span class="day blk">17일(목)·18일(금)</span><span class="lesson">창의가 팡팡 — 혼합물의 분리를 이용한 장치 소개하기 <em>(2차시)</em></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">15일 (화)</span><span class="nth"></span><span class="lesson">과학이 톡톡 · 단원 마무리</span></li><li><span class="day blk">17일 (목)·18일 (금)</span><span class="nth">1~2차시</span><span class="lesson">창의가 팡팡 — 혼합물의 분리를 이용한 장치 소개하기</span></li></ul>
       </div></td>
       <td class="hours c">3</td>
     </tr>
     <tr>
       <td class="wk c">19</td><td class="span">12.21 – 12.25</td><td class="days c">4</td>
       <td class="body"><div class="seg" style="--rail:var(--u-mix)">
-        <ul class="lessons">
-          <li><span class="day">22일(화)·24일(목)</span><span class="lesson">심화 보충 <em>(단원평가)</em>
-            <span class="note">12.25 성탄절 — 연속 블록 대신 목요일 1교시 5-1 · 2교시 5-4 · 3교시 5-3 · 4교시 5-2로 조정</span></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">22일 (화)·24일 (목)</span><span class="nth"></span><span class="lesson">심화 보충 <em>(단원평가)</em>
+            <span class="note">12.25 성탄절 — 연속 블록 대신 목요일 1교시 5-1 · 2교시 5-4 · 3교시 5-3 · 4교시 5-2로 조정</span></span></li></ul>
       </div></td>
       <td class="hours c">2</td>
     </tr>
     <tr>
       <td class="wk c">20</td><td class="span">12.28 – 1.1</td><td class="days c">4</td>
       <td class="body"><div class="seg" style="--rail:var(--u-mix)">
-        <ul class="lessons">
-          <li><span class="day">29일(화)·31일(목)</span><span class="lesson">심화 보충
-            <span class="note">1.1 신정 — 연속 블록 대신 목요일 1교시 5-1 · 2교시 5-4 · 3교시 5-3 · 4교시 5-2로 조정</span></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">29일 (화)·31일 (목)</span><span class="nth"></span><span class="lesson">심화 보충
+            <span class="note">1.1 신정 — 연속 블록 대신 목요일 1교시 5-1 · 2교시 5-4 · 3교시 5-3 · 4교시 5-2로 조정</span></span></li></ul>
       </div></td>
       <td class="hours c">2</td>
     </tr>
@@ -535,10 +486,8 @@ table.prog tfoot td{padding:13px 10px;border-top:2px solid var(--ink);font-size:
       <td class="month"><div class="m">1</div><div class="d">5일</div></td>
       <td class="wk c">21</td><td class="span">1.4 – 1.8</td><td class="days c">5</td>
       <td class="body"><div class="seg" style="--rail:var(--u-mix)">
-        <ul class="lessons">
-          <li><span class="day">5일(화)</span><span class="lesson">심화 보충
-            <span class="note">학년말 교육과정 운영 — 연속 블록 미운영</span></span></li>
-        </ul>
+        <ul class="lessons"><li><span class="day">5일 (화)</span><span class="nth"></span><span class="lesson">심화 보충
+            <span class="note">학년말 교육과정 운영 — 연속 블록 미운영</span></span></li></ul>
       </div></td>
       <td class="hours c">1</td>
     </tr>
