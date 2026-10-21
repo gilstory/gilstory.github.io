@@ -88,10 +88,23 @@ td input[type=date]{width:130px;padding:3px 6px}
 .updated{font-size:12px;color:var(--ink-2);background:var(--wash);border-radius:8px;padding:6px 10px;margin:4px 0 0}
 td.l{white-space:normal;min-width:150px}
 footer{color:var(--muted);font-size:12px;margin:24px 0 8px}
+/* 내 앱 바로가기 */
+.app-links{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:0 0 14px;font-family:inherit;font-size:13px}
+.app-links-label{color:var(--muted);margin-right:2px}
+.app-link{display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);color:var(--ink);text-decoration:none;white-space:nowrap}
+a.app-link:hover{background:var(--wash)}
+.app-link.here{background:var(--ink);color:var(--page);border-color:var(--ink);font-weight:600}
 </style>
 </head>
 <body>
 <div class="wrap">
+<nav class="app-links" aria-label="내 앱 바로가기">
+  <span class="app-links-label">바로가기</span>
+  <a class="app-link" href="https://claude.ai/artifact/QW9Bi8PgGLLn4RM3eYu8vA" target="_blank" rel="noopener">📜 공명 상소문</a>
+  <a class="app-link" href="https://claude.ai/artifact/SZPM4kbPz1JbxuxyVkTU2T" target="_blank" rel="noopener">🧮 종가베팅 비중계산기</a>
+  <a class="app-link" href="https://gilstory.github.io/hynix/">📈 하이닉스 갭 상승 확률</a>
+  <span class="app-link here" aria-current="page">🪜 하이닉스 레버리지 그리드</span>
+</nav>
 <header class="top">
   <div>
     <h1>하이닉스 레버리지 그리드 현황</h1>
