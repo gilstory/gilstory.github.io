@@ -166,7 +166,7 @@ a.app-link:hover{background:var(--wash)}
   <div class="kpis" id="profitKpis"></div>
   <div class="card">
     <h2>월별 실현손익</h2>
-    <p class="desc">매도로 확정된 손익(키움 실현손익, 수수료 차감) · 막대에 마우스를 올리면 자세히 · 빨강 = 이익, 파랑 = 손실</p>
+    <p class="desc">매도로 확정된 손익 — 차수 기준 (매도가 − 그 차수 실제 매입단가) × 수량 − 수수료. 차수 기록이 없는 9/14 이전 매도는 키움 실현손익 · 막대에 마우스를 올리면 자세히 · 빨강 = 이익, 파랑 = 손실</p>
     <div class="tscroll"><div id="monthChart"></div></div>
   </div>
   <div class="grid2">
@@ -235,6 +235,9 @@ function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clear
 /* ---------- 계산 ---------- */
 const poolPrice=()=>S.cfg.poolCost/S.cfg.poolQty;
 const realOf=h=>h.real==='pool'?poolPrice():Number(h.real);
+/* 매도 손익(차수 기준): sells 기록이 있으면 (매도가 − 차수 실제 매입단가) × 수량 − 수수료, 없으면(사이클 이전) 키움 손익 */
+function sellPL(t){const r=S.sells.find(r=>r[0]===t.date&&r[2]===t.qty&&r[3]===t.price);
+  if(!r)return t.pl||0;const real=r[6]==='pool'?poolPrice():Number(r[6]);return (r[3]-real)*r[2]-(r[7]||0);}
 function tierPrice(n){const c=S.cfg;return Math.round(c.anchorPrice*Math.pow(1+c.step,c.anchorTier-n));}
 /* 매직스플릿 실제 규칙: 보유 차수는 실제 매수가, 그 아래 차수는 직전 차수 매수가 ÷ (1+간격) 연쇄 */
 function effPrice(n){const H=S.hold,h=H[n];if(h&&h.qty>0)return h.ms;
@@ -315,7 +318,7 @@ function renderJournal(){
 function profitAgg(){
   const M={};
   S.trades.forEach(t=>{const k=t.date.slice(0,7);const m=M[k]||(M[k]={k,pl:0,n:0,sellAmt:0,buyAmt:0,fee:0,pre:0});
-    if(t.side==='sell'){m.n++;m.sellAmt+=t.price*t.qty;m.pl+=t.pl||0;m.fee+=t.fee||0;if((t.note||'').includes('그리드 이전'))m.pre+=t.pl||0;}
+    if(t.side==='sell'){const pl=sellPL(t);m.n++;m.sellAmt+=t.price*t.qty;m.pl+=pl;m.fee+=t.fee||0;if((t.note||'').includes('그리드 이전'))m.pre+=pl;}
     else m.buyAmt+=t.price*t.qty;});
   return Object.values(M).sort((a,b)=>a.k<b.k?-1:1);
 }
@@ -351,11 +354,11 @@ function renderProfit(){
     ms.map(m=>{cum+=m.pl;return `<tr><td class="c">${ym(m.k)}</td><td>${m.n}</td><td>${f0(m.sellAmt)}</td><td>${f0(m.buyAmt)}</td><td>${f0(m.fee)}</td><td class="${sgn(m.pl)}"><b>${sf0(m.pl)}</b></td><td class="${sgn(cum)}">${sf0(cum)}</td></tr>`;}).join('')+'</tbody>';
   // 연별 표
   const Y={};ms.forEach(m=>{const k=m.k.slice(0,4);const o=Y[k]||(Y[k]={k,pl:0,n:0,fee:0,sellAmt:0,months:0});o.pl+=m.pl;o.n+=m.n;o.fee+=m.fee;o.sellAmt+=m.sellAmt;if(m.n)o.months++;});
-  const s=summary(),ac=S.account||{},un=ac.cost?s.mkt-ac.cost:s.evReal;
+  const s=summary(),un=s.evReal;  // 실현이 차수 기준이므로 평가손익도 차수 실제 매입단가 기준
   $('yearTbl').innerHTML=`<thead><tr><th class="c">연도</th><th>매도 건수</th><th>수수료</th><th>실현손익</th><th>현재 평가손익</th><th>실현+평가</th></tr></thead><tbody>`+
     Object.values(Y).sort((a,b)=>a.k<b.k?-1:1).map(o=>{const u=o.k===curY?un:0;return `<tr><td class="c">${o.k}년</td><td>${o.n}</td><td>${f0(o.fee)}</td><td class="${sgn(o.pl)}"><b>${sf0(o.pl)}</b></td><td class="${sgn(u)}">${o.k===curY?sf0(u):''}</td><td class="${sgn(o.pl+u)}">${sf0(o.pl+u)}</td></tr>`;}).join('')+'</tbody>';
   const pre=ms.reduce((a,m)=>a+m.pre,0);
-  $('yearNote').textContent=(pre?`${ym(ms.find(m=>m.pre).k)} 실현손익에는 그리드 시작 전 당일매매 ${sf0(pre)}원이 포함되어 있습니다. `:'')+`평가손익은 ${S.asOf} 현재가 ${f0(S.price)}원 기준(수수료 전)이며, 팔기 전까지는 바뀝니다.`;
+  $('yearNote').textContent=(pre?`${ym(ms.find(m=>m.pre).k)} 실현손익에는 그리드 시작 전 당일매매 ${sf0(pre)}원이 포함되어 있습니다. `:'')+`평가손익은 차수별 실제 매입단가 대비 ${S.asOf} 현재가 ${f0(S.price)}원 기준(수수료 전)이며, 팔기 전까지는 바뀝니다.`;
 }
 function renderGrid(){
   const g=grid(),c=S.cfg;
