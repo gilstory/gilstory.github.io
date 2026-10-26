@@ -391,9 +391,18 @@ function renderAll(){
 }
 
 /* ---------- 데이터 불러오기 ---------- */
+/* 데스크톱 앱(pywebview)인지 판별 — 창이 막 열렸을 때는 연결 객체가 늦게 붙으므로 최대 8초 기다림 */
+const IS_DESKTOP=/pywebview/i.test(navigator.userAgent)||new URLSearchParams(location.search).has('app')||!!window.pywebview;
+function desktopApi(){
+  const ok=()=>window.pywebview&&window.pywebview.api&&window.pywebview.api.refresh;
+  if(ok())return Promise.resolve(true);
+  if(!IS_DESKTOP)return Promise.resolve(false);
+  return new Promise(res=>{let n=0;const t=setInterval(()=>{if(ok()||++n>=40){clearInterval(t);res(!!ok());}},200);
+    window.addEventListener('pywebviewready',()=>{clearInterval(t);res(!!ok());},{once:true});});
+}
 async function loadData(manual){
   const btn=$('btnLoad');btn.disabled=true;btn.textContent='불러오는 중…';
-  const api=window.pywebview&&window.pywebview.api&&window.pywebview.api.refresh;
+  const api=manual?await desktopApi():null;
   if(manual&&api){ /* 데스크톱 앱: PC에서 키움 계좌를 조회해 기록을 갱신 */
     btn.textContent='키움 계좌 조회 중…';
     try{
@@ -408,7 +417,7 @@ async function loadData(manual){
     const r=await fetch('data.json?t='+Date.now(),{cache:'no-store'});
     if(!r.ok)throw new Error(r.status);
     S=await r.json();renderAll();
-    if(manual){toast(`최신 기록을 불러왔습니다 (${S.updatedAt})`);document.querySelector('#tabs button[data-t="status"]').click();}
+    if(manual){toast(IS_DESKTOP?`키움 조회를 하지 못해 저장된 기록만 불러왔습니다 (${S.updatedAt})`:`웹 보기 — 저장된 기록을 불러왔습니다 (${S.updatedAt}) · 키움 조회는 바탕화면 앱에서만 됩니다`);document.querySelector('#tabs button[data-t="status"]').click();}
   }catch(e){
     if(!S){$('updated').innerHTML='<b>기록을 불러오지 못했습니다.</b> 잠시 후 \'현황 보기\'를 다시 눌러 주세요.';}
     toast('불러오기 실패 — 네트워크를 확인해 주세요');
